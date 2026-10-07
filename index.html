@@ -459,8 +459,16 @@ function view(l){
     ent(t('Win and lose','Thắng và thua'),params([
       [t('Win','Thắng'),t(`Every stack of cards on the table has been sent to a pole of its color, and every pole has been cleared from the level.`,
                          `Tất cả các chồng thẻ trên bàn đã được đưa lên cột cùng màu, và mọi cột đều đã được dọn khỏi màn chơi.`)],
-      [t('Lose','Thua'),t(`Every waiting slot is taken, and none of the cards in the waiting slots matches an available pole.`,
-                         `Các ô chờ đã kín chỗ, và không thẻ nào trong ô chờ cùng màu với cột đang nhận thẻ.`)]
+      [t('Lose','Thua'),t(`Every waiting slot is taken, none of the cards in the waiting slots matches an available pole, and none of the unblocked stacks on the table matches an available pole either.`,
+                         `Các ô chờ đã kín chỗ, không thẻ nào trong ô chờ cùng màu với cột đang nhận thẻ, và trên bàn cũng không còn chồng thẻ không bị đè nào cùng màu với cột đang nhận thẻ.`)]
+    ]))+
+    ent(nm('Revive','Hồi sinh'),ul([
+      t(`When the player revives, the game uses 2 free Remove boosters on the poles at the bottom of the queues that hold the fewest cards.`,
+        `Khi người chơi hồi sinh, trò chơi dùng miễn phí 2 lượt Loại bỏ cho các cột đang ở dưới cùng hàng chờ và có ít thẻ nhất.`),
+      t(`If the game is still stuck after that, it uses the free Remove again and repeats until the game can continue.`,
+        `Nếu sau đó vẫn còn bị kẹt, trò chơi tiếp tục dùng Loại bỏ miễn phí cho tới khi chơi tiếp được.`),
+      t(`These free Removes do not use up the player's Remove boosters, and the player does not need to own any.`,
+        `Các lượt miễn phí này không trừ vào số công cụ Loại bỏ người chơi đang có, và người chơi cũng không cần có sẵn công cụ này.`)
     ]));
 
   B['main-game-mechanics']=
@@ -508,7 +516,9 @@ function view(l){
       t(`A Locked Card Stack is locked away and can't be tapped to send up.`,`Chồng thẻ bị khóa không thể chạm để đưa lên.`),
       t(`It still shows its color, but the player can't interact with it.`,`Chồng thẻ vẫn hiện màu, nhưng người chơi chưa làm gì được với nó.`),
       t(`It shows a countdown: the number of poles that must be cleared before it unlocks.`,`Trên chồng thẻ có một con số đếm ngược, cho biết cần dọn xong bao nhiêu cột thì chồng thẻ mới mở khóa.`),
+      t(`The countdown only starts once the stack is unblocked. Poles cleared before that do not count.`,`Con số chỉ bắt đầu đếm khi chồng thẻ hết bị đè. Các cột được dọn xong trước đó không được tính.`),
       t(`Each cleared pole lowers the countdown by 1.`,`Mỗi cột được dọn xong thì con số giảm đi 1.`),
+      t(`If every other pole has been cleared and only the poles for the locked cards remain, the stack unlocks immediately.`,`Nếu mọi cột khác đều đã được dọn xong, chỉ còn lại các cột dành cho thẻ bị khóa, chồng thẻ sẽ mở khóa ngay.`),
       t(`Once unlocked, it can be tapped and sent up like a normal stack.`,`Mở khóa xong, người chơi chạm để đưa lên như chồng thẻ thường.`)
     ]),unlock(17));
 
