@@ -267,6 +267,72 @@ mark.hit{background:var(--mark);color:#18203A;border-radius:3px;padding:0 1px}
   .sec{margin-top:40px}
   .fly rect{animation:none}
 }
+
+/* ---------- additions for 1.3: panels, tiles, flow chart, annotated sketch ---------- */
+code{font:500 .9em/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--tint);border-radius:6px;padding:1px 6px;white-space:nowrap}
+.gbox code,.node code{background:var(--paper)}
+.ent.sys{padding:28px 0 30px}
+.ent-b>p.lead{margin:0 0 16px}
+.gbox{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px 18px;margin:0 0 14px}
+.gbox:last-child{margin-bottom:0}
+.gbox-h{font:700 1.06rem/1.3 var(--display);margin:0 0 12px}
+.gbox-h small{display:block;font:500 .86rem/1.4 var(--body);color:var(--muted);margin-top:1px}
+.gbox>p{margin:0 0 10px;max-width:68ch}
+.gbox>:last-child{margin-bottom:0}
+.gbox .note{margin:14px 0 0;max-width:none}
+.tiles{list-style:none;margin:0 0 14px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(136px,1fr));gap:10px}
+.tiles li{background:var(--tint);border-radius:12px;padding:10px 14px 11px;line-height:1.35}
+.tiles .tv{display:block;font:800 1.45rem/1.15 var(--display)}
+.tiles .tk{display:block;font-size:.88rem;color:var(--muted);margin-top:2px}
+.tiles li.hot{background:var(--ink);color:var(--paper)}
+.tiles li.hot .tk{color:inherit;opacity:.85}
+.ent-b>.tiles{max-width:520px;margin-bottom:0}
+.ent-b>.tiles li{background:var(--surface);border:1px solid var(--line)}
+.cases{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.cases li{background:var(--tint);border-radius:12px;padding:10px 14px;font-weight:500;line-height:1.4}
+.kv{margin:0}
+.kv>div{padding:11px 0;border-top:1px solid var(--line)}
+.kv>div:first-child{border-top:0;padding-top:0}
+.kv>div:last-child{padding-bottom:0}
+.kv dt{font-weight:600}
+.kv dd{margin:2px 0 0}
+@container (min-width:640px){
+  .kv>div{display:grid;grid-template-columns:140px minmax(0,1fr);gap:18px}
+  .kv dd{margin:0}
+}
+.upm{display:flex;align-items:center;gap:14px;background:var(--tint);border-radius:12px;padding:24px 18px 18px;max-width:460px}
+.upm-w{position:relative}
+.upm-w.bar{flex:1;min-width:0}
+.upm-pin{position:absolute;top:-15px;left:-8px;z-index:1;box-shadow:0 0 0 2px var(--tint)}
+.upm-bar{position:relative;height:26px;border-radius:999px;background:var(--track);overflow:hidden}
+.upm-fill{position:absolute;left:0;top:0;bottom:0;width:60%;background:var(--c3);border-radius:999px}
+.upm-n{position:absolute;inset:0;display:grid;place-items:center;font:800 .95rem/1 var(--display);color:#fff}
+.upm-box{width:48px;height:48px;border-radius:12px;border:2px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.upm-box .badge{font-size:1.3rem}
+.gbox>p.upm-cap{font-size:.86rem;line-height:1.5;color:var(--muted);margin:8px 2px 16px}
+.parts{list-style:none;margin:0;padding:0;display:grid;gap:12px;max-width:68ch}
+.parts li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;align-items:start;line-height:1.5}
+.parts b{display:block;font-weight:600}
+.parts .d{display:block}
+.flow{max-width:660px}
+.node{background:var(--tint);border-radius:12px;padding:10px 14px 11px}
+.node p{margin:0}
+.node .k{display:block;font:600 .82rem/1.4 var(--body);color:var(--muted)}
+.node .cond{font-weight:600;margin-bottom:4px}
+.arrow{text-align:center;color:var(--muted);font-size:1.15rem;line-height:1;padding:5px 0 6px}
+.split{display:grid;gap:8px 12px}
+@container (min-width:600px){.split{grid-template-columns:1fr 1fr}}
+.yn{display:inline-block;font:700 .82rem/1.2 var(--display);border-radius:999px;padding:3px 10px 2px;margin-right:8px;background:var(--ink);color:var(--paper);vertical-align:.08em}
+.yn.no{background:none;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.fx{display:block;margin-top:6px}
+.fx code{white-space:normal;display:inline-block;padding:3px 8px}
+.lvgrid{display:grid;gap:8px;max-width:540px;margin:0 0 14px}
+.lvrow{display:grid;grid-template-columns:clamp(70px,27%,158px) minmax(0,1fr);gap:10px;align-items:center}
+.lvk{font-weight:600;font-size:.88rem;line-height:1.3;color:var(--muted)}
+.lvcells{display:grid;grid-template-columns:repeat(6,minmax(0,52px));gap:clamp(4px,1.2cqi,8px);justify-items:center;align-items:center}
+.lvcells .fr{font:800 clamp(.8rem,3.9cqi,1rem)/1.3 var(--display);white-space:nowrap}
+.lvcells .sq{display:grid;place-items:center;width:100%;aspect-ratio:1;border-radius:10px;background:var(--tint);font:700 1.1rem/1 var(--display)}
+.lvcells .nw{font:700 .76rem/1 var(--display);background:var(--c3);color:#fff;border-radius:999px;padding:4px 8px 3px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -329,8 +395,9 @@ const SECTIONS=[
   {id:'game-mechanics',n:'1',c:1,en:'Game mechanics',vi:'Cơ chế trò chơi',subs:[
     {id:'gameplay-overview',n:'1.1',en:'Gameplay overview',vi:'Tổng quan lối chơi'},
     {id:'main-game-mechanics',n:'1.2',en:'Main game mechanics',vi:'Cơ chế chính'},
-    {id:'elements-mechanics',n:'1.3',en:'Elements',vi:'Yếu tố đặc biệt'},
-    {id:'booster-mechanics',n:'1.4',en:'Boosters',vi:'Công cụ hỗ trợ'}]},
+    {id:'additional-mechanics',n:'1.3',en:'Additional mechanics',vi:'Cơ chế bổ sung'},
+    {id:'elements-mechanics',n:'1.4',en:'Elements',vi:'Yếu tố đặc biệt'},
+    {id:'booster-mechanics',n:'1.5',en:'Boosters',vi:'Công cụ hỗ trợ'}]},
   {id:'ftue--tutorial',n:'2',c:2,en:'FTUE & tutorial',vi:'FTUE & hướng dẫn',subs:[
     {id:'ftue-logic',n:'2.1',en:'FTUE logic',vi:'Cách FTUE hoạt động'},
     {id:'ftue-steps',n:'2.2',en:'FTUE steps',vi:'Các bước FTUE'},
@@ -493,15 +560,105 @@ function view(l){
         `Khi cột xuống tới vị trí dưới cùng của hàng chờ, cột bắt đầu nhận thẻ.`),
       t(`When a pole is full, it clears from the level.`,
         `Khi đầy, cột biến mất khỏi màn chơi.`)
-    ]))+
-    ent(nm('Reward ads waiting slot (RV Slot)','Ô chờ quảng cáo thưởng'),ul([
-      t(`RV Slots let the player watch a rewarded ad to earn extra waiting slots in the level.`,
-        `Ô chờ quảng cáo thưởng (RV Slot) cho phép người chơi xem quảng cáo có thưởng để nhận thêm ô chờ trong màn chơi.`),
-      t(`Each level has 2 RV Slots.`,
-        `Mỗi màn có 2 ô chờ quảng cáo thưởng.`),
-      t(`Using an RV Slot adds 8 waiting slots.`,
-        `Mỗi lần dùng một ô chờ quảng cáo thưởng, người chơi được thêm 8 ô chờ.`)
     ]));
+
+  /* 1.3 uses panels, tiles and a small flow chart so each system and each of its parts stands apart */
+  const sys=(name,body,tags)=>ent(name,body,tags).replace('<div class="ent">','<div class="ent sys">');
+  const panel=(title,body,sub)=>`<div class="gbox"><h5 class="gbox-h blk">${title}${sub?`<small>${sub}</small>`:''}</h5>${body}</div>`;
+  const tiles=items=>`<ul class="tiles">${items.map(([v,k,cls])=>`<li${cls?` class="${cls}"`:''}><span class="tv">${v}</span><span class="tk">${k}</span></li>`).join('')}</ul>`;
+  const kv=pairs=>`<dl class="kv">${pairs.map(([k,v])=>`<div class="blk"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
+  const lead=x=>`<p class="lead">${x}</p>`;
+
+  B['additional-mechanics']=
+    sys(nm('Heart system (lives)','Hệ thống tim'),
+      lead(t(`The heart system limits how many times the player can lose and replay the game within a certain span of time.`,
+             `Hệ thống tim giới hạn số lần người chơi có thể thua và chơi lại trong một khoảng thời gian.`))+
+      panel(t('Maximum and refill','Số tim tối đa và hồi tim'),
+        tiles([
+          ['5',t('Maximum lives','Số tim tối đa')],
+          [t('20 min','20 phút'),t('To refill one life','Để hồi 1 tim')]
+        ])+ul([
+          t(`Each player has a maximum of 5 lives.`,`Mỗi người chơi có tối đa 5 tim.`),
+          t(`When the player has fewer than 5 lives, the system refills them automatically. Each life takes 20 minutes to refill.`,
+            `Khi người chơi có ít hơn 5 tim, hệ thống tự động hồi tim. Mỗi tim cần 20 phút để hồi.`),
+          t(`Once the player is back at 5 lives, the refill countdown stops.`,
+            `Khi đã đủ 5 tim trở lại, đồng hồ đếm ngược hồi tim sẽ dừng.`)
+        ]))+
+      panel(t('Losing lives','Mất tim'),
+        `<p>${t(`The player loses a life when they:`,`Người chơi mất tim khi:`)}</p>
+         <ul class="cases">
+           <li>${t(`Lose a level and restart it`,`Thua màn và chơi lại màn đó`)}</li>
+           <li>${t(`Choose to restart the level manually`,`Tự chọn chơi lại màn`)}</li>
+           <li>${t(`Exit to the home screen`,`Thoát về màn hình chính`)}</li>
+         </ul>`))+
+
+    sys(nm('Element unlock progress system','Thanh tiến độ mở khóa yếu tố'),
+      lead(t(`A progress bar on the Victory screen that shows the player how many levels are left until the next element unlocks.`,
+             `Một thanh tiến độ trên màn hình chiến thắng, cho người chơi thấy còn bao nhiêu màn nữa thì mở khóa yếu tố tiếp theo.`))+
+      panel(t('UI components','Thành phần giao diện'),
+        `<div class="upm" role="img" data-nosearch aria-label="${esc(t('Sketch of the module: part A is a progress bar filled to 3 of 5, part B is a square icon box at its right end.','Hình minh họa: phần A là thanh tiến độ đang ở mức 3 trên 5, phần B là ô vuông chứa biểu tượng ở đầu bên phải.'))}">
+           <div class="upm-w bar"><span class="pinl upm-pin">A</span><div class="upm-bar"><div class="upm-fill"></div><span class="upm-n">3/5</span></div></div>
+           <div class="upm-w"><span class="pinl upm-pin">B</span><div class="upm-box">${badge(7,'?')}</div></div>
+         </div>
+         <p class="upm-cap">${t('Simplified sketch. It shows the bar after level 7 in the example below.','Hình minh họa đơn giản: thanh tiến độ sau màn 7 trong ví dụ bên dưới.')}</p>
+         <ul class="parts">
+           <li><span class="pinl" data-nosearch>A</span><span><b>${nm('Progress bar','Thanh tiến độ')}</b><span class="d">${t(
+             `A horizontal track with a green fill gauge. The step count <code>{current}/{total}</code> is centered on it.`,
+             `Một thanh nằm ngang, phần đã đạt được tô màu xanh lá. Số bước dạng <code>{current}/{total}</code> (hiện tại/tổng) nằm ở giữa thanh.`)}</span></span></li>
+           <li><span class="pinl" data-nosearch>B</span><span><b>${nm('Feature icon box','Ô biểu tượng')}</b><span class="d">${t(
+             `A square frame at the right end that shows the next element to be unlocked.`,
+             `Một khung vuông ở đầu bên phải, hiện yếu tố sắp được mở khóa tiếp theo.`)}</span></span></li>
+         </ul>`)+
+      panel(t('Flow and progression logic','Cách hoạt động'),
+        `<div class="flow">
+           <div class="node"><p><span class="k">${t('Trigger','Khi nào chạy')}</span>${t(
+             `The Victory screen loads after level N is completed.`,
+             `Màn hình chiến thắng hiện lên sau khi người chơi hoàn thành màn N.`)}</p></div>
+           <div class="arrow" aria-hidden="true" data-nosearch>↓</div>
+           <div class="node"><p><span class="k">${t('Check','Kiểm tra')}</span>${t(
+             `Is there an upcoming feature milestone for the player's current level?`,
+             `Với màn hiện tại của người chơi, còn mốc mở khóa tính năng nào sắp tới không?`)}</p></div>
+           <div class="arrow" aria-hidden="true" data-nosearch>↓</div>
+           <div class="split">
+             <div class="node"><p class="cond"><span class="yn no">${t('No','Không')}</span>${t(`All features are already unlocked`,`Mọi tính năng đều đã mở khóa`)}</p>
+               <p>${t(`Hide the entire module and re-center the remaining UI.`,`Ẩn toàn bộ phần này và căn giữa lại các phần giao diện còn lại.`)}</p></div>
+             <div class="node"><p class="cond"><span class="yn">${t('Yes','Có')}</span>${t(`An active target is found`,`Còn mốc cần đạt`)}</p>
+               <p>${t(`Calculate how far the bar is filled, using Total and Current (see Fill calculation).`,`Tính mức đầy của thanh từ hai con số Tổng và Hiện tại (xem phần Cách tính mức đầy của thanh).`)}</p></div>
+           </div>
+         </div>`,
+        t('State resolution (on screen load)','Xác định trạng thái (khi màn hình hiện lên)'))+
+      panel(t('Fill calculation','Cách tính mức đầy của thanh'),
+        kv([
+          [nm('Total','Tổng'),t(`The levels from the previous feature unlock (or from level 1) up to the level just before the next feature unlock.`,
+                              `Số màn tính từ mốc mở khóa trước đó (hoặc từ màn 1) tới màn ngay trước mốc mở khóa tiếp theo.`)+
+            `<span class="fx"><code>${t('total = next unlock level − previous unlock level','tổng = màn mở khóa tiếp theo − màn mở khóa trước đó')}</code></span>`],
+          [nm('Current','Hiện tại'),t(`How many of those levels the player has completed.`,
+                                    `Trong các màn đó, người chơi đã hoàn thành bao nhiêu màn.`)+
+            `<span class="fx"><code>${t('current = completed level − previous unlock level + 1','hiện tại = màn vừa hoàn thành − màn mở khóa trước đó + 1')}</code></span>`]
+        ]))+
+      panel(t('Example','Ví dụ'),
+        `<div class="lvgrid">
+           <div class="lvrow blk"><span class="lvk">${t('Progress bar shows','Thanh tiến độ hiện')}</span><div class="lvcells">${
+             [5,6,7,8,9].map((n,i)=>`<span class="fr">${i+1}/5<span class="sr"> ${t('after level','sau màn')} ${n}, </span></span>`).join('')}<span></span></div></div>
+           <div class="lvrow blk"><span class="lvk">${t('Level','Màn')}</span><div class="lvcells">${
+             [5,6,7,8,9,10].map(n=>`<span class="sq">${n}<span class="sr">, </span></span>`).join('')}</div></div>
+           <div class="lvrow blk"><span class="lvk">${t('New element unlocks','Mở yếu tố mới')}</span><div class="lvcells">${
+             [5,6,7,8,9,10].map(n=>n===5||n===10?`<span class="nw">${t('New','Mới')}<span class="sr"> ${t('at level','ở màn')} ${n}, </span></span>`:'<span></span>').join('')}</div></div>
+         </div>`+
+        ul([
+          t(`An element unlocks at level 5 and the next one at level 10.`,
+            `Một yếu tố mở ở màn 5, yếu tố tiếp theo mở ở màn 10.`),
+          t(`The bar shows each number after the player completes that level. After level 7, it shows “3/5”.`,
+            `Thanh hiện mỗi con số sau khi người chơi hoàn thành màn tương ứng. Sau màn 7, thanh hiện “3/5”.`)
+        ])))+
+
+    sys(nm('Reward ads waiting slot (RV Slot)','Ô chờ quảng cáo thưởng'),
+      lead(t(`RV Slots let the player watch a rewarded ad to earn extra waiting slots in the level.`,
+             `Ô chờ quảng cáo thưởng (RV Slot) cho phép người chơi xem quảng cáo có thưởng để nhận thêm ô chờ trong màn chơi.`))+
+      tiles([
+        ['2',t('RV Slots in each level','Ô chờ quảng cáo thưởng trong mỗi màn')],
+        ['+8',t('Waiting slots added each time an RV Slot is used','Ô chờ được thêm mỗi lần dùng một ô chờ quảng cáo thưởng')]
+      ]));
 
   B['elements-mechanics']=
     ent(N.hiddenS,ul([
@@ -599,7 +756,7 @@ function view(l){
     [t('Element','Yếu tố'),t('Popup text','Nội dung popup'),t('Unlocks at level','Mở ở màn')],
     [
       [N.hiddenS,popup('Unblock the stack<br>to reveal its color.','Dọn chồng thẻ nằm trên<br>để hiện màu.'),lvl(7)],
-      [N.hiddenP,popup('Move to the bottom<br>to reveal its color.','Đưa cột xuống dưới cùng<br>để hiện màu.'),lvl(12)],
+      [N.hiddenP,popup('Move to the bottom<br>to reveal its color.','Đưa xuống dưới cùng<br>để hiện màu.'),lvl(12)],
       [N.locked,popup('Send cards up<br>to unlock the stack.','Đưa thẻ lên<br>để mở khóa chồng thẻ.'),lvl(17)]
     ]);
 
