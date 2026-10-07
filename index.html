@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Card Slots GDD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF1F6; --surface:#FFFFFF; --ink:#18203A; --muted:#566079; --line:#D6DCE8; --tint:#E3E8F1;
+  --rail:#232A40; --rail-ink:#EEF1F8; --rail-muted:#AAB3C9; --rail-line:rgba(255,255,255,.13); --rail-hover:rgba(255,255,255,.08);
+  --track:#2A3149; --accent:#1F55D6; --focus:#1F55D6; --mark:#FFDF5E; --flash:rgba(255,214,64,.42); --wip:#FBE7A1;
+  --c1:#D9363E; --c2:#2563EB; --c3:#1B8641; --c4:#F4BE0B; --c5:#F472B6; --c6:#F58220; --c7:#7C4DDB; --c8:#22B8D1;
+  --display:"Baloo 2","Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --rail-w:304px; --bar-h:0px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#131826; --surface:#1B2234; --ink:#E9EDF7; --muted:#A3ADC4; --line:#2F3852; --tint:#232B41;
+    --rail:#0E1220; --track:#0B0F1B; --accent:#8FB1FF; --focus:#8FB1FF; --flash:rgba(255,214,64,.26); --wip:#5A4B14;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131826; --surface:#1B2234; --ink:#E9EDF7; --muted:#A3ADC4; --line:#2F3852; --tint:#232B41;
+  --rail:#0E1220; --track:#0B0F1B; --accent:#8FB1FF; --focus:#8FB1FF; --flash:rgba(255,214,64,.26); --wip:#5A4B14;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--bar-h) + 14px)}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:400 1rem/1.65 var(--body);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+a{color:var(--accent);text-underline-offset:3px}
+button{font:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.rail :focus-visible{outline-color:#fff}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:var(--rail-w) minmax(0,1fr)}
+main{container-type:inline-size;padding:48px clamp(20px,5vw,64px) 30vh;width:100%;max-width:1040px;min-width:0;margin-inline:auto}
+
+/* ---------- rail (contents + search) ---------- */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);align-self:start;z-index:30;
+  height:100vh;height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+  display:flex;flex-direction:column;background:var(--rail);color:var(--rail-ink)}
+.brand{display:flex;align-items:center;gap:12px;padding:22px 20px 14px;color:inherit;text-decoration:none;font:800 1.4rem/1.05 var(--display)}
+.brand .badge{width:38px;height:38px}
+.brand small{display:block;margin-top:3px;font:500 .8rem/1.2 var(--body);color:var(--rail-muted)}
+.menu-btn{display:none}
+.lang{display:grid;grid-template-columns:1fr 1fr;margin:0 18px 12px;padding:3px;border-radius:999px;background:rgba(255,255,255,.1)}
+.lang button{border:0;background:none;color:var(--rail-ink);font:600 .88rem/1 var(--body);padding:9px 10px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:#fff;color:#18203A}
+.lang .short{display:none}
+.search{position:relative;margin:0 18px 10px}
+.search input{width:100%;height:44px;border-radius:12px;border:1px solid var(--rail-line);background:rgba(255,255,255,.07);
+  color:var(--rail-ink);font:400 1rem/1 var(--body);padding:0 70px 0 40px;-webkit-appearance:none;appearance:none}
+.search input::placeholder{color:var(--rail-muted);opacity:1}
+.search input:placeholder-shown{padding-right:46px}
+.search input::-webkit-search-cancel-button{display:none}
+.search .ico{position:absolute;left:13px;top:50%;width:17px;height:17px;transform:translateY(-50%);color:var(--rail-muted);pointer-events:none}
+.search-r{position:absolute;right:6px;top:0;bottom:0;display:flex;align-items:center;gap:2px}
+.hint{font-size:.8rem;color:var(--rail-muted);padding:0 6px;font-variant-numeric:tabular-nums}
+.hint.key{border:1px solid var(--rail-line);border-radius:6px;padding:1px 7px;margin-right:6px}
+.clr{width:34px;height:34px;border:0;border-radius:8px;background:none;color:var(--rail-ink);font-size:1.5rem;line-height:1;cursor:pointer}
+.clr:hover{background:var(--rail-hover)}
+.panel{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:4px 10px 28px}
+.rail[data-view="toc"] #results,.rail[data-view="results"] #toc{display:none}
+
+.toc ol{list-style:none;margin:0;padding:0}
+.toc>ol>li{margin-bottom:6px}
+.toc a{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;color:var(--rail-ink);text-decoration:none;font-weight:600;font-size:.96rem;line-height:1.3}
+.toc a .badge{width:26px;height:26px}
+.toc a .tl{flex:1;min-width:0}
+.toc ol ol a{font-weight:400;font-size:.92rem;color:var(--rail-muted);padding:6px 10px 6px 12px}
+.toc ol ol .num{flex:none;width:2.1em;text-align:right;font-variant-numeric:tabular-nums}
+.toc a:hover{background:var(--rail-hover)}
+.toc a.on{background:rgba(255,255,255,.14);color:#fff}
+.toc .wipt{flex:none;font-size:.72rem;font-weight:600;color:#18203A;background:var(--c4);border-radius:999px;padding:1px 7px}
+
+.res-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:2px 10px 8px;color:var(--rail-muted);font-size:.86rem}
+.linkbtn{border:0;background:none;color:var(--rail-ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px;font-size:.86rem}
+.res{display:block;padding:9px 10px;border-radius:10px;color:var(--rail-ink);text-decoration:none}
+.res:hover,.res[aria-current="true"]{background:var(--rail-hover)}
+.res[aria-current="true"]{box-shadow:inset 3px 0 0 var(--mark)}
+.res .crumb{display:block;font-size:.78rem;color:var(--rail-muted);margin-bottom:2px}
+.res .snip{display:block;font-size:.9rem;line-height:1.45;overflow-wrap:anywhere}
+.res mark{background:var(--mark);color:#18203A;border-radius:3px;padding:0 2px}
+.res-empty{padding:6px 10px;font-size:.92rem;line-height:1.5}
+.res-empty p{margin:0 0 8px}
+.res-empty .muted{color:var(--rail-muted)}
+.res-tip{padding:10px 10px 0;color:var(--rail-muted);font-size:.8rem}
+
+/* ---------- card badges ---------- */
+.badge{position:relative;display:inline-grid;place-items:center;flex:none;width:1.5em;height:1.5em;color:var(--cc,var(--c2));--on:#fff}
+.badge svg{position:absolute;inset:0;width:100%;height:100%}
+.badge b{position:relative;font:800 1em/1 var(--display);color:var(--on);transform:translateY(.04em)}
+.c1{--cc:var(--c1)}.c2{--cc:var(--c2)}.c3{--cc:var(--c3)}.c4{--cc:var(--c4)}
+.c5{--cc:var(--c5)}.c6{--cc:var(--c6)}.c7{--cc:var(--c7)}.c8{--cc:var(--c8)}
+.c4,.c5,.c6,.c8{--on:#18203A}
+
+/* ---------- hero ---------- */
+.hero{display:grid;gap:32px}
+.hero h1{font:800 clamp(2.9rem,9cqi,4.6rem)/.95 var(--display);margin:0;letter-spacing:-.01em}
+.hero .kind{font:600 1.25rem/1.3 var(--display);color:var(--muted);margin:8px 0 0}
+.hero .pitch{font-size:1.12rem;line-height:1.6;max-width:44ch;margin:18px 0 0}
+.legend{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:2px;max-width:520px}
+.legend button{display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;align-items:start;width:100%;text-align:left;border:0;background:none;color:inherit;border-radius:12px;padding:8px;margin-left:-8px;cursor:pointer;line-height:1.45}
+.legend button:hover,.legend button[aria-pressed="true"]{background:var(--tint)}
+.pinl{display:block;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);font:700 .92rem/27px var(--display);text-align:center}
+.legend b{font-weight:600}
+.legend .d{display:block;color:var(--muted);font-size:.94rem}
+.field{margin:0;justify-self:start;width:100%;max-width:372px}
+.field-box{background:var(--surface);border:1px solid var(--line);border-radius:30px;padding:16px;overflow:hidden}
+.field svg{display:block;width:100%;height:auto}
+.field figcaption{font-size:.86rem;line-height:1.5;color:var(--muted);margin:10px 4px 0}
+.field-foot{display:flex;justify-content:flex-end;margin:8px 4px 0}
+.pause{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 14px;font-size:.85rem;font-weight:500;cursor:pointer}
+.trackfill{fill:var(--track)}
+.table{fill:var(--tint);stroke:var(--line);stroke-width:1.5}
+.rod{opacity:.6}
+.edge{stroke:#000;stroke-opacity:.24;stroke-width:1}
+.sheen{fill:#fff;opacity:.16}
+.fly rect{opacity:0;transform-box:fill-box;transform-origin:center;animation:fly 3.8s cubic-bezier(.4,.1,.3,1) infinite;animation-delay:var(--d,0s)}
+@keyframes fly{
+  0%{opacity:0;transform:translate(0,0) scale(1)}
+  6%{opacity:1}
+  36%{opacity:1;transform:translate(34px,var(--dy,-200px)) scale(1.55,.18)}
+  44%{opacity:1;transform:translate(34px,var(--dy,-200px)) scale(1.55,.18)}
+  50%,100%{opacity:0;transform:translate(34px,var(--dy,-200px)) scale(1.55,.18)}
+}
+.field.paused .fly,.field[data-hl] .fly{display:none}
+.f1{fill:var(--c1)}.f2{fill:var(--c2)}.f3{fill:var(--c3)}.f4{fill:var(--c4)}.f5{fill:var(--c5)}.f6{fill:var(--c6)}.f7{fill:var(--c7)}.f8{fill:var(--c8)}
+.slot{fill:none;stroke:var(--muted);stroke-width:1.6;stroke-dasharray:5 5}
+.pin circle{fill:var(--ink);stroke:var(--surface);stroke-width:2}
+.pin text{font:700 12.5px var(--display);text-anchor:middle;fill:var(--paper)}
+.part{transition:opacity .18s ease}
+.field[data-hl] .part{opacity:.2}
+.field[data-hl="A"] .part-A,.field[data-hl="B"] .part-B,.field[data-hl="C"] .part-C,.field[data-hl="D"] .part-D,.field[data-hl="E"] .part-E{opacity:1}
+@container (min-width:780px){
+  .hero{grid-template-columns:minmax(0,1fr) minmax(280px,360px);gap:48px;align-items:start}
+  .field{justify-self:end}
+}
+
+/* ---------- sections ---------- */
+.sec{margin-top:88px}
+.sec>h2{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font:800 2.15rem/1.15 var(--display);margin:0}
+.sec>h2 .badge{width:48px;height:48px;font-size:1.6rem}
+.sec-intro{color:var(--muted);max-width:68ch;margin:10px 0 0}
+.sub{margin-top:44px}
+.sub>h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;font:700 1.5rem/1.2 var(--display);margin:0 0 12px}
+.sub>h3 .num{color:var(--muted);font-weight:600}
+.wip{font:600 .8rem/1.2 var(--body);background:var(--wip);color:var(--ink);padding:4px 11px;border-radius:999px;white-space:nowrap;align-self:center}
+.empty{color:var(--muted);font-style:italic;margin:0}
+.sec>h2 + .ent,.sec>h2 + .tbl,.sec>h2 + .sec-intro + .ent{margin-top:22px}
+
+.ent{padding:18px 0 16px;border-top:1px solid var(--line)}
+.ent-h h4,.defs dt{font:700 1.14rem/1.3 var(--display);margin:0}
+.orig{display:block;font:500 .82rem/1.3 var(--body);color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0;font-size:.84rem;font-weight:500;line-height:1.35}
+.tags span{display:inline-block;background:var(--tint);color:var(--ink);border-radius:8px;padding:3px 9px}
+.ent-b{margin-top:8px;min-width:0}
+.ent-b>p{margin:0 0 8px;max-width:68ch}
+.defs{margin:0}
+.defs>div{padding:16px 0;border-top:1px solid var(--line)}
+.defs dd{margin:6px 0 0;max-width:68ch}
+@container (min-width:720px){
+  .ent,.defs>div{display:grid;grid-template-columns:200px minmax(0,1fr);gap:8px 32px}
+  .ent-b,.defs dd{margin-top:0}
+}
+
+ul.bl,ul.params{list-style:none;margin:0;padding:0}
+ul.bl>li{position:relative;padding-left:1.2em;margin:0 0 .45em;max-width:68ch}
+ul.bl>li::before{content:"";position:absolute;left:.12em;top:.66em;width:.38em;height:.38em;border-radius:50%;background:var(--muted)}
+ul.bl ul.bl{margin:.4em 0 .2em}
+ul.bl ul.bl>li::before{background:none;border:1.5px solid var(--muted)}
+ol.steps{margin:.5em 0 .3em;padding-left:1.5em;max-width:66ch}
+ol.steps>li{margin:0 0 .35em;padding-left:.2em}
+ol.steps>li::marker{font-weight:700;font-family:var(--display)}
+ul.params>li{margin:0 0 .7em;max-width:68ch}
+ul.params>li>b{display:block;font-weight:600}
+ul.params>li>span{display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.chips span{background:var(--tint);border-radius:8px;padding:3px 11px;font-weight:500}
+.note{background:var(--tint);border-radius:14px;padding:12px 16px;max-width:68ch;margin:16px 0 4px;font-size:.95rem}
+.note b{font-weight:600}
+
+/* ---------- tables ---------- */
+.tbl{overflow-x:auto;margin:6px 0 4px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:540px;font-size:.96rem;line-height:1.5}
+th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--line)}
+thead th{font-weight:600;font-size:.86rem;color:var(--muted);white-space:nowrap}
+tbody th{font-weight:600}
+tbody tr:last-child>*{border-bottom:0}
+.wide table{min-width:760px}
+.lvl{font:800 1.35rem/1.1 var(--display)}
+.dash{color:var(--muted)}
+.popup{display:inline-block;white-space:nowrap;font:700 1.02rem/1.25 var(--display);border:2px solid var(--ink);border-radius:12px;padding:6px 13px;text-align:center}
+.gloss{display:block;white-space:nowrap;color:var(--muted);font-size:.87rem;line-height:1.4;margin-top:6px}
+.steps-tbl tbody{counter-reset:st}
+.steps-tbl tbody th{position:relative;padding-left:52px;min-width:200px}
+.steps-tbl tbody th::before{counter-increment:st;content:counter(st);position:absolute;left:16px;top:12px;width:1.55em;height:1.55em;border-radius:50%;background:var(--ink);color:var(--surface);font:700 .9rem/1.6em var(--display);text-align:center}
+.hap{white-space:nowrap}
+.hap i{font-style:normal;letter-spacing:.12em;margin-right:.45em}
+.cat{color:var(--muted)}
+
+/* ---------- colour list + unlock timeline ---------- */
+.colors{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 8px;max-width:420px}
+.colors li{display:grid;justify-items:center;gap:6px;text-align:center;font-size:.9rem;line-height:1.3}
+.colors .badge{width:56px;height:56px;font-size:1.7rem}
+@container (min-width:640px){.colors{grid-template-columns:repeat(8,minmax(0,1fr));max-width:none}}
+.glance{margin-top:44px}
+.glance h4{font:700 1.14rem/1.3 var(--display);margin:0 0 4px}
+.glance>p{margin:0;color:var(--muted);max-width:68ch;font-size:.95rem}
+.timeline{list-style:none;margin:26px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:30px 0}
+.timeline li{position:relative;padding:16px 14px 0 0;border-top:2px solid var(--line);line-height:1.35}
+.timeline li::before{content:"";position:absolute;top:-8px;left:0;width:14px;height:14px;border-radius:50%;background:var(--ink)}
+.timeline li.boost::before{background:var(--paper);border:3.5px solid var(--ink)}
+.timeline .lv{display:block;font:800 1.3rem/1.2 var(--display)}
+.timeline .nm{display:block;font-weight:600;font-size:.95rem}
+.timeline .nm a{color:inherit}
+.timeline .kd{display:block;color:var(--muted);font-size:.84rem}
+
+/* ---------- search hits in the page ---------- */
+mark.hit{background:var(--mark);color:#18203A;border-radius:3px;padding:0 1px}
+.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%,35%{background-color:var(--flash)}100%{background-color:transparent}}
+
+/* ---------- small screens: rail becomes a top bar ---------- */
+@media (max-width:959px){
+  :root{--bar-h:60px}
+  .app{display:block}
+  main{padding-top:28px}
+  .rail{height:auto;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:8px 10px}
+  .brand{display:none}
+  .menu-btn{order:1;display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:12px;background:rgba(255,255,255,.1);color:inherit;cursor:pointer}
+  .menu-btn svg{width:20px;height:20px}
+  .search{order:2;margin:0}
+  .search input{padding-right:78px}
+  .search input:placeholder-shown{padding-right:10px}
+  .lang{order:3;margin:0}
+  .lang button{padding:11px 11px}
+  .lang .full,.hint.key{display:none}
+  .lang .short{display:inline}
+  .panel{display:none;position:absolute;left:0;right:0;top:100%;max-height:min(70vh,560px);background:var(--rail);
+    border-top:1px solid var(--rail-line);box-shadow:0 22px 36px rgba(8,11,22,.4);padding:10px 10px 18px}
+  .rail[data-open="1"] .panel{display:block}
+  .res-tip{display:none}
+  .sec{margin-top:64px}
+  .sec>h2{font-size:1.8rem}
+  .sec>h2 .badge{width:42px;height:42px;font-size:1.4rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .fly rect{animation:none}
+  .field-foot{display:none}
+  .part{transition:none}
+}
+@media print{
+  .rail,.field-foot{display:none}
+  .app{display:block}
+  main{padding:0;max-width:none}
+  .sec{margin-top:40px}
+  .fly rect{animation:none}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="card" viewBox="-50 -50 100 100">
+      <rect x="-31" y="-42" width="62" height="84" rx="12" transform="rotate(13)" fill="currentColor" opacity=".42"/>
+      <rect x="-31" y="-42" width="62" height="84" rx="12" fill="currentColor"/>
+      <rect x="-24" y="-35" width="48" height="70" rx="7" fill="#fff" opacity=".17"/>
+      <rect x="-24" y="-35" width="48" height="70" rx="7" fill="none" stroke="#000" stroke-opacity=".12" stroke-width="1.5"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <header class="rail" id="rail" data-view="toc" data-open="">
+    <a class="brand" href="#top">
+      <span class="badge c2"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#card"/></svg></span>
+      <span>Card Slots<small id="brandSub">Game design document</small></span>
+    </a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="panel" aria-label="Contents">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h9"/></svg>
+    </button>
+    <div class="lang" id="langSwitch" role="group" aria-label="Language">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en"><span class="full">English</span><span class="short">EN</span></button>
+      <button type="button" data-set-lang="vi" aria-pressed="false" lang="vi"><span class="full">Tiếng Việt</span><span class="short">VI</span></button>
+    </div>
+    <div class="search" role="search">
+      <svg class="ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4.5 4.5"/></svg>
+      <input id="q" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Search the GDD" aria-label="Search the GDD">
+      <div class="search-r">
+        <span class="hint key" id="hint" aria-hidden="true">/</span>
+        <button class="clr" id="clr" type="button" hidden aria-label="Clear search">×</button>
+      </div>
+    </div>
+    <div class="panel" id="panel">
+      <div id="results"></div>
+      <div class="sr" id="status" role="status"></div>
+      <nav class="toc" id="toc" aria-label="Contents"></nav>
+    </div>
+  </header>
+  <main id="main"></main>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- small helpers ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* card badge: a small stack of cards, used for section numbers and the color list */
+const badge=(c,label)=>`<span class="badge c${c}" data-nosearch><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#card"/></svg>${label!=null?`<b>${label}</b>`:''}</span>`;
+
+/* ---------- document outline ---------- */
+const SECTIONS=[
+  {id:'game-mechanics',n:'1',c:1,en:'Game mechanics',vi:'Cơ chế trò chơi',subs:[
+    {id:'gameplay-overview',n:'1.1',en:'Gameplay overview',vi:'Tổng quan lối chơi'},
+    {id:'main-game-mechanics',n:'1.2',en:'Main game mechanics',vi:'Cơ chế chính'},
+    {id:'elements-mechanics',n:'1.3',en:'Elements',vi:'Yếu tố đặc biệt'},
+    {id:'booster-mechanics',n:'1.4',en:'Boosters',vi:'Công cụ hỗ trợ'}]},
+  {id:'ftue--tutorial',n:'2',c:2,en:'FTUE & tutorial',vi:'FTUE & hướng dẫn',subs:[
+    {id:'ftue-logic',n:'2.1',en:'FTUE logic',vi:'Cách FTUE hoạt động'},
+    {id:'ftue-steps',n:'2.2',en:'FTUE steps',vi:'Các bước FTUE'},
+    {id:'element-tutorial',n:'2.3',en:'Element tutorial',vi:'Hướng dẫn yếu tố đặc biệt'},
+    {id:'booster-tutorial',n:'2.4',en:'Booster tutorial',vi:'Hướng dẫn công cụ hỗ trợ'}]},
+  {id:'object-set--animation',n:'3',c:3,en:'Object set & animation',vi:'Đối tượng & chuyển động',subs:[
+    {id:'game-concept',n:'3.1',en:'Game concept',vi:'Ý tưởng game',wip:true},
+    {id:'core-game-object-concept',n:'3.2',en:'Core game objects',vi:'Đối tượng chính',wip:true},
+    {id:'element-object-concept',n:'3.3',en:'Element objects',vi:'Đối tượng yếu tố đặc biệt',wip:true},
+    {id:'booster-object-concept',n:'3.4',en:'Booster objects',vi:'Đối tượng công cụ hỗ trợ',wip:true}]},
+  {id:'sfx--haptics',n:'4',c:4,en:'SFX & haptics',vi:'Âm thanh & rung'},
+  {id:'remote-config',n:'5',c:5,en:'Remote config',vi:'Cấu hình từ xa',wip:true},
+  {id:'level-config',n:'6',c:6,en:'Level config',vi:'Cấu hình màn chơi',wip:true}
+];
+const SEC={};
+SECTIONS.forEach(s=>{SEC[s.id]=s;(s.subs||[]).forEach(u=>{SEC[u.id]=u;});});
+
+const UI={
+  en:{sub:'Game design document',search:'Search the GDD',searchShort:'Search',contents:'Contents',language:'Language',clear:'Clear search',
+      matches:n=>n===1?'1 match':n+' matches',none:q=>`No matches for “${q}”.`,tryShort:'Try a shorter or different word.',
+      other:n=>(n===1?'1 match':n+' matches')+' in the Vietnamese version.',switchTo:'Switch to Tiếng Việt',
+      tip:'Enter jumps to the next match. Esc clears.',overview:'Overview',wip:'In progress',
+      pause:'Pause motion',play:'Play motion',title:'Card Slots GDD'},
+  vi:{sub:'Tài liệu thiết kế game',search:'Tìm trong tài liệu',searchShort:'Tìm kiếm',contents:'Mục lục',language:'Ngôn ngữ',clear:'Xóa tìm kiếm',
+      matches:n=>n+' kết quả',none:q=>`Không tìm thấy “${q}”.`,tryShort:'Hãy thử từ khóa ngắn hơn hoặc từ khác.',
+      other:n=>`Có ${n} kết quả trong bản tiếng Anh.`,switchTo:'Chuyển sang English',
+      tip:'Nhấn Enter để tới kết quả kế tiếp. Nhấn Esc để xóa.',overview:'Tổng quan',wip:'Đang viết',
+      pause:'Dừng chuyển động',play:'Chạy chuyển động',title:'Card Slots GDD'}
+};
+
+/* ---------- play-screen sketch ---------- */
+/* one pole seen from the front: a base, a rod, and the cards already stacked on it */
+function poleSVG(cx,base,c,filled){
+  let s=`<rect class="f${c} rod" x="${cx-2.5}" y="${base-40}" width="5" height="42" rx="2.5"/>`+
+        `<rect class="f${c}" x="${cx-22}" y="${base}" width="44" height="9" rx="4.5"/>`;
+  for(let i=0;i<filled;i++){s+=`<rect class="f${c} edge" x="${cx-17}" y="${(base-6-i*6.5).toFixed(1)}" width="34" height="5" rx="2"/>`;}
+  return s;
+}
+/* one stack of cards lying on the table, seen from above */
+function stackSVG(cx,cy,rot,c,n){
+  let s='';
+  for(let k=n-1;k>=0;k--){s+=`<rect class="f${c} edge" x="${cx-28}" y="${(cy-37+k*3.2).toFixed(1)}" width="56" height="74" rx="9"/>`;}
+  s+=`<rect class="sheen" x="${cx-21}" y="${cy-30}" width="42" height="60" rx="5"/>`;
+  return `<g transform="rotate(${rot} ${cx} ${cy})">${s}</g>`;
+}
+function pin(x,y,l){return `<g class="pin"><circle cx="${x}" cy="${y}" r="11"/><text x="${x}" y="${y}" dy=".34em">${l}</text></g>`;}
+function fieldSVG(label){
+  /* four queues of three poles each; the last pole in each list sits at the bottom of its queue */
+  const queues=[[1,6,3],[4,2,1],[5,8,7],[2,3,4]],filled=[4,2,1,3],bases=[56,114,172];
+  let lanes='',waiting='',bottom='';
+  queues.forEach((qu,i)=>{
+    const x=25+i*76,cx=x+31;
+    lanes+=`<rect class="trackfill" x="${x}" y="6" width="62" height="186" rx="18"/>`;
+    qu.forEach((c,r)=>{const p=poleSVG(cx,bases[r],c,r===2?filled[i]:0);if(r===2)bottom+=p;else waiting+=p;});
+  });
+  let slots='';
+  for(let i=0;i<8;i++){slots+=`<rect class="slot" x="${29+i*36}" y="210" width="30" height="40" rx="7"/>`;}
+  [[0,6],[1,2]].forEach(([i,c])=>{
+    const x=29+i*36+5;
+    slots+=`<rect class="f${c} edge" x="${x}" y="218" width="20" height="27" rx="4"/><rect class="f${c} edge" x="${x}" y="215.5" width="20" height="27" rx="4"/>`;
+  });
+  const table=`<rect class="table" x="14" y="270" width="312" height="190" rx="24"/>`;
+  const blocked=[[64,312,-10,2,3],[150,306,6,4,2],[252,310,-5,7,3],[110,408,8,3,2],[232,410,-7,5,3]].map(a=>stackSVG(...a)).join('');
+  const free=[[98,356,5,1,3],[186,360,-6,8,2],[284,372,9,6,3]].map(a=>stackSVG(...a)).join('');
+  /* three red cards leave the red stack and land on the red pole */
+  let fly='';
+  for(let k=0;k<3;k++){fly+=`<rect class="f1 edge" x="87" y="342" width="22" height="28" rx="4" style="--d:${(k*.32).toFixed(2)}s;--dy:${(-200.5-k*6.5).toFixed(1)}px"/>`;}
+  return `<svg viewBox="0 0 340 470" role="img" aria-label="${esc(label)}">
+    <g class="part part-A part-B">${lanes}</g>
+    <g class="part part-A">${waiting}${pin(14,84,'A')}</g>
+    <g class="part part-B">${bottom}${pin(14,160,'B')}</g>
+    <g class="part part-C">${slots}${pin(14,230,'C')}</g>
+    <g class="part part-D part-E">${table}</g>
+    <g class="part part-E">${blocked}${pin(34,284,'E')}</g>
+    <g class="part part-D">${free}${pin(314,340,'D')}</g>
+    <g class="part fly" aria-hidden="true">${fly}</g>
+  </svg>`;
+}
+
+/* ---------- page content (English, Vietnamese) ---------- */
+let paused=false;
+function view(l){
+  const vi=l==='vi';
+  const t=(en,v)=>vi?v:en;
+  const ui=UI[l];
+  const ul=items=>`<ul class="bl">${items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  const ol=items=>`<ol class="steps">${items.map(i=>`<li>${i}</li>`).join('')}</ol>`;
+  const params=items=>`<ul class="params">${items.map(([a,b])=>`<li><b>${a}</b><span>${b}</span></li>`).join('')}</ul>`;
+  const nm=(en,v)=>vi?`${v} <span class="orig">${en}</span>`:en;
+  const ent=(name,body,tags)=>`<div class="ent"><div class="ent-h"><h4>${name}</h4>${tags?`<p class="tags">${[].concat(tags).map(x=>`<span>${x}</span>`).join(' ')}</p>`:''}</div><div class="ent-b">${body}</div></div>`;
+  const defs=pairs=>`<dl class="defs">${pairs.map(([a,b])=>`<div class="blk"><dt>${a}</dt><dd>${b}</dd></div>`).join('')}</dl>`;
+  const table=(label,heads,rows,cls)=>`<div class="tbl ${cls||''}" tabindex="0" role="region" aria-label="${esc(label)}"><table><thead><tr>${heads.map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map((c,i)=>i===0?`<th scope="row">${c}</th>`:`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  const popup=(text,v)=>`<span class="popup" lang="en">${text}</span>${vi?`<span class="gloss">${v}</span>`:''}`;
+  const dash=`<span class="dash">–</span>`;
+  const lvl=n=>`<span class="lvl">${n}</span>`;
+  const wip=`<span class="wip">${ui.wip}</span>`;
+  const empty=`<p class="empty">${t('Nothing written here yet.','Chưa có nội dung.')}</p>`;
+  const note=body=>`<p class="note"><b>${t('Editor’s note.','Ghi chú biên tập.')}</b> ${body}</p>`;
+  const unlock=n=>t(`Unlocks at level ${n}`,`Mở ở màn ${n}`);
+  const unlockB=n=>[unlock(n),t(`3 free`,`Tặng 3 lượt`)];
+  const hap=n=>n?`<span class="hap"><i aria-hidden="true" data-nosearch>${'●'.repeat(n)+'○'.repeat(3-n)}</i>${[0,t('Weak','Nhẹ'),t('Medium','Vừa'),t('Strong','Mạnh')][n]}</span>`:dash;
+
+  /* names reused across sections */
+  const N={
+    hiddenS:nm('Hidden Card Stack','Chồng thẻ ẩn'),hiddenP:nm('Hidden Color Pole','Cột ẩn màu'),locked:nm('Locked Card Stack','Chồng thẻ bị khóa'),
+    hand:nm('Hand','Bàn tay'),shuffle:nm('Shuffle','Xáo trộn'),remove:nm('Remove','Loại bỏ')
+  };
+  const P={ /* plain names for running text and tables */
+    hiddenS:t('Hidden Card Stack','Chồng thẻ ẩn'),hiddenP:t('Hidden Color Pole','Cột ẩn màu'),locked:t('Locked Card Stack','Chồng thẻ bị khóa'),
+    hand:t('Hand','Bàn tay'),shuffle:t('Shuffle','Xáo trộn'),remove:t('Remove','Loại bỏ')
+  };
+  const withEl=t('With elements','Khi gặp yếu tố đặc biệt');
+
+  const B={};
+
+  /* ===== 1. Game mechanics ===== */
+  B['gameplay-overview']=
+    ent(t('How it plays','Cách chơi'),ul([
+      t(`The player taps a stack of cards on the table to send it up. The cards go straight to a pole of the same color, or to the waiting slots if no matching pole is ready.`,
+        `Người chơi chạm vào một chồng thẻ trên bàn để đưa thẻ lên. Thẻ bay thẳng tới cột cùng màu, hoặc vào ô chờ nếu chưa có cột nào phù hợp.`),
+      t(`Cards in the waiting slots look for a pole of their color and fly to it as soon as one is available.`,
+        `Thẻ đang nằm trong ô chờ sẽ tự tìm cột cùng màu và bay tới ngay khi có cột phù hợp.`),
+      t(`The player wins by clearing every card from the table.`,
+        `Dọn hết thẻ trên bàn là thắng màn.`)
+    ]))+
+    ent(t('Win and lose','Thắng và thua'),params([
+      [t('Win','Thắng'),t(`Every stack of cards on the table has been sent to a pole of its color, and every pole has been cleared from the level.`,
+                         `Tất cả các chồng thẻ trên bàn đã được đưa lên cột cùng màu, và mọi cột đều đã được dọn khỏi màn chơi.`)],
+      [t('Lose','Thua'),t(`Every waiting slot is taken, and none of the cards in the waiting slots matches an available pole.`,
+                         `Các ô chờ đã kín chỗ, và không thẻ nào trong ô chờ cùng màu với cột đang nhận thẻ.`)]
+    ]));
+
+  B['main-game-mechanics']=
+    ent(nm('Card','Thẻ'),ul([
+      t(`Every card has one color. Cards of the same color sit together in a stack, and stacks come in different sizes.`,
+        `Mỗi thẻ có một màu. Các thẻ cùng màu nằm chung thành một chồng, mỗi chồng có số thẻ khác nhau.`),
+      t(`Stacks lie on the table and overlap, so some stacks block others.`,
+        `Các chồng thẻ nằm trên bàn và đè lên nhau.`),
+      t(`A stack blocks any stack of a different color that lies underneath it.`,
+        `Chồng thẻ nằm trên sẽ đè chồng thẻ khác màu nằm dưới nó.`),
+      t(`The player can only tap a stack that is not blocked.`,
+        `Người chơi chỉ chạm được vào chồng thẻ không bị đè.`),
+      t(`Tapping a stack sends its cards up. If a pole of the same color is at the bottom of a queue, the cards fly to that pole. If not, they fly to the waiting slots.`,
+        `Chạm vào một chồng thẻ để đưa thẻ lên. Nếu có cột cùng màu đang ở dưới cùng hàng chờ, thẻ bay tới cột đó. Nếu không, thẻ bay vào ô chờ.`),
+      t(`Once the stack on top has been sent up, the stack below is unblocked and can be sent up too.`,
+        `Khi chồng thẻ nằm trên được đưa đi, chồng bên dưới hết bị đè và cũng có thể đưa lên.`)
+    ]))+
+    ent(nm('Pole','Cột'),ul([
+      t(`Every pole has one color. Poles line up in queues.`,
+        `Mỗi cột có một màu. Các cột xếp thành từng hàng chờ.`),
+      t(`When a pole reaches the bottom of its queue, it becomes available: cards can start stacking on it.`,
+        `Khi cột xuống tới vị trí dưới cùng của hàng chờ, cột bắt đầu nhận thẻ.`),
+      t(`When a pole is full, it clears from the level.`,
+        `Khi đầy, cột biến mất khỏi màn chơi.`)
+    ]))+
+    ent(nm('Reward ads waiting slot (RV Slot)','Ô chờ quảng cáo thưởng'),ul([
+      t(`RV Slots let the player watch a rewarded ad to earn extra waiting slots in the level.`,
+        `Ô chờ quảng cáo thưởng (RV Slot) cho phép người chơi xem quảng cáo có thưởng để nhận thêm ô chờ trong màn chơi.`),
+      t(`Each level has 2 RV Slots.`,
+        `Mỗi màn có 2 ô chờ quảng cáo thưởng.`),
+      t(`Using an RV Slot adds 8 waiting slots.`,
+        `Mỗi lần dùng một ô chờ quảng cáo thưởng, người chơi được thêm 8 ô chờ.`)
+    ]));
+
+  B['elements-mechanics']=
+    ent(N.hiddenS,ul([
+      t(`A Hidden Card Stack hides its real color while it is blocked.`,`Chồng thẻ ẩn che đi màu thật khi còn bị đè.`),
+      t(`Once it is unblocked, it reveals its real color.`,`Khi hết bị đè, chồng thẻ hiện màu thật.`)
+    ]),unlock(7))+
+    ent(N.hiddenP,ul([
+      t(`A Hidden Color Pole hides its real color while it is not at the bottom of its queue.`,`Cột ẩn màu che đi màu thật khi chưa xuống tới dưới cùng hàng chờ.`),
+      t(`Once it reaches the bottom of its queue, it reveals its real color.`,`Khi xuống tới vị trí dưới cùng của hàng chờ, cột hiện màu thật.`)
+    ]),unlock(12))+
+    ent(N.locked,ul([
+      t(`A Locked Card Stack is locked away and can't be tapped to send up.`,`Chồng thẻ bị khóa không thể chạm để đưa lên.`),
+      t(`It still shows its color, but the player can't interact with it.`,`Chồng thẻ vẫn hiện màu, nhưng người chơi chưa làm gì được với nó.`),
+      t(`It shows a countdown: the number of poles that must be cleared before it unlocks.`,`Trên chồng thẻ có một con số đếm ngược, cho biết cần dọn xong bao nhiêu cột thì chồng thẻ mới mở khóa.`),
+      t(`Each cleared pole lowers the countdown by 1.`,`Mỗi cột được dọn xong thì con số giảm đi 1.`),
+      t(`Once unlocked, it can be tapped and sent up like a normal stack.`,`Mở khóa xong, người chơi chạm để đưa lên như chồng thẻ thường.`)
+    ]),unlock(17));
+
+  B['booster-mechanics']=
+    ent(N.hand,ul([
+      t(`Lets the player pick any stack of cards on the table and send it up, even a blocked one.`,
+        `Cho phép người chơi chọn bất kỳ chồng thẻ nào trên bàn để đưa lên, kể cả chồng đang bị đè.`),
+      withEl+':'+ul([
+        t(`Hidden Card Stack and Locked Card Stack: both can be selected.`,`Chồng thẻ ẩn và Chồng thẻ bị khóa: đều chọn được.`),
+        t(`A selected Locked Card Stack unlocks immediately.`,`Chồng thẻ bị khóa được chọn sẽ mở khóa ngay.`)
+      ])
+    ]),unlockB(5))+
+    ent(N.shuffle,ul([
+      t(`Rearranges the poles in the queues. The game does the following in order:`,
+        `Xếp lại thứ tự các cột trong các hàng chờ. Trò chơi làm lần lượt các bước sau:`)+ol([
+        t(`Pick up to 3 colors from the cards in the waiting slots. If the waiting slots are empty or hold fewer than 3 colors, pick the remaining colors from the unblocked stacks on the table.`,
+          `Chọn tối đa 3 màu từ các thẻ đang nằm trong ô chờ. Nếu ô chờ trống hoặc chưa đủ 3 màu, trò chơi lấy thêm màu từ các chồng thẻ không bị đè trên bàn.`),
+        t(`Move 3 poles of the picked colors down to the bottom of the queues.`,
+          `Đưa 3 cột thuộc các màu đã chọn xuống dưới cùng các hàng chờ.`),
+        t(`Shuffle the rest of the poles randomly.`,`Xáo ngẫu nhiên các cột còn lại.`)
+      ]),
+      withEl+':'+ul([
+        t(`When choosing which poles move down, the order of priority is normal pole → Hidden Color Pole.`,
+          `Khi chọn cột để đưa xuống, thứ tự ưu tiên là cột thường → Cột ẩn màu.`)
+      ])
+    ]),unlockB(8))+
+    ent(N.remove,ul([
+      t(`Lets the player pick any pole in the queues and clear it immediately.`,
+        `Cho phép người chơi chọn bất kỳ cột nào trong các hàng chờ để dọn cột đó ngay lập tức.`),
+      t(`The picked pole pulls cards of its color up from the table, in this order of priority:`,
+        `Cột được chọn sẽ hút các thẻ cùng màu từ trên bàn lên, theo thứ tự ưu tiên:`)+ol([
+        t(`Normal stacks that are not blocked`,`Chồng thẻ thường không bị đè`),
+        t(`Blocked stacks`,`Chồng thẻ bị đè`),
+        t(`Hidden Card Stacks`,`Chồng thẻ ẩn`),
+        t(`Locked Card Stacks. A locked stack that gets pulled unlocks immediately.`,`Chồng thẻ bị khóa. Chồng thẻ bị khóa khi được hút sẽ mở khóa ngay.`)
+      ])
+    ]),unlockB(10));
+
+  /* ===== 2. FTUE & tutorial ===== */
+  B['ftue--tutorial']=`<p class="sec-intro">${t(
+    `FTUE stands for first-time user experience: what a player goes through the first time they open the game.`,
+    `FTUE (First-Time User Experience) là trải nghiệm của người chơi trong lần đầu tiên mở game.`)}</p>`;
+
+  B['ftue-logic']=defs([
+    [t('Goal','Mục tiêu'),
+     t(`The FTUE helps players grasp the core loop quickly. Its levels introduce mechanics one at a time, in an intuitive way, without overloading the player with information.`,
+       `FTUE giúp người chơi nhanh chóng hiểu vòng chơi chính. Các màn đầu giới thiệu từng cơ chế một cách tự nhiên, lần lượt, không dồn quá nhiều thông tin cùng lúc.`)],
+    [nm('Input masking','Khóa thao tác'),
+     t(`When a step needs a tap on a specific spot, a translucent overlay blocks every touch outside the target area, so the player follows the intended path. The game HUD stays usable.`,
+       `Khi một bước cần người chơi chạm vào một vị trí cụ thể, trò chơi phủ một lớp mờ lên màn hình và chặn mọi thao tác chạm bên ngoài vùng được chỉ định, để người chơi đi đúng theo hướng dẫn. Các nút trên giao diện (HUD) vẫn bấm được.`)],
+    [nm('State machine','Đi theo từng bước'),
+     t(`Each tutorial runs as a state machine, one step at a time. The overlay is released and the next step starts only when the player meets the current step's completion condition.`,
+       `Mỗi hướng dẫn chạy theo từng bước nối tiếp nhau. Chỉ khi người chơi làm đúng yêu cầu của bước hiện tại thì lớp mờ mới được gỡ và trò chơi chuyển sang bước kế tiếp.`)],
+    [nm('Highlight','Khung nổi bật'),
+     t(`Some steps show a highlight box around the place to tap. The player can only tap that place.`,
+       `Ở một số bước sẽ có khung sáng chỉ chỗ cần chạm. Người chơi chỉ chạm được vào đúng vị trí đó.`)],
+    [t('Progress save','Lưu tiến độ'),
+     t(`Some steps save that they are complete. If the player closes the app before finishing the tutorial and opens it again, the FTUE skips the saved steps and continues from the next one.`,
+       `Một số bước sẽ lưu lại trạng thái đã hoàn thành. Nếu người chơi thoát game giữa chừng rồi mở lại, FTUE bỏ qua các bước đã lưu và tiếp tục từ bước kế tiếp.`)]
+  ]);
+
+  const tapCond=t('The player taps the highlighted stack of cards.','Người chơi chạm vào chồng thẻ đang được làm nổi bật.');
+  const tapStep=(n,enOrd,viOrd)=>[t(`Tap stack ${n}`,`Chạm vào chồng thẻ ${n}`),tapCond,
+    t(`The ${enOrd} stack the player should tap`,`Chồng thẻ ${viOrd} cần chạm`),popup('Tap to send cards','Chạm để đưa thẻ lên'),dash];
+  B['ftue-steps']=table(t('FTUE steps','Các bước FTUE'),
+    [t('Step','Bước'),t('Complete condition','Điều kiện hoàn thành'),t('Highlight','Phần được làm nổi bật'),t('Text box','Nội dung hộp thoại'),t('Progress save','Lưu tiến độ')],
+    [
+      [t('Load the level','Tải màn chơi'),t('The game loads into level 1.','Trò chơi vào màn 1.'),dash,dash,dash],
+      [t('Terms &amp; Conditions / Privacy Policy','Điều khoản / Chính sách quyền riêng tư'),
+       t('The player taps to agree to the Terms &amp; Conditions / Privacy Policy.','Người chơi chạm đồng ý với Điều khoản / Chính sách quyền riêng tư.'),dash,dash,dash],
+      tapStep(1,'1st','thứ nhất'),
+      tapStep(2,'2nd','thứ hai'),
+      tapStep(3,'3rd','thứ ba'),
+      [t('Level complete','Hoàn thành màn'),t('The player sends up all the cards and completes the level.','Người chơi đưa hết thẻ lên và hoàn thành màn.'),dash,dash,t('Yes','Có')]
+    ],'wide steps-tbl');
+
+  B['element-tutorial']=table(t('Element tutorial','Hướng dẫn yếu tố đặc biệt'),
+    [t('Element','Yếu tố'),t('Popup text','Nội dung popup'),t('Unlocks at level','Mở ở màn')],
+    [
+      [N.hiddenS,popup('Unblock the stack<br>to reveal its color.','Dọn chồng thẻ nằm trên<br>để hiện màu.'),lvl(7)],
+      [N.hiddenP,popup('Move pole to the bottom<br>to reveal its color.','Đưa cột xuống dưới cùng<br>để hiện màu.'),lvl(12)],
+      [N.locked,popup('Send cards up<br>to unlock the stack.','Đưa thẻ lên<br>để mở khóa chồng thẻ.'),lvl(17)]
+    ]);
+
+  B['booster-tutorial']=table(t('Booster tutorial','Hướng dẫn công cụ hỗ trợ'),
+    [t('Booster','Công cụ'),t('Popup text','Nội dung popup'),t('Unlocks at level','Mở ở màn'),t('Free boosters','Số lượt tặng')],
+    [
+      [N.hand,popup('Pick any stack of cards!','Chọn bất kỳ chồng thẻ nào!'),lvl(5),lvl(3)],
+      [N.shuffle,popup('Shuffle the poles<br>in queues!','Xáo trộn các cột<br>trong hàng chờ!'),lvl(8),lvl(3)],
+      [N.remove,popup('Tap the pole<br>to sort it instantly!','Chạm vào cột<br>để xếp xong ngay!'),lvl(10),lvl(3)]
+    ]);
+
+  const stops=[
+    [1,t('First tutorial','Hướng dẫn đầu tiên'),'ftue','ftue-steps','FTUE'],
+    [5,P.hand,'boost','booster-mechanics'],[7,P.hiddenS,'elem','elements-mechanics'],
+    [8,P.shuffle,'boost','booster-mechanics'],[10,P.remove,'boost','booster-mechanics'],
+    [12,P.hiddenP,'elem','elements-mechanics'],[17,P.locked,'elem','elements-mechanics']
+  ];
+  B['ftue--tutorial:after']=`<div class="glance">
+    <h4>${t('Unlock order at a glance','Thứ tự mở khóa theo màn')}</h4>
+    <p>${t('Sections 2.2 to 2.4 on one line, in level order.','Gom các mục 2.2 đến 2.4 trên một dòng, theo thứ tự màn chơi.')}</p>
+    <ol class="timeline">${stops.map(s=>`<li class="${s[2]}"><span class="lv">${t('Level','Màn')} ${s[0]}</span><span class="nm"><a href="#${s[3]}">${s[1]}</a></span><span class="kd">${s[4]||(s[2]==='boost'?t('Booster','Công cụ hỗ trợ'):t('Element','Yếu tố đặc biệt'))}</span></li>`).join('')}</ol>
+  </div>`;
+
+  /* ===== 3. Object set & animation ===== */
+  B['game-concept']=empty;
+
+  const colors=[t('Red','Đỏ'),t('Blue','Xanh dương'),t('Green','Xanh lá'),t('Yellow','Vàng'),t('Pink','Hồng'),t('Orange','Cam'),t('Purple','Tím'),t('Cyan','Xanh ngọc')];
+  const anim=n=>t('Animation '+n,'Chuyển động '+n);
+  B['core-game-object-concept']=
+    ent(t('Color list','Bảng màu'),
+      `<p>${t('One list of 8 colors is shared by cards and poles.','Thẻ và cột dùng chung một bảng 8 màu.')}</p>
+       <ol class="colors">${colors.map((c,i)=>`<li>${badge(i+1,i+1)}<span><span class="sr">${i+1}: </span>${c}</span></li>`).join('')}</ol>`)+
+    ent(nm('Card','Thẻ'),params([
+      [anim(1),t('Cards move from the table to a pole.','Thẻ bay từ bàn lên cột.')],
+      [anim(2),t('Cards move from the table to the waiting slots.','Thẻ bay từ bàn vào ô chờ.')]
+    ]))+
+    ent(nm('Pole','Cột'),params([
+      [anim(1),t('The pole moves down its queue.','Cột đi xuống trong hàng chờ.')],
+      [anim(2),t('The pole is full and clears from the level.','Cột đầy và biến mất khỏi màn chơi.')]
+    ]));
+
+  const an=t('Animation','Chuyển động');
+  B['element-object-concept']=
+    ent(N.hiddenS,params([[an,t('A smoke particle effect covers the swap from hidden stack to normal stack.','Hiệu ứng khói che đi lúc chồng thẻ ẩn đổi thành chồng thẻ thường.')]]))+
+    ent(N.hiddenP,params([[an,t('A smoke particle effect covers the swap from hidden pole to normal pole.','Hiệu ứng khói che đi lúc cột ẩn màu đổi thành cột thường.')]]))+
+    ent(N.locked,params([[an,t('The ice breaks into pieces when the stack unlocks.','Lớp băng vỡ vụn khi chồng thẻ được mở khóa.')]]));
+
+  B['booster-object-concept']=
+    ent(N.shuffle,params([[an,t('The shuffle animation mixes up the poles in the queues.','Hiệu ứng xáo trộn đảo vị trí các cột trong các hàng chờ.')]]))+
+    ent(N.remove,params([[an,t('The picked pole flies toward the table, then pulls in all the cards of its color.','Cột được chọn bay về phía bàn rồi hút hết các thẻ cùng màu.')]]));
+
+  /* ===== 4. SFX & haptics ===== */
+  const cat={ui:t('UI','Giao diện (UI)'),core:t('Core game SFX','Lối chơi chính'),el:t('Element SFX','Yếu tố đặc biệt'),bo:t('Booster SFX','Công cụ hỗ trợ')};
+  const sfx=[
+    ['BGM In Game','ui',t('Gameplay starts','Bắt đầu vào chơi'),0],
+    ['BGM Home','ui',t('The home screen is open','Đang ở màn hình chính'),0],
+    ['Win Level','ui',t('The player wins the level','Người chơi thắng màn'),3],
+    ['Lose Level','ui',t('The player is temporarily stuck','Người chơi tạm thời bị kẹt'),3],
+    ['Tap','ui',t('The player taps the UI','Người chơi chạm vào giao diện'),1],
+    ['Coin Reward','ui',t('The player receives a coin reward','Người chơi nhận thưởng xu'),0],
+    ['Booster Reward','ui',t('The player receives a booster reward','Người chơi nhận thưởng công cụ hỗ trợ'),0],
+    ['Card Selected','core',t('The player taps a stack of cards','Người chơi chạm vào chồng thẻ'),2],
+    ['Card Move to column','core',t('A card slides onto the pole','Thẻ trượt vào cột'),0],
+    ['Pole Clear','core',t('A pole is full and clears','Cột đầy và được dọn đi'),2],
+    ['Hidden Pole/Card Stack','el',t('A Hidden Card Stack or Hidden Color Pole reveals its color','Chồng thẻ ẩn hoặc Cột ẩn màu hiện màu thật'),0],
+    ['Locked Card Stack Unlock','el',t('A Locked Card Stack unlocks','Chồng thẻ bị khóa được mở khóa'),0],
+    ['Shuffle','bo',t('The game shuffles the poles','Trò chơi xáo trộn các cột'),0]
+  ];
+  B['sfx--haptics']=table(t('SFX and haptics','Âm thanh và rung'),
+    [t('Name','Tên'),t('Category','Nhóm'),t('Plays when','Phát khi'),t('Haptic','Rung')],
+    sfx.map(r=>[`<span lang="en">${r[0]}</span>`,`<span class="cat">${cat[r[1]]}</span>`,r[2],hap(r[3])]));
+
+  /* ===== 5. Remote config ===== */
+  const unl=t('0 means unlimited.','0 nghĩa là không giới hạn.');
+  B['remote-config']=`<p class="sec-intro">${t(
+      `Values the team can change without releasing a new build.`,
+      `Các thông số mà đội có thể chỉnh mà không cần phát hành bản game mới.`)}</p>`+
+    ent(t('Rewards: coins and boosters','Phần thưởng: xu và công cụ hỗ trợ'),
+      params([
+        [t('Coins earned per level','Số xu nhận mỗi màn'),t('How many coins the player earns per level.','Người chơi nhận bao nhiêu xu sau mỗi màn.')],
+        [t('Ad multiplier on the level reward','Hệ số nhân thưởng khi xem quảng cáo'),t('How much a rewarded ad multiplies the level reward (2×, 3×, …).','Phần thưởng của màn được nhân lên bao nhiêu khi xem quảng cáo (2×, 3×, …).')],
+        [t('Reward per purchase','Số lượng nhận mỗi lần mua'),t('How many boosters one purchase gives. Set separately for each booster.','Mỗi lần mua nhận được bao nhiêu công cụ hỗ trợ. Đặt riêng cho từng công cụ.')],
+        [t('Coin cost','Giá bằng xu'),t('The price of one purchase, in coins. Set separately for each booster.','Giá của một lần mua, tính bằng xu. Đặt riêng cho từng công cụ.')]
+      ])+
+      `<p>${t('Boosters listed for purchase:','Các công cụ được liệt kê để mua:')}</p>
+       <div class="chips blk" lang="en"><span>Paper Box</span><span>Magnet</span><span>Remove</span></div>`+
+      note(t(
+         `The source lists Paper Box, Magnet and Remove here, but the rest of this GDD names the boosters Hand, Shuffle and Remove. The names are kept as written and need confirming.`,
+         `Bản gốc ghi Paper Box, Magnet và Remove ở mục này, trong khi các phần khác của tài liệu gọi công cụ là Hand, Shuffle và Remove. Tên được giữ nguyên như bản gốc và cần xác nhận lại.`)))+
+    ent(t('Ads: limits and placement','Quảng cáo: giới hạn và vị trí'),params([
+      [t('Max ads per day for the multiplier','Số quảng cáo tối đa mỗi ngày để nhân thưởng'),t('How many ads a player can watch per day to double or triple rewards.','Mỗi ngày người chơi được xem tối đa bao nhiêu quảng cáo để nhân đôi hoặc nhân ba phần thưởng.')+' '+unl],
+      [t('Max ads per day for revive','Số quảng cáo tối đa mỗi ngày để hồi sinh'),t('How many ads a player can watch per day to revive.','Mỗi ngày người chơi được xem tối đa bao nhiêu quảng cáo để hồi sinh.')+' '+unl],
+      [t('Max ads per day for boosters','Số quảng cáo tối đa mỗi ngày để nhận công cụ hỗ trợ'),t('How many ads a player can watch per day to get boosters.','Mỗi ngày người chơi được xem tối đa bao nhiêu quảng cáo để nhận công cụ hỗ trợ.')+' '+unl]
+    ]))+
+    ent(t('Sub-mechanics: revive and others','Cơ chế phụ: hồi sinh và các phần khác'),params([
+      [t('First revive cost','Giá lần hồi sinh đầu tiên'),t('The cost of the first revive.','Giá của lần hồi sinh đầu tiên.')],
+      [t('Price growth per extra revive','Mức tăng giá mỗi lần hồi sinh thêm'),t('The multiplier applied to the cost of each following revive.','Hệ số nhân giá áp dụng cho mỗi lần hồi sinh tiếp theo.')],
+      [t('Max revives per level','Số lần hồi sinh tối đa mỗi màn'),t('How many revives are allowed in one level.','Mỗi màn được hồi sinh tối đa bao nhiêu lần.')+' '+unl]
+    ]));
+
+  /* ===== 6. Level config ===== */
+  B['level-config']=ent(t('Planned content','Nội dung dự kiến'),ul([
+    t('JSON format','Định dạng JSON'),
+    t('Tutorial on how to use the level builder tool','Hướng dẫn cách dùng công cụ dựng màn (level builder)')
+  ]));
+
+  /* ----- hero ----- */
+  const legend=[
+    ['A',t('Queues','Hàng chờ'),t('Poles line up here. Each pole has one color.','Các cột xếp hàng ở đây. Mỗi cột có một màu.')],
+    ['B',t('Bottom poles','Cột dưới cùng'),t('The pole at the bottom of each queue. Only these collect cards.','Cột nằm dưới cùng của mỗi hàng chờ. Chỉ những cột này mới nhận thẻ.')],
+    ['C',t('Waiting slots','Ô chờ'),t('Cards with no matching pole wait here.','Thẻ chưa có cột cùng màu thì nằm đợi ở đây.')],
+    ['D',t('Free stacks','Chồng thẻ không bị đè'),t('Nothing lies on top, so the player can tap them.','Không có gì đè lên, nên người chơi chạm được.')],
+    ['E',t('Blocked stacks','Chồng thẻ bị đè'),t('Covered by another stack. They can’t be tapped yet.','Đang bị chồng khác đè lên nên chưa chạm được.')]
+  ];
+  const hero=`<div class="hero" id="top" data-sec="top" data-spy="top">
+    <div>
+      <h1>Card Slots</h1>
+      <p class="kind">${ui.sub}</p>
+      <p class="pitch">${t(`Tap stacks of cards to send them to poles of the same color, park the rest in the waiting slots, and clear the table.`,
+                           `Chạm vào các chồng thẻ để đưa thẻ lên cột cùng màu, thẻ chưa có chỗ thì tạm nằm ở ô chờ, rồi dọn sạch bàn để thắng.`)}</p>
+      <ul class="legend">${legend.map(g=>`<li><button type="button" data-part="${g[0]}" aria-pressed="false"><span class="pinl" data-nosearch>${g[0]}</span><span><b>${g[1]}</b><span class="d">${g[2]}</span></span></button></li>`).join('')}</ul>
+    </div>
+    <figure class="field${paused?' paused':''}" id="field">
+      <div class="field-box">${fieldSVG(t('Sketch of the play screen: queues of poles on top, a row of waiting slots in the middle, and overlapping stacks of cards on the table below.','Hình minh họa màn chơi: các hàng chờ của cột ở phía trên, hàng ô chờ ở giữa, và các chồng thẻ đè lên nhau trên bàn ở phía dưới.'))}</div>
+      <div class="field-foot"><button type="button" class="pause" id="pauseBtn">${paused?ui.play:ui.pause}</button></div>
+      <figcaption>${t(`Simplified sketch. The number of queues, poles, waiting slots and stacks, and how the poles and cards look, are examples, not final values.`,
+                      `Hình minh họa đơn giản. Số hàng chờ, số cột, số ô chờ, số chồng thẻ cũng như hình dáng cột và thẻ chỉ là ví dụ, chưa phải thông số chính thức.`)}</figcaption>
+    </figure>
+  </div>`;
+
+  return hero+SECTIONS.map(s=>`
+    <section class="sec" id="${s.id}" data-sec="${s.id}" data-spy="${s.id}">
+      <h2>${badge(s.c,s.n)}<span>${esc(s[l])}</span>${s.wip?wip:''}</h2>
+      ${B[s.id]||''}
+      ${(s.subs||[]).map(u=>`<div class="sub" id="${u.id}" data-sec="${u.id}" data-spy="${u.id}">
+        <h3><span class="num" data-nosearch>${u.n}</span><span>${esc(u[l])}</span>${u.wip?wip:''}</h3>
+        ${B[u.id]||''}
+      </div>`).join('')}
+      ${B[s.id+':after']||''}
+    </section>`).join('');
+}
+
+function tocHTML(l){
+  return `<ol>${SECTIONS.map(s=>`<li><a href="#${s.id}" data-target="${s.id}">${badge(s.c,s.n)}<span class="tl">${esc(s[l])}</span>${s.wip?`<span class="wipt" title="${UI[l].wip}">WIP</span>`:''}</a>${
+    s.subs?`<ol>${s.subs.map(u=>`<li><a href="#${u.id}" data-target="${u.id}"><span class="num">${u.n}</span><span class="tl">${esc(u[l])}</span>${u.wip?`<span class="wipt" title="${UI[l].wip}">WIP</span>`:''}</a></li>`).join('')}</ol>`:''
+  }</li>`).join('')}</ol>`;
+}
+
+/* ---------- state ---------- */
+const root=document.documentElement,main=$('#main'),rail=$('#rail'),panel=$('#panel'),toc=$('#toc'),results=$('#results'),
+      q=$('#q'),hint=$('#hint'),clr=$('#clr'),menuBtn=$('#menuBtn');
+const KEY='cardSlotsGddLang';
+let lang='en';
+try{if(/^vi/i.test(navigator.language||''))lang='vi';}catch(e){}
+try{const s=localStorage.getItem(KEY);if(s==='en'||s==='vi')lang=s;}catch(e){}
+
+let index=[],hits=[],cur=-1,spyEls=[],active='top';
+const narrow=window.matchMedia('(max-width:959px)'),statusEl=$('#status');
+const otherCache={};
+
+/* ---------- search ---------- */
+const COMB=/[\u0300-\u036f]/;
+const fold=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();
+const lower=s=>s.toLowerCase();
+const BLOCK='li,p,tr,h1,h2,h3,h4,figcaption,.blk';
+
+function collect(rootEl){
+  const map=new Map(),out=[];
+  const w=document.createTreeWalker(rootEl,NodeFilter.SHOW_TEXT,{acceptNode(n){
+    if(!n.nodeValue.trim())return NodeFilter.FILTER_REJECT;
+    const p=n.parentElement;
+    if(!p||p.closest('svg,[data-nosearch],script,style'))return NodeFilter.FILTER_REJECT;
+    return NodeFilter.FILTER_ACCEPT;
+  }});
+  while(w.nextNode()){
+    const n=w.currentNode,b=n.parentElement.closest(BLOCK);
+    if(!b)continue;
+    let e=map.get(b);
+    if(!e){e={el:b,nodes:[]};map.set(b,e);out.push(e);}
+    e.nodes.push(n);
+  }
+  out.forEach(e=>{
+    e.text=e.nodes.map(n=>n.nodeValue.replace(/\s+/g,' ').trim()).join(' ');
+    e.fold=fold(e.text);e.lower=lower(e.text);
+    const s=e.el.closest('[data-sec]');e.sec=s?s.dataset.sec:'top';
+  });
+  return out;
+}
+const LETTER=/\p{L}/u;
+function term(w){
+  const lo=lower(w),fo=fold(w),strict=fo!==lo;         // typed with accents → match accents exactly
+  const s=strict?lo:fo;
+  return {s,strict,whole:s.length===1};                // a single letter (e.g. “ô”) only matches as a whole word
+}
+function parseTerms(raw){
+  return raw.normalize('NFC').trim().split(/\s+/).filter(Boolean).map(term).filter(tm=>tm.s.length>=2||tm.strict);
+}
+/* a multi-word query is tried as an exact phrase first, then as “all of these words” */
+function resolveTerms(list,raw){
+  const terms=parseTerms(raw);
+  if(terms.length>1){
+    const phrase=[term(raw.normalize('NFC').trim().replace(/\s+/g,' '))];
+    const m=matchIn(list,phrase);
+    if(m.length)return {terms:phrase,matched:m};
+  }
+  return {terms,matched:terms.length?matchIn(list,terms):[]};
+}
+function mapStr(str,fn){
+  let f='';const map=[];
+  for(let i=0;i<str.length;i++){const c=fn(str[i]);for(let k=0;k<c.length;k++){f+=c[k];map.push(i);}}
+  return {f,map};
+}
+function findRanges(str,terms){
+  const res=[];let fm=null,lm=null;
+  terms.forEach(tm=>{
+    const m=tm.strict?(lm||(lm=mapStr(str,lower))):(fm||(fm=mapStr(str,fold)));
+    let i=0;
+    while((i=m.f.indexOf(tm.s,i))!==-1){
+      const a=m.map[i];let b=m.map[i+tm.s.length-1]+1;
+      while(b<str.length&&COMB.test(str[b]))b++;
+      if(!tm.whole||(!(a>0&&LETTER.test(str[a-1]))&&!(b<str.length&&LETTER.test(str[b]))))res.push([a,b]);
+      i+=tm.s.length;
+    }
+  });
+  res.sort((x,y)=>x[0]-y[0]);
+  const merged=[];
+  res.forEach(r=>{const last=merged[merged.length-1];if(last&&r[0]<=last[1])last[1]=Math.max(last[1],r[1]);else merged.push(r.slice());});
+  return merged;
+}
+function markNode(node,terms){
+  const rs=findRanges(node.nodeValue,terms);
+  for(let i=rs.length-1;i>=0;i--){
+    const r=document.createRange();r.setStart(node,rs[i][0]);r.setEnd(node,rs[i][1]);
+    const m=document.createElement('mark');m.className='hit';
+    try{r.surroundContents(m);}catch(e){}
+  }
+}
+function clearMarks(){
+  $$('mark.hit',main).forEach(m=>{const p=m.parentNode;p.replaceChild(document.createTextNode(m.textContent),m);p.normalize();});
+}
+function markedHTML(str,terms){
+  const rs=findRanges(str,terms);let h='',pos=0;
+  rs.forEach(r=>{h+=esc(str.slice(pos,r[0]))+'<mark>'+esc(str.slice(r[0],r[1]))+'</mark>';pos=r[1];});
+  return h+esc(str.slice(pos));
+}
+function snippet(e,terms){
+  const txt=e.text,rs=findRanges(txt,terms),first=rs.length?rs[0][0]:0;
+  let a=Math.max(0,first-34),b=Math.min(txt.length,first+92);
+  if(a>0){const sp=txt.indexOf(' ',a);if(sp!==-1&&sp<first)a=sp+1;}
+  if(b<txt.length){const sp=txt.lastIndexOf(' ',b);if(sp>first+12)b=sp;}
+  return (a>0?'…':'')+markedHTML(txt.slice(a,b),terms)+(b<txt.length?'…':'');
+}
+function crumb(id){
+  const s=SEC[id];return s?s.n+' '+s[lang]:UI[lang].overview;
+}
+function matchIn(list,terms){return list.filter(e=>terms.every(tm=>(tm.strict?e.lower:e.fold).includes(tm.s)&&findRanges(e.text,[tm]).length));}
+
+function runSearch(fromInput){
+  const ui=UI[lang];
+  clearMarks();
+  index=collect(main);
+  const raw=q.value,found=resolveTerms(index,raw),terms=found.terms;
+  hits=[];cur=-1;
+  clr.hidden=!raw;
+  if(!terms.length){
+    rail.dataset.view='toc';results.innerHTML='';statusEl.textContent='';
+    hint.textContent='/';hint.classList.add('key');hint.hidden=!!raw;
+    if(fromInput)setOpen(false);
+    return;
+  }
+  const matched=found.matched;
+  matched.forEach(e=>e.nodes.forEach(n=>markNode(n,terms)));
+  hits=matched.map(e=>e.el);
+  rail.dataset.view='results';
+  statusEl.textContent=matched.length?ui.matches(matched.length):ui.none(raw.trim());
+  hint.classList.remove('key');hint.hidden=false;hint.textContent=String(hits.length);
+  if(matched.length){
+    results.innerHTML=`<div class="res-head"><span>${ui.matches(matched.length)}</span><button type="button" class="linkbtn" data-clear>${ui.clear}</button></div>`+
+      matched.map((e,i)=>`<a class="res" href="#${e.sec}" data-hit="${i}"><span class="crumb">${esc(crumb(e.sec))}</span><span class="snip">${snippet(e,terms)}</span></a>`).join('')+
+      `<p class="res-tip">${ui.tip}</p>`;
+  }else{
+    const o=lang==='en'?'vi':'en';
+    if(!otherCache[o]){const d=document.createElement('div');d.innerHTML=view(o);otherCache[o]=collect(d);}
+    const n=resolveTerms(otherCache[o],raw).matched.length;
+    results.innerHTML=`<div class="res-empty"><p>${esc(ui.none(raw.trim()))}</p>`+
+      (n?`<p class="muted">${ui.other(n)}</p><button type="button" class="linkbtn" data-set-lang="${o}">${ui.switchTo}</button>`
+        :`<p class="muted">${ui.tryShort}</p>`)+`</div>`;
+  }
+  if(fromInput)setOpen(true);
+}
+function goHit(i){
+  if(!hits.length)return;
+  cur=(i+hits.length)%hits.length;
+  const el=hits[cur];
+  el.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'center'});
+  el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
+  hint.textContent=(cur+1)+'/'+hits.length;
+  $$('.res',results).forEach(a=>{
+    const on=+a.dataset.hit===cur;
+    if(on){a.setAttribute('aria-current','true');keepVisible(a);}else a.removeAttribute('aria-current');
+  });
+}
+function clearSearch(focus){q.value='';runSearch(true);if(focus)q.focus();}
+
+/* ---------- contents panel ---------- */
+function setOpen(on){rail.dataset.open=on?'1':'';menuBtn.setAttribute('aria-expanded',on?'true':'false');}
+function keepVisible(el){
+  if(!el||getComputedStyle(panel).position==='absolute'&&rail.dataset.open!=='1')return;
+  const p=panel.getBoundingClientRect(),r=el.getBoundingClientRect();
+  if(r.top<p.top+8)panel.scrollTop-=(p.top+8-r.top);
+  else if(r.bottom>p.bottom-8)panel.scrollTop+=(r.bottom-p.bottom+8);
+}
+function spy(){
+  if(!spyEls.length)return;
+  const line=(parseFloat(getComputedStyle(root).getPropertyValue('--bar-h'))||0)+110;
+  let id=spyEls[0].dataset.spy;
+  for(const el of spyEls){if(el.getBoundingClientRect().top<=line)id=el.dataset.spy;else break;}
+  if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4&&window.scrollY>0)id=spyEls[spyEls.length-1].dataset.spy;
+  if(id===active&&$('.toc a.on'))return;
+  active=id;
+  $$('.toc a').forEach(a=>{
+    const on=a.dataset.target===id;
+    a.classList.toggle('on',on);
+    if(on){a.setAttribute('aria-current','location');keepVisible(a);}else a.removeAttribute('aria-current');
+  });
+}
+let ticking=false;
+function onScroll(){if(ticking)return;ticking=true;requestAnimationFrame(()=>{ticking=false;spy();});}
+
+function jump(id){
+  if(id==='top'){window.scrollTo({top:0,behavior:reduceMotion?'auto':'smooth'});}
+  else{const el=document.getElementById(id);if(!el)return;el.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'start'});}
+  try{history.replaceState(null,'',id==='top'?location.pathname+location.search:'#'+id);}catch(e){}
+}
+
+/* ---------- render + language ---------- */
+function render(){
+  const ui=UI[lang];
+  root.lang=lang;root.dataset.lang=lang;document.title=ui.title;
+  main.innerHTML=view(lang);
+  toc.innerHTML=tocHTML(lang);
+  $('#brandSub').textContent=ui.sub;
+  q.placeholder=narrow.matches?ui.searchShort:ui.search;q.setAttribute('aria-label',ui.search);
+  clr.setAttribute('aria-label',ui.clear);
+  menuBtn.setAttribute('aria-label',ui.contents);toc.setAttribute('aria-label',ui.contents);
+  $('#langSwitch').setAttribute('aria-label',ui.language);
+  $$('#langSwitch [data-set-lang]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.setLang===lang?'true':'false'));
+  spyEls=$$('[data-spy]',main);
+  runSearch(false);
+  spy();
+}
+function setLang(l){
+  if(l===lang||(l!=='en'&&l!=='vi'))return;
+  const anchor=document.getElementById(active),before=anchor?anchor.getBoundingClientRect().top:null,atTop=window.scrollY<8;
+  lang=l;
+  try{localStorage.setItem(KEY,l);}catch(e){}
+  render();
+  if(!atTop&&before!==null){
+    const el=document.getElementById(active);
+    if(el)window.scrollBy(0,el.getBoundingClientRect().top-before);
+  }
+  spy();
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const tg=e.target;
+  const lb=tg.closest('[data-set-lang]');
+  if(lb){setLang(lb.dataset.setLang);return;}
+  if(tg.closest('[data-clear]')||tg.closest('#clr')){clearSearch(true);return;}
+  if(tg.closest('#menuBtn')){
+    const open=rail.dataset.open==='1';
+    if(!open)rail.dataset.view='toc';
+    setOpen(!open);
+    if(!open)keepVisible($('.toc a.on'));
+    return;
+  }
+  const a=tg.closest('a[href^="#"]');
+  if(a){
+    e.preventDefault();
+    if(a.dataset.hit!=null)goHit(+a.dataset.hit);
+    else jump(decodeURIComponent(a.getAttribute('href').slice(1)));
+    setOpen(false);
+    return;
+  }
+  const pb=tg.closest('#pauseBtn');
+  if(pb){paused=!paused;$('#field').classList.toggle('paused',paused);pb.textContent=paused?UI[lang].play:UI[lang].pause;return;}
+  const lg=tg.closest('.legend button');
+  if(lg){
+    const was=lg.getAttribute('aria-pressed')==='true';
+    $$('.legend button').forEach(b=>b.setAttribute('aria-pressed','false'));
+    if(!was){lg.setAttribute('aria-pressed','true');$('#field').dataset.hl=lg.dataset.part;}
+    else delete $('#field').dataset.hl;
+    return;
+  }
+  if(!tg.closest('.rail'))setOpen(false);
+});
+function hoverPart(e,on){
+  const b=e.target.closest&&e.target.closest('.legend button');if(!b)return;
+  const f=$('#field');if(!f)return;
+  if(on)f.dataset.hl=b.dataset.part;
+  else{const p=$('.legend button[aria-pressed="true"]');if(p)f.dataset.hl=p.dataset.part;else delete f.dataset.hl;}
+}
+main.addEventListener('mouseover',e=>hoverPart(e,true));
+main.addEventListener('mouseout',e=>hoverPart(e,false));
+main.addEventListener('focusin',e=>hoverPart(e,true));
+main.addEventListener('focusout',e=>hoverPart(e,false));
+
+q.addEventListener('input',()=>runSearch(true));
+q.addEventListener('focus',()=>{if(parseTerms(q.value).length){rail.dataset.view='results';setOpen(true);}});
+q.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.preventDefault();if(hits.length){goHit(cur+(e.shiftKey?-1:1));setOpen(false);}}
+  else if(e.key==='Escape'){e.preventDefault();if(q.value)clearSearch(true);else{setOpen(false);q.blur();}}
+});
+document.addEventListener('keydown',e=>{
+  const el=document.activeElement,typing=el&&(el.tagName==='INPUT'||el.tagName==='TEXTAREA'||el.isContentEditable);
+  if((e.key==='/'&&!typing&&!e.ctrlKey&&!e.metaKey&&!e.altKey)||((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k')){e.preventDefault();q.focus();q.select();}
+  else if(e.key==='Escape'&&!typing)setOpen(false);
+});
+window.addEventListener('scroll',onScroll,{passive:true});
+window.addEventListener('resize',onScroll);
+const onNarrow=()=>{q.placeholder=narrow.matches?UI[lang].searchShort:UI[lang].search;if(!narrow.matches)setOpen(false);};
+if(narrow.addEventListener)narrow.addEventListener('change',onNarrow);else if(narrow.addListener)narrow.addListener(onNarrow);
+
+render();
+try{
+  const h=decodeURIComponent((location.hash||'').slice(1));
+  if(h&&document.getElementById(h))requestAnimationFrame(()=>{document.getElementById(h).scrollIntoView({block:'start'});spy();});
+}catch(e){}
+})();
+</script>
+</body>
+</html>
