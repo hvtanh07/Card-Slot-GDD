@@ -479,7 +479,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const GAME='Card Slots';
 const GBASE=40;  /* win-screen base coin reward, matches level_win_coin */
-const PID='card.slots';  /* product ID prefix for every IAP pack. Placeholder, not confirmed */
+const PID='card.slots';  /* product ID prefix for every IAP pack */
 
 /* card badge: a small stack of cards, used for section numbers and the color list */
 const badge=(c,label)=>`<span class="badge c${c}" data-nosearch><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#card"/></svg>${label!=null?`<b>${label}</b>`:''}</span>`;
@@ -504,14 +504,14 @@ const SECTIONS=[
     {id:'booster-object-concept',n:'3.4',en:'Booster objects',vi:'Đối tượng công cụ hỗ trợ',wip:true}]},
   {id:'sfx--haptics',n:'4',c:4,en:'SFX & haptics',vi:'Âm thanh & rung'},
   {id:'remote-config',n:'5',c:5,en:'Remote config',vi:'Cấu hình từ xa',wip:true},
-  {id:'iap--offers',n:'6',c:8,en:'IAP & offers',vi:'Mua trong game & ưu đãi',wip:true,subs:[
+  {id:'iap--offers',n:'6',c:8,en:'IAP & offers',vi:'Mua trong game & ưu đãi',subs:[
     {id:'pack-list',n:'6.1',en:'Pack list',vi:'Danh sách gói'},
     {id:'popup-list',n:'6.2',en:'Popup list',vi:'Danh sách popup'},
     {id:'session-start-popup',n:'6.3',en:'Session-start priority',vi:'Thứ tự popup khi mở game'},
     {id:'store',n:'6.4',en:'Store',vi:'Cửa hàng'},
     {id:'starter-pack',n:'6.5',en:'Starter Pack',vi:'Gói Khởi đầu'},
     {id:'remove-ads',n:'6.6',en:'Remove Ads',vi:'Gỡ quảng cáo'}]},
-  {id:'live-ops',n:'7',c:6,en:'Live ops',vi:'Tính năng Live Ops',wip:true,subs:[
+  {id:'live-ops',n:'7',c:6,en:'Live ops',vi:'Tính năng Live Ops',subs:[
     {id:'limited-time-reward',n:'7.1',en:'Limited Time Reward',vi:'Quà giới hạn thời gian'},
     {id:'skip-retry',n:'7.2',en:'Skip Level & Retry with Booster',vi:'Bỏ qua màn & Chơi lại kèm công cụ'}]},
   {id:'change-note',n:'8',c:7,en:'Change note',vi:'Ghi chú thay đổi'},
@@ -783,8 +783,6 @@ function view(l){
   const tbd=`<span class="dash">${t('TBD','Chưa chốt')}</span>`;
   const empty=`<p class="empty">${t('Nothing written here yet.','Chưa có nội dung.')}</p>`;
   const note=body=>`<p class="note"><b>${t('Editor’s note.','Ghi chú biên tập.')}</b> ${body}</p>`;
-  /* marks a part that came from the GDD template and still carries the template's default numbers */
-  const tpl=(en,v)=>`<p class="note"><b>${t('From the GDD template.','Lấy từ template GDD.')}</b> ${t(en,v)}</p>`;
   const unlock=n=>t(`Unlocks at level ${n}`,`Mở ở màn ${n}`);
   const unlockB=n=>[unlock(n),t(`3 free`,`Tặng 3 lượt`)];
   const hap=n=>n?`<span class="hap"><i aria-hidden="true" data-nosearch>${'●'.repeat(n)+'○'.repeat(3-n)}</i>${[0,t('Weak','Nhẹ'),t('Medium','Vừa'),t('Strong','Mạnh')][n]}</span>`:dash;
@@ -885,9 +883,7 @@ function view(l){
           [t('Time left','Thời gian còn lại'),t('Format','Định dạng'),t('Example','Ví dụ')],
           [[t('≥ 1 day','≥ 1 ngày'),'<code>xxd</code>','<code>2d</code>'],
            [t('≥ 1 hour','≥ 1 giờ'),'<code>xxh yym</code>','<code>12h 23m</code>'],
-           [t('< 1 hour','< 1 giờ'),'<code>mm:ss</code>','<code>15:12</code>']],'compact')+
-        tpl(`Unlimited lives was not in the Card Slots GDD before. Confirm it for this game.`,
-            `Tim vô hạn chưa có trong GDD Card Slots trước đây. Cần xác nhận cho game này.`)))+
+           [t('< 1 hour','< 1 giờ'),'<code>mm:ss</code>','<code>15:12</code>']],'compact')))+
 
     sys(nm('Element unlock progress system','Thanh tiến độ mở khóa yếu tố'),
       lead(t(`A progress bar on the Victory screen that shows the player how many levels are left until the next element unlocks.`,
@@ -982,9 +978,7 @@ function view(l){
           [t('Daily ad limit reached','Hết lượt quảng cáo trong ngày'),t('Hide gauge and Bonus, re-center','Ẩn đồng hồ và nút Thưởng thêm, căn giữa lại')],
           [t('1 s pause and ad','1 giây chờ và lúc quảng cáo chạy'),t('All input locked','Khóa mọi thao tác')]
         ],'compact')+
-        `<p class="note">${t(`Swing speed, segment multipliers and the daily ad limit are remote config.`,`Tốc độ kim, hệ số từng ô và giới hạn quảng cáo mỗi ngày nằm trong cấu hình từ xa.`)}</p>`+
-        tpl(`The win screen bonus was not in the Card Slots GDD before. The base reward and multipliers are template defaults.`,
-            `Thưởng thêm ở màn hình thắng chưa có trong GDD Card Slots trước đây. Thưởng gốc và các hệ số là giá trị mặc định của template.`)))+
+        `<p class="note">${t(`Swing speed, segment multipliers and the daily ad limit are remote config.`,`Tốc độ kim, hệ số từng ô và giới hạn quảng cáo mỗi ngày nằm trong cấu hình từ xa.`)}</p>`))+
 
     sys(nm('Reward ads waiting slot (RV Slot)','Ô chờ quảng cáo thưởng'),
       lead(t(`RV Slots let the player watch a rewarded ad to earn extra waiting slots in the level.`,
@@ -1011,9 +1005,7 @@ function view(l){
         t(`Looped levels play like any level: same rewards, bonus, hearts, revive.`,`Màn lặp chơi như mọi màn: cùng thưởng, thưởng thêm, tim, hồi sinh.`),
         t(`An update that adds levels: players inside the new range play the real level.`,`Bản cập nhật thêm màn: người chơi trong khoảng màn mới chơi đúng màn đó.`),
         t(`Analytics logs both shown and content level.`,`Analytics ghi cả màn hiển thị và màn nội dung.`)
-      ])+`<p class="note">${t(`Remote config: <code>level_loop_last_level</code>, <code>level_loop_start_level</code>.`,`Cấu hình từ xa: <code>level_loop_last_level</code>, <code>level_loop_start_level</code>.`)}</p>`+
-      tpl(`Level loop back was not in the Card Slots GDD before. The level numbers are template defaults.`,
-          `Lặp lại màn chơi chưa có trong GDD Card Slots trước đây. Các số màn là giá trị mặc định của template.`)))+
+      ])+`<p class="note">${t(`Remote config: <code>level_loop_last_level</code>, <code>level_loop_start_level</code>.`,`Cấu hình từ xa: <code>level_loop_last_level</code>, <code>level_loop_start_level</code>.`)}</p>`))+
 
     sys(nm('Revive','Hồi sinh'),
       lead(t(`When the player loses, one more chance to continue the same attempt. Shows before the lose screen.`,
@@ -1028,9 +1020,7 @@ function view(l){
           [t('Coins','Xu'),t(`<code>revive_base_cost</code> (900), × <code>revive_cost_growth</code> per extra revive`,`<code>revive_base_cost</code> (900), × <code>revive_cost_growth</code> mỗi lần thêm`),t('Not enough coins → store, then back','Không đủ xu → cửa hàng, rồi quay lại')],
           [t('Rewarded ad','Quảng cáo có thưởng'),t('Free','Miễn phí'),t(`<code>revive_max_ads_per_attempt</code> (1), then hidden`,`<code>revive_max_ads_per_attempt</code> (1), sau đó ẩn`)],
           [t('Give up','Bỏ cuộc'),dash,t('→ Lose screen','→ Màn hình thua')]
-        ],'compact')+
-        tpl(`The costs and limits here are template defaults. The Card Slots rules under “On revive” come from the earlier 1.1.`,
-            `Giá và giới hạn ở đây là giá trị mặc định của template. Các quy tắc Card Slots ở mục “Khi hồi sinh” lấy từ mục 1.1 trước đây.`))+
+        ],'compact'))+
       panel(t('On revive','Khi hồi sinh'),ul([
         t(`When the player revives, the game uses 2 free Remove boosters on the poles at the bottom of the queues that hold the fewest cards.`,
           `Khi người chơi hồi sinh, trò chơi dùng miễn phí 2 lượt Loại bỏ cho các cột đang ở dưới cùng hàng chờ và có ít thẻ nhất.`),
@@ -1240,8 +1230,6 @@ function view(l){
   B['remote-config']=`<p class="sec-intro">${t(
       `Values the team can change without releasing a new build.`,
       `Các thông số mà đội có thể chỉnh mà không cần phát hành bản game mới.`)}</p>`+
-    tpl(`The Card Slots list had descriptions but no keys or values. Keys and values here are template defaults, except lives (5, 20 min) from 1.3. A dash in the Key column is a Card Slots setting with no key yet.`,
-        `Danh sách Card Slots trước đây chỉ có mô tả, chưa có key và giá trị. Key và giá trị ở đây là mặc định của template, trừ số tim (5, 20 phút) lấy từ mục 1.3. Dấu gạch ở cột Key là thông số của Card Slots chưa có key.`)+
     rc(t('Rewards: coins and boosters','Phần thưởng: xu và công cụ hỗ trợ')+` <span class="orig">${t('Level reward','Thưởng qua màn')}</span>`,[
       ['level_win_coin',lab('Coins earned per level','Số xu nhận mỗi màn',t('How many coins the player earns per level.','Người chơi nhận bao nhiêu xu sau mỗi màn.')),'40',coin],
       ['level_win_ad_multiplier',lab('Ad multiplier on the level reward','Hệ số nhân thưởng khi xem quảng cáo',t('How much a rewarded ad multiplies the level reward (2×, 3×, …).','Phần thưởng của màn được nhân lên bao nhiêu khi xem quảng cáo (2×, 3×, …).')),'2.0×','×']
@@ -1294,9 +1282,7 @@ function view(l){
   /* 6.1 lists every pack and 6.2 every popup, one row each. Add or change a pack or popup there first,
      then give it a detail entry (6.5, 6.6 or section 7) only if its rules don't fit in one row. */
   B['iap--offers']=`<p class="sec-intro">${t(`Packs and every popup that offers something (money, coins or rewarded ad). Keep 6.1 and 6.2 up to date. Unlock levels are remote config.`,
-    `Các gói và mọi popup mời nhận ưu đãi (tiền, xu hoặc quảng cáo có thưởng). Luôn cập nhật mục 6.1 và 6.2. Màn mở khóa nằm trong cấu hình từ xa.`)}</p>`+
-    tpl(`This whole section is new for Card Slots. Packs, prices, timings and the product ID prefix <code>${PID}</code> are template defaults to confirm.`,
-        `Toàn bộ mục này mới với Card Slots. Các gói, giá, thời gian và tiền tố mã sản phẩm <code>${PID}</code> là mặc định của template, cần xác nhận.`);
+    `Các gói và mọi popup mời nhận ưu đãi (tiền, xu hoặc quảng cáo có thưởng). Luôn cập nhật mục 6.1 và 6.2. Màn mở khóa nằm trong cấu hình từ xa.`)}</p>`;
   const pid=s=>`<code>${PID}.${s}</code>`;
   const see=(id,n)=>`<a href="#${id}">${n}</a>`;
   const bx=n=>t(`${n}× each booster`,`Mỗi công cụ ×${n}`);
@@ -1411,9 +1397,7 @@ function view(l){
 
   /* ===== 7. Live ops ===== */
   B['live-ops']=`<p class="sec-intro">${t(`Features that bring players back or help past hard levels, mostly for rewarded ads. Also listed in 6.2.`,
-    `Tính năng kéo người chơi quay lại hoặc giúp qua màn khó, phần lớn đổi bằng quảng cáo có thưởng. Cũng có trong mục 6.2.`)}</p>`+
-    tpl(`This whole section is new for Card Slots. Rewards, timings and limits are template defaults to confirm. Retry with Booster uses ${P.remove}, the booster revive already uses.`,
-        `Toàn bộ mục này mới với Card Slots. Phần thưởng, thời gian và giới hạn là mặc định của template, cần xác nhận. Chơi lại kèm công cụ dùng ${P.remove}, công cụ mà hồi sinh đang dùng.`);
+    `Tính năng kéo người chơi quay lại hoặc giúp qua màn khó, phần lớn đổi bằng quảng cáo có thưởng. Cũng có trong mục 6.2.`)}</p>`;
   B['limited-time-reward']=
     sys(nm('Limited Time Reward','Quà giới hạn thời gian'),
       lead(t(`A free gift every 4 hours, claimed with a rewarded ad.`,`Quà miễn phí mỗi 4 giờ, nhận bằng quảng cáo có thưởng.`))+
@@ -1452,7 +1436,8 @@ function view(l){
         t(`Revive moved from 1.1 into 1.3, with the template's revive cost and options added.`,`Hồi sinh chuyển từ mục 1.1 sang 1.3, thêm giá và lựa chọn hồi sinh theo template.`),
         t(`Added from the template: unlimited lives, win screen bonus and level loop back in 1.3, sections 6 IAP & offers, 7 Live ops and 8 Change note.`,`Thêm từ template: tim vô hạn, thưởng thêm ở màn hình thắng và lặp lại màn chơi ở mục 1.3, các mục 6 Mua trong game & ưu đãi, 7 Live Ops và 8 Ghi chú thay đổi.`),
         t(`Remote config now uses the template's key table. Level config moved to section 9.`,`Cấu hình từ xa dùng bảng key của template. Cấu hình màn chơi chuyển sang mục 9.`),
-        t(`Added an animated demo for each element and booster in 1.4 and 1.5.`,`Thêm minh họa chuyển động cho từng yếu tố và công cụ ở mục 1.4 và 1.5.`)
+        t(`Added an animated demo for each element and booster in 1.4 and 1.5.`,`Thêm minh họa chuyển động cho từng yếu tố và công cụ ở mục 1.4 và 1.5.`),
+        t(`The parts added from the template are now official for Card Slots.`,`Các phần thêm từ template nay là nội dung chính thức của Card Slots.`)
       ])));
 
   /* ===== 9. Level config ===== */
