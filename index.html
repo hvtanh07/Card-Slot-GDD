@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Card Slots GDD</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -16,6 +17,7 @@
   --display:"Baloo 2","Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --rail-w:304px; --bar-h:0px;
+  --hid:#7D8597; --ice:#4FB3DB; --door:#8A5A35; --veil:rgba(24,32,58,.58);
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
@@ -24,11 +26,13 @@
   :root:not([data-theme="light"]){
     --paper:#131826; --surface:#1B2234; --ink:#E9EDF7; --muted:#A3ADC4; --line:#2F3852; --tint:#232B41;
     --rail:#0E1220; --track:#0B0F1B; --accent:#8FB1FF; --focus:#8FB1FF; --flash:rgba(255,214,64,.26); --wip:#5A4B14;
+    --hid:#6E778C; --ice:#8FD8F5; --door:#B98252; --veil:rgba(6,9,18,.66);
   }
 }
 :root[data-theme="dark"]{
   --paper:#131826; --surface:#1B2234; --ink:#E9EDF7; --muted:#A3ADC4; --line:#2F3852; --tint:#232B41;
   --rail:#0E1220; --track:#0B0F1B; --accent:#8FB1FF; --focus:#8FB1FF; --flash:rgba(255,214,64,.26); --wip:#5A4B14;
+    --hid:#6E778C; --ice:#8FD8F5; --door:#B98252; --veil:rgba(6,9,18,.66);
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -96,7 +100,7 @@ main{container-type:inline-size;padding:48px clamp(20px,5vw,64px) 30vh;width:100
 .res-empty .muted{color:var(--rail-muted)}
 .res-tip{padding:10px 10px 0;color:var(--rail-muted);font-size:.8rem}
 
-/* ---------- card badges ---------- */
+/* ---------- caps ---------- */
 .badge{position:relative;display:inline-grid;place-items:center;flex:none;width:1.5em;height:1.5em;color:var(--cc,var(--c2));--on:#fff}
 .badge svg{position:absolute;inset:0;width:100%;height:100%}
 .badge b{position:relative;font:800 1em/1 var(--display);color:var(--on);transform:translateY(.04em)}
@@ -139,6 +143,30 @@ main{container-type:inline-size;padding:48px clamp(20px,5vw,64px) 30vh;width:100
 .slot{fill:none;stroke:var(--muted);stroke-width:1.6;stroke-dasharray:5 5}
 .pin circle{fill:var(--ink);stroke:var(--surface);stroke-width:2}
 .pin text{font:700 12.5px var(--display);text-anchor:middle;fill:var(--paper)}
+/* element demos */
+.demo{margin:14px 0 0;max-width:212px}
+.demo-box{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px 8px 6px}
+.demo svg{display:block;width:100%;height:auto;overflow:visible}
+.demo .scene g,.demo .scene circle,.demo .scene rect,.demo .scene line,.demo .scene path{transform-box:fill-box;transform-origin:center}
+.demo figcaption{font-size:.8rem;line-height:1.45;color:var(--muted);margin:8px 2px 0}
+.demo-btn{position:absolute;right:6px;bottom:6px;width:30px;height:30px;padding:0;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.demo-btn svg{width:11px;height:11px;fill:currentColor}
+.demo-btn .i-play,.demo-btn[aria-pressed="true"] .i-pause{display:none}
+.demo-btn[aria-pressed="true"] .i-play{display:block}
+.bn.sm{font-size:15px}
+.chain{fill:none;stroke:var(--ink);stroke-width:4;stroke-dasharray:6 3;stroke-linecap:round}
+.veil{fill:var(--veil)}
+.padlock path{fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round}
+.padlock rect{fill:#fff}
+.padlock.ink path{stroke:var(--ink)}
+.padlock.ink rect{fill:var(--ink)}
+.hidbox{fill:var(--hid)}
+.qmark{font:800 17px var(--display);text-anchor:middle;fill:#fff}
+.ice{fill:none;stroke:var(--ice);stroke-width:3}
+.door{fill:var(--door)}
+.smoke circle{fill:var(--line)}
+.tap{fill:none;stroke:var(--ink);stroke-width:2.5}
+.lkslot{fill:var(--tint);stroke:var(--muted);stroke-width:1.6}
 .part{transition:opacity .18s ease}
 .field[data-hl] .part{opacity:.2}
 .field[data-hl="A"] .part-A,.field[data-hl="B"] .part-B,.field[data-hl="C"] .part-C,.field[data-hl="D"] .part-D,.field[data-hl="E"] .part-E{opacity:1}
@@ -152,6 +180,7 @@ main{container-type:inline-size;padding:48px clamp(20px,5vw,64px) 30vh;width:100
 .sec>h2{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font:800 2.15rem/1.15 var(--display);margin:0}
 .sec>h2 .badge{width:48px;height:48px;font-size:1.6rem}
 .sec-intro{color:var(--muted);max-width:68ch;margin:10px 0 0}
+.sub>.sec-intro{margin:0 0 14px}
 .sub{margin-top:44px}
 .sub>h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;font:700 1.5rem/1.2 var(--display);margin:0 0 12px}
 .sub>h3 .num{color:var(--muted);font-weight:600}
@@ -161,6 +190,7 @@ main{container-type:inline-size;padding:48px clamp(20px,5vw,64px) 30vh;width:100
 
 .ent{padding:18px 0 16px;border-top:1px solid var(--line)}
 .ent-h h4,.defs dt{font:700 1.14rem/1.3 var(--display);margin:0}
+.ent-h{min-width:0}
 .orig{display:block;font:500 .82rem/1.3 var(--body);color:var(--muted)}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0;font-size:.84rem;font-weight:500;line-height:1.35}
 .tags span{display:inline-block;background:var(--tint);color:var(--ink);border-radius:8px;padding:3px 9px}
@@ -182,6 +212,8 @@ ul.bl ul.bl>li::before{background:none;border:1.5px solid var(--muted)}
 ol.steps{margin:.5em 0 .3em;padding-left:1.5em;max-width:66ch}
 ol.steps>li{margin:0 0 .35em;padding-left:.2em}
 ol.steps>li::marker{font-weight:700;font-family:var(--display)}
+ol.steps ol.steps{list-style-type:lower-alpha;margin:.35em 0 .35em}
+ol.steps .after{display:block;margin-top:.1em}
 ul.params>li{margin:0 0 .7em;max-width:68ch}
 ul.params>li>b{display:block;font-weight:600}
 ul.params>li>span{display:block}
@@ -198,6 +230,24 @@ thead th{font-weight:600;font-size:.86rem;color:var(--muted);white-space:nowrap}
 tbody th{font-weight:600}
 tbody tr:last-child>*{border-bottom:0}
 .wide table{min-width:760px}
+.xwide table{min-width:820px}
+.xwide th,.xwide td{padding:12px 9px}
+.xwide th:first-child,.xwide td:first-child{padding-left:14px}
+.xwide code{font-size:.8em;padding:1px 5px}
+.xwide thead th{white-space:normal;vertical-align:bottom}
+.xwide tbody th[scope=row],.xwide tbody td{white-space:nowrap}
+.xwide tbody td.wrap{white-space:normal;min-width:96px}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.grp th{background:var(--tint);font-weight:700;padding-block:8px}
+.tbl ul.bl{margin:0}
+.tbl.compact table{min-width:0}
+.gbox .tbl{margin:0;background:var(--surface)}
+.tbl ul.bl>li{margin:0 0 .3em}
+.pops table{min-width:1080px;font-size:.92rem}
+.pops th,.pops td{padding:11px 10px}
+.pops tbody th[scope=row]{min-width:130px}
+.pops td:nth-child(4),.pops td:nth-child(5){min-width:200px}
+.pops code{font-size:.82em}
 .lvl{font:800 1.35rem/1.1 var(--display)}
 .dash{color:var(--muted)}
 .popup{display:inline-block;white-space:nowrap;font:700 1.02rem/1.25 var(--display);border:2px solid var(--ink);border-radius:12px;padding:6px 13px;text-align:center}
@@ -226,49 +276,7 @@ tbody tr:last-child>*{border-bottom:0}
 .timeline .nm a{color:inherit}
 .timeline .kd{display:block;color:var(--muted);font-size:.84rem}
 
-/* ---------- search hits in the page ---------- */
-mark.hit{background:var(--mark);color:#18203A;border-radius:3px;padding:0 1px}
-.flash{animation:flash 1.6s ease-out}
-@keyframes flash{0%,35%{background-color:var(--flash)}100%{background-color:transparent}}
-
-/* ---------- small screens: rail becomes a top bar ---------- */
-@media (max-width:959px){
-  :root{--bar-h:60px}
-  .app{display:block}
-  main{padding-top:28px}
-  .rail{height:auto;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:8px 10px}
-  .brand{display:none}
-  .menu-btn{order:1;display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:12px;background:rgba(255,255,255,.1);color:inherit;cursor:pointer}
-  .menu-btn svg{width:20px;height:20px}
-  .search{order:2;margin:0}
-  .search input{padding-right:78px}
-  .search input:placeholder-shown{padding-right:10px}
-  .lang{order:3;margin:0}
-  .lang button{padding:11px 11px}
-  .lang .full,.hint.key{display:none}
-  .lang .short{display:inline}
-  .panel{display:none;position:absolute;left:0;right:0;top:100%;max-height:min(70vh,560px);background:var(--rail);
-    border-top:1px solid var(--rail-line);box-shadow:0 22px 36px rgba(8,11,22,.4);padding:10px 10px 18px}
-  .rail[data-open="1"] .panel{display:block}
-  .res-tip{display:none}
-  .sec{margin-top:64px}
-  .sec>h2{font-size:1.8rem}
-  .sec>h2 .badge{width:42px;height:42px;font-size:1.4rem}
-}
-@media (prefers-reduced-motion:reduce){
-  .fly rect{animation:none}
-  .field-foot{display:none}
-  .part{transition:none}
-}
-@media print{
-  .rail,.field-foot{display:none}
-  .app{display:block}
-  main{padding:0;max-width:none}
-  .sec{margin-top:40px}
-  .fly rect{animation:none}
-}
-
-/* ---------- additions for 1.3: panels, tiles, flow chart, annotated sketch ---------- */
+/* ---------- additional mechanics: panels, tiles, flow chart ---------- */
 code{font:500 .9em/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--tint);border-radius:6px;padding:1px 6px;white-space:nowrap}
 .gbox code,.node code{background:var(--paper)}
 .ent.sys{padding:28px 0 30px}
@@ -288,6 +296,8 @@ code{font:500 .9em/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;back
 .tiles li.hot .tk{color:inherit;opacity:.85}
 .ent-b>.tiles{max-width:520px;margin-bottom:0}
 .ent-b>.tiles li{background:var(--surface);border:1px solid var(--line)}
+.ent-b>.tiles li.hot{background:var(--ink);border-color:var(--ink)}
+.ent-b>.tiles:has(li:nth-child(4)){max-width:none;margin-bottom:16px}
 .cases{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .cases li{background:var(--tint);border-radius:12px;padding:10px 14px;font-weight:500;line-height:1.4}
 .kv{margin:0}
@@ -333,6 +343,87 @@ code{font:500 .9em/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;back
 .lvcells .fr{font:800 clamp(.8rem,3.9cqi,1rem)/1.3 var(--display);white-space:nowrap}
 .lvcells .sq{display:grid;place-items:center;width:100%;aspect-ratio:1;border-radius:10px;background:var(--tint);font:700 1.1rem/1 var(--display)}
 .lvcells .nw{font:700 .76rem/1 var(--display);background:var(--c3);color:#fff;border-radius:999px;padding:4px 8px 3px;white-space:nowrap}
+.ent-b>.tiles+ul.bl{margin-top:16px}
+.ent-b>.tbl,.ent-b>.kv{margin:14px 0}
+.gbox>.tbl+p,.gbox>.kv+.tbl{margin-top:12px}
+.gbox>p .chips,.kv .chips{margin:0}
+.note ul.bl{margin-top:6px}
+.note ul.bl>li{margin-bottom:.3em}
+.node ul.bl{margin-top:4px}
+.node ul.bl>li{margin-bottom:.2em}
+.gbox code,.state code{background:var(--paper)}
+
+/* ---------- live-ops state cards ---------- */
+.states{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.state{background:var(--tint);border-radius:12px;padding:12px 14px}
+.state .sn{margin:0 0 6px;font-weight:600;line-height:1.5}
+.state .sn small{display:block;font-weight:500;color:var(--muted);font-size:.86rem}
+.state>p{margin:0 0 8px}
+.go{list-style:none;margin:0;padding:8px 0 0;border-top:1px solid var(--line)}
+.go li{margin:0 0 .25em;padding-left:1.3em;text-indent:-1.3em}
+.go li::before{content:"→ ";color:var(--muted);font-weight:700}
+
+/* ---------- win-screen gauge ---------- */
+.gauge{max-width:400px}
+.gauge svg{display:block;width:100%;height:auto;overflow:visible}
+.gseg{stroke:var(--surface);stroke-width:2;transition:opacity .2s}
+.g2{fill:var(--c2)}.g3{fill:var(--c3)}.g5{fill:var(--c4)}
+.gauge.stopped .gseg:not(.on){opacity:.3}
+.gseg.on{stroke:var(--ink);stroke-width:3}
+.glab{font:800 17px var(--display);text-anchor:middle;fill:#fff;pointer-events:none}
+.glab.l{fill:#18203A}
+.needle{fill:var(--ink)}
+.hub{fill:var(--ink);stroke:var(--surface);stroke-width:3}
+.gbase{margin:6px 0 0;text-align:center;color:var(--muted);font-size:.9rem}
+.gctl{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-top:14px}
+.gctl>span{display:flex;align-items:center;gap:8px}
+.gctl .pinl{width:22px;height:22px;font-size:.8rem;line-height:23px}
+.gbtn{border:1.5px solid var(--ink);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 18px;font-weight:600;cursor:pointer;min-height:40px}
+.gbtn.primary{background:var(--ink);color:var(--paper)}
+.gres{margin:12px 0 0;font-weight:500;min-height:3.2em;max-width:52ch}
+.gres strong{font:800 1.15rem/1.2 var(--display)}
+
+/* ---------- search hits in the page ---------- */
+mark.hit{background:var(--mark);color:#18203A;border-radius:3px;padding:0 1px}
+.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%,35%{background-color:var(--flash)}100%{background-color:transparent}}
+
+/* ---------- small screens: rail becomes a top bar ---------- */
+@media (max-width:959px){
+  :root{--bar-h:60px}
+  .app{display:block}
+  main{padding-top:28px}
+  .rail{height:auto;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:8px 10px}
+  .brand{display:none}
+  .menu-btn{order:1;display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:12px;background:rgba(255,255,255,.1);color:inherit;cursor:pointer}
+  .menu-btn svg{width:20px;height:20px}
+  .search{order:2;margin:0}
+  .search input{padding-right:78px}
+  .search input:placeholder-shown{padding-right:10px}
+  .lang{order:3;margin:0}
+  .lang button{padding:11px 11px}
+  .lang .full,.hint.key{display:none}
+  .lang .short{display:inline}
+  .panel{display:none;position:absolute;left:0;right:0;top:100%;max-height:min(70vh,560px);background:var(--rail);
+    border-top:1px solid var(--rail-line);box-shadow:0 22px 36px rgba(8,11,22,.4);padding:10px 10px 18px}
+  .rail[data-open="1"] .panel{display:block}
+  .res-tip{display:none}
+  .sec{margin-top:64px}
+  .sec>h2{font-size:1.8rem}
+  .sec>h2 .badge{width:42px;height:42px;font-size:1.4rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .fly rect{animation:none}
+  .field-foot{display:none}
+  .part{transition:none}
+}
+@media print{
+  .rail,.field-foot{display:none}
+  .app{display:block}
+  main{padding:0;max-width:none}
+  .sec{margin-top:40px}
+  .fly rect{animation:none}
+}
 </style>
 </head>
 <body>
@@ -386,6 +477,9 @@ const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const GAME='Card Slots';
+const GBASE=40;  /* win-screen base coin reward, matches level_win_coin */
+const PID='card.slots';  /* product ID prefix for every IAP pack. Placeholder, not confirmed */
 
 /* card badge: a small stack of cards, used for section numbers and the color list */
 const badge=(c,label)=>`<span class="badge c${c}" data-nosearch><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#card"/></svg>${label!=null?`<b>${label}</b>`:''}</span>`;
@@ -410,7 +504,18 @@ const SECTIONS=[
     {id:'booster-object-concept',n:'3.4',en:'Booster objects',vi:'Đối tượng công cụ hỗ trợ',wip:true}]},
   {id:'sfx--haptics',n:'4',c:4,en:'SFX & haptics',vi:'Âm thanh & rung'},
   {id:'remote-config',n:'5',c:5,en:'Remote config',vi:'Cấu hình từ xa',wip:true},
-  {id:'level-config',n:'6',c:6,en:'Level config',vi:'Cấu hình màn chơi',wip:true}
+  {id:'iap--offers',n:'6',c:8,en:'IAP & offers',vi:'Mua trong game & ưu đãi',wip:true,subs:[
+    {id:'pack-list',n:'6.1',en:'Pack list',vi:'Danh sách gói'},
+    {id:'popup-list',n:'6.2',en:'Popup list',vi:'Danh sách popup'},
+    {id:'session-start-popup',n:'6.3',en:'Session-start priority',vi:'Thứ tự popup khi mở game'},
+    {id:'store',n:'6.4',en:'Store',vi:'Cửa hàng'},
+    {id:'starter-pack',n:'6.5',en:'Starter Pack',vi:'Gói Khởi đầu'},
+    {id:'remove-ads',n:'6.6',en:'Remove Ads',vi:'Gỡ quảng cáo'}]},
+  {id:'live-ops',n:'7',c:6,en:'Live ops',vi:'Tính năng Live Ops',wip:true,subs:[
+    {id:'limited-time-reward',n:'7.1',en:'Limited Time Reward',vi:'Quà giới hạn thời gian'},
+    {id:'skip-retry',n:'7.2',en:'Skip Level & Retry with Booster',vi:'Bỏ qua màn & Chơi lại kèm công cụ'}]},
+  {id:'change-note',n:'8',c:7,en:'Change note',vi:'Ghi chú thay đổi'},
+  {id:'level-config',n:'9',c:3,en:'Level config',vi:'Cấu hình màn chơi',wip:true}
 ];
 const SEC={};
 SECTIONS.forEach(s=>{SEC[s.id]=s;(s.subs||[]).forEach(u=>{SEC[u.id]=u;});});
@@ -420,12 +525,20 @@ const UI={
       matches:n=>n===1?'1 match':n+' matches',none:q=>`No matches for “${q}”.`,tryShort:'Try a shorter or different word.',
       other:n=>(n===1?'1 match':n+' matches')+' in the Vietnamese version.',switchTo:'Switch to Tiếng Việt',
       tip:'Enter jumps to the next match. Esc clears.',overview:'Overview',wip:'In progress',
-      pause:'Pause motion',play:'Play motion',title:'Card Slots GDD'},
+      pause:'Pause motion',play:'Play motion',pauseDemo:'Pause demo',playDemo:'Play demo',title:GAME+' GDD',
+      bonus:'Bonus',again:'Swing again',swing:'Swing',next:'Next level',
+      gTap:'Tap Bonus to stop the needle.',gStart:'Tap Swing to start the needle.',
+      gRes:m=>`<strong>×${m}</strong> → ${GBASE} × ${m} = ${GBASE*m} coins. In the game, the rewarded ad plays after a 1-second pause, then the coins fly in.`,
+      gNext:`<strong>${GBASE} coins</strong>. The player skips the bonus and takes the base reward.`},
   vi:{sub:'Tài liệu thiết kế game',search:'Tìm trong tài liệu',searchShort:'Tìm kiếm',contents:'Mục lục',language:'Ngôn ngữ',clear:'Xóa tìm kiếm',
       matches:n=>n+' kết quả',none:q=>`Không tìm thấy “${q}”.`,tryShort:'Hãy thử từ khóa ngắn hơn hoặc từ khác.',
       other:n=>`Có ${n} kết quả trong bản tiếng Anh.`,switchTo:'Chuyển sang English',
       tip:'Nhấn Enter để tới kết quả kế tiếp. Nhấn Esc để xóa.',overview:'Tổng quan',wip:'Đang viết',
-      pause:'Dừng chuyển động',play:'Chạy chuyển động',title:'Card Slots GDD'}
+      pause:'Dừng chuyển động',play:'Chạy chuyển động',pauseDemo:'Dừng minh họa',playDemo:'Chạy minh họa',title:GAME+' GDD',
+      bonus:'Thưởng thêm',again:'Cho kim chạy lại',swing:'Cho kim chạy',next:'Màn tiếp theo',
+      gTap:'Chạm “Thưởng thêm” để dừng kim.',gStart:'Chạm “Cho kim chạy” để kim bắt đầu lắc.',
+      gRes:m=>`<strong>×${m}</strong> → ${GBASE} × ${m} = ${GBASE*m} xu. Trong game, quảng cáo có thưởng sẽ chạy sau 1 giây, rồi xu bay vào.`,
+      gNext:`<strong>${GBASE} xu</strong>. Người chơi bỏ qua phần thưởng thêm và nhận phần thưởng gốc.`}
 };
 
 /* ---------- play-screen sketch ---------- */
@@ -477,6 +590,179 @@ function fieldSVG(label){
   </svg>`;
 }
 
+/* ---------- element and booster demos: small looping sketches, one per element and booster ----------
+   DEMOS key:{D:<loop seconds>, svg:()=>`<markup inside a 200×196 box>`, tracks:()=>[[selector,property,[[time,value],…]],…]}
+   Poles stand in lanes at the top, stacks of cards lie on the table below. */
+function T(x,y,s){return `translate(${x}px,${y}px)`+(s!=null?` scale(${s})`:'');}
+const lane=(x,h)=>`<rect class="trackfill" x="${x}" y="4" width="48" height="${h||82}" rx="14"/>`;
+const dtable=y=>`<rect class="table" x="6" y="${y}" width="188" height="${192-y}" rx="16"/>`;
+/* a pole in a demo; hid draws it grey with a question mark */
+function dpole(cx,base,c,hid){
+  const f=hid?'hidbox':'f'+c;
+  return `<rect class="${f} rod" x="${cx-2}" y="${base-30}" width="4" height="32" rx="2"/><rect class="${f}" x="${cx-16}" y="${base}" width="32" height="7" rx="3.5"/>`+
+    (hid?`<text class="qmark" x="${cx}" y="${base-14}" dy=".35em">?</text>`:'');
+}
+/* cards sitting on a pole once a stack has landed on it */
+function dfill(cx,base,c,n){let s='';for(let i=0;i<(n||3);i++)s+=`<rect class="f${c} edge" x="${cx-12}" y="${(base-5-i*5).toFixed(1)}" width="24" height="4" rx="1.5"/>`;return s;}
+/* a stack of cards on the table; hid draws it grey with a question mark */
+function dstack(x,y,c,n,hid){
+  const f=hid?'hidbox':'f'+c;let s='';
+  for(let k=(n||3)-1;k>=0;k--)s+=`<rect class="${f} edge" x="${x}" y="${(y+k*2.5).toFixed(1)}" width="30" height="40" rx="5"/>`;
+  s+=`<rect class="sheen" x="${x+5}" y="${y+5}" width="20" height="30" rx="3"/>`;
+  return s+(hid?`<text class="qmark" x="${x+15}" y="${y+20}" dy=".35em">?</text>`:'');
+}
+function cdBadge(cx,cy,extra){
+  const vals=['2','1','0'].concat(extra||[]);
+  return `<g class="pin cdg"><circle cx="${cx}" cy="${cy}" r="9.5"/>${vals.map((v,i)=>`<text class="v${i}" x="${cx}" y="${cy}" dy=".35em"${i?' style="opacity:0"':''}>${v}</text>`).join('')}</g>`;
+}
+function cdTracks(sel,a,b){return [[`${sel} .v0`,'opacity',[[0,1],[a,1],[a+.12,0]]],[`${sel} .v1`,'opacity',[[0,0],[a,0],[a+.12,1],[b,1],[b+.12,0]]],[`${sel} .v2`,'opacity',[[0,0],[b,0],[b+.12,1]]]];}
+/* a tap ring shows where the player taps, a puff covers a swap or a clear */
+function tap(cx,cy){return `<circle class="tap" cx="${cx}" cy="${cy}" r="15" style="opacity:0"/>`;}
+function tapTracks(t){return [['.tap','opacity',[[0,0],[t,0],[t+.1,.9],[t+.55,0]]],['.tap','transform',[[t,'scale(.5)'],[t+.55,'scale(1.35)']]]];}
+function puff(cx,cy){return `<g class="smoke">${[[-9,-4,9],[10,-2,10],[0,9,11],[-3,-10,7]].map(([dx,dy,r])=>`<circle cx="${cx+dx}" cy="${cy+dy}" r="${r}" style="opacity:0"/>`).join('')}</g>`;}
+function puffTracks(t){return [['.smoke circle','transform',[[t,'scale(.3)'],[t+.6,'scale(1.4)']]],['.smoke circle','opacity',[[0,0],[t,0],[t+.15,.95],[t+.6,0]]]];}
+/* a stack flies up to a pole and shrinks onto it */
+const fly=(sel,t0,t1,dx,dy)=>[[sel,'transform',[[t0,T(0,0)],[t1,T(dx,dy,.35)]]],[sel,'opacity',[[0,1],[t1-.05,1],[t1+.05,0]]]];
+const show=(sel,t)=>[sel,'opacity',[[0,0],[t,0],[t+.1,1]]];
+/* a full pole pops and clears */
+const clear=(sel,t)=>[[sel,'transform',[[t,'scale(1)'],[t+.15,'scale(1.1)'],[t+.4,'scale(.2)']]],[sel,'opacity',[[0,1],[t+.25,1],[t+.4,0]]]];
+const DEMOS={
+  hiddenS:{D:6.4,
+    svg:()=>lane(40)+lane(112)+dpole(64,66,1)+dpole(136,66,2)+
+      `<g class="pf1" style="opacity:0">${dfill(64,66,1)}</g><g class="pf2" style="opacity:0">${dfill(136,66,2)}</g>`+dtable(96)+
+      `<g class="hid">${dstack(92,126,0,3,true)}</g><g class="rev" style="opacity:0">${dstack(92,126,2,3)}</g>`+
+      `<g class="a0">${dstack(74,112,1,3)}</g>`+tap(89,132)+puff(107,146),
+    tracks:()=>[
+      ...tapTracks(.5),
+      ...fly('.a0',.9,1.6,-25,-82),show('.pf1',1.6),
+      ...puffTracks(2.1),
+      ['.hid','opacity',[[0,1],[2.3,1],[2.45,0]]],
+      ['.rev','opacity',[[0,0],[2.3,0],[2.45,1],[4.25,1],[4.35,0]]],
+      ['.rev','transform',[[3.6,T(0,0)],[4.3,T(29,-96,.35)]]],show('.pf2',4.3)
+    ]},
+  hiddenP:{D:7.2,
+    svg:()=>lane(76,96)+
+      `<g class="p1">${dpole(100,80,1)}<g class="pf1" style="opacity:0">${dfill(100,80,1)}</g></g>`+
+      `<g class="p2"><g class="hp">${dpole(100,38,0,true)}</g><g class="rp" style="opacity:0">${dpole(100,38,3)}</g><g class="pf2" style="opacity:0">${dfill(100,38,3)}</g></g>`+
+      dtable(108)+`<g class="s1">${dstack(40,128,1,3)}</g><g class="s2">${dstack(120,128,3,3)}</g>`+tap(55,148)+puff(100,66),
+    tracks:()=>[
+      ...tapTracks(.5),
+      ...fly('.s1',.9,1.6,45,-82),show('.pf1',1.6),
+      ...clear('.p1',2.1),
+      ['.p2','transform',[[2.8,T(0,0)],[3.4,T(0,42)]]],
+      ...puffTracks(3.45),
+      ['.hp','opacity',[[0,1],[3.65,1],[3.8,0]]],
+      ['.rp','opacity',[[0,0],[3.65,0],[3.8,1]]],
+      ...fly('.s2',4.6,5.3,-35,-84),show('.pf2',5.3)
+    ]},
+  locked:{D:7.6,
+    svg:()=>lane(40)+lane(112)+
+      `<g class="pr">${dpole(64,66,1)}<g class="pf1" style="opacity:0">${dfill(64,66,1)}</g></g>`+
+      `<g class="pb">${dpole(136,66,2)}<g class="pf2" style="opacity:0">${dfill(136,66,2)}</g></g>`+dtable(96)+
+      dstack(85,122,7,3)+`<rect class="ice" x="81" y="118" width="38" height="50" rx="8"/>`+cdBadge(119,118)+
+      `<g class="s1">${dstack(18,126,1,3)}</g><g class="s2">${dstack(152,126,2,3)}</g>`+tap(33,146),
+    tracks:()=>[
+      ...tapTracks(.3),
+      ...fly('.s1',.6,1.3,31,-96),show('.pf1',1.3),
+      ...clear('.pr',1.7),
+      ...cdTracks('.cdg',2.1,3.9),
+      ...fly('.s2',2.5,3.2,-31,-96),show('.pf2',3.2),
+      ...clear('.pb',3.5),
+      ['.ice','transform',[[4.1,'scale(1)'],[4.5,'scale(1.5)']]],
+      ['.ice','opacity',[[0,1],[4.1,1],[4.5,0]]],
+      ['.cdg','opacity',[[0,1],[4.1,1],[4.4,0]]]
+    ]},
+  /* ----- booster demos ----- */
+  hand:{D:5.8, /* tap a blocked stack: it lifts out and flies to its pole */
+    svg:()=>lane(40)+lane(112)+dpole(64,66,2)+dpole(136,66,3)+`<g class="pf" style="opacity:0">${dfill(64,66,2)}</g>`+dtable(96)+
+      `<g class="pkb">${dstack(86,130,2,3)}</g>${dstack(68,112,1,3)}${dstack(140,120,3,2)}`+
+      `<g class="pk" style="opacity:0">${dstack(86,130,2,3)}</g>`+tap(110,160),
+    tracks:()=>[
+      ...tapTracks(.6),
+      ['.pkb','opacity',[[0,1],[1.0,1],[1.05,0]]],
+      ['.pk','opacity',[[0,0],[1.0,0],[1.05,1],[2.3,1],[2.4,0]]],
+      ['.pk','transform',[[1.05,T(0,0)],[1.3,T(0,-6,1.12)],[2.3,T(-37,-100,.35)]]],
+      show('.pf',2.35)
+    ]},
+  shuffle:{D:5.6, /* the poles mix, and poles that match the table come to the bottom */
+    svg:()=>{
+      const xs=[38,100,162],pl=(b,u)=>b.map((c,i)=>dpole(xs[i],76,c)+dpole(xs[i],36,u[i])).join('');
+      return [16,78,140].map(x=>lane(x-2,88)).join('')+
+        `<g class="old">${pl([7,2,8],[1,6,4])}</g>`+
+        `<g class="new" style="opacity:0">${pl([1,4,2],[7,8,6])}<g class="pfn" style="opacity:0">${dfill(38,76,1)}</g></g>`+
+        dtable(102)+`<g class="s1">${dstack(40,124,1,3)}</g>${dstack(130,124,4,3)}`+tap(100,46)+puff(100,46);},
+    tracks:()=>[
+      ...tapTracks(.6),
+      ['.old','transform',[[1.0,'scale(1)'],[1.4,'scale(.55) rotate(-8deg)']]],
+      ['.old','opacity',[[0,1],[1.3,1],[1.45,0]]],
+      ...puffTracks(1.15),
+      ['.new','opacity',[[0,0],[1.45,0],[1.6,1]]],
+      ['.new','transform',[[1.45,'scale(.55) rotate(8deg)'],[1.9,'scale(1)']]],
+      ...fly('.s1',2.6,3.3,-17,-84),show('.pfn',3.3)
+    ]},
+  remove:{D:6, /* tap any pole in a queue: it pulls in the cards of its color and clears */
+    svg:()=>lane(40,88)+lane(112,88)+dpole(64,76,2)+dpole(136,76,3)+dpole(136,36,6)+
+      dtable(102)+`<g class="r1">${dstack(20,126,1,3)}</g><g class="r2">${dstack(138,134,1,3)}</g>${dstack(120,118,3,3)}`+
+      `<g class="rp">${dpole(64,36,1)}<g class="rf" style="opacity:0">${dfill(64,36,1)}</g></g>`+tap(64,22)+puff(100,120),
+    tracks:()=>[
+      ...tapTracks(.6),
+      ['.rp','transform',[[1.0,T(0,0)],[1.7,T(36,96,1.15)],[3.0,T(36,96,1.15)],[3.3,T(36,96,.2)]]],
+      ['.rp','opacity',[[0,1],[3.1,1],[3.3,0]]],
+      ...fly('.r1',1.9,2.4,65,-36),...fly('.r2',2.1,2.6,-53,-44),show('.rf',2.45),
+      ...puffTracks(3.1)
+    ]}
+};
+
+/* ---------- win-screen bonus gauge ---------- */
+const MULT=[2,3,5,3,2],GX=130,GY=132,GR=112,Gr=60;
+const f1=n=>+(+n).toFixed(1);
+function gaugeSVG(label){
+  const P=(rad,deg)=>{const a=deg*Math.PI/180;return [f1(GX+rad*Math.cos(a)),f1(GY-rad*Math.sin(a))];};
+  let s='';
+  MULT.forEach((m,i)=>{
+    const a1=180-36*i,a2=180-36*(i+1);
+    const [x1,y1]=P(GR,a1),[x2,y2]=P(GR,a2),[x3,y3]=P(Gr,a2),[x4,y4]=P(Gr,a1);
+    s+=`<path class="gseg g${m}" data-seg="${i}" d="M${x1} ${y1}A${GR} ${GR} 0 0 1 ${x2} ${y2}L${x3} ${y3}A${Gr} ${Gr} 0 0 0 ${x4} ${y4}Z"/>`;
+    const [lx,ly]=P((GR+Gr)/2,(a1+a2)/2);
+    s+=`<text class="glab${m===5?' l':''}" x="${lx}" y="${ly}" dy=".35em">×${m}</text>`;
+  });
+  return `<svg viewBox="0 0 260 146" role="img" aria-label="${esc(label)}">${s}
+    <g id="needle"><path class="needle" d="M${GX-4} ${GY}L${GX} ${GY-GR+8}L${GX+4} ${GY}Z"/></g><circle class="hub" cx="${GX}" cy="${GY}" r="10"/>
+    ${pin(12,22,'A')}${pin(GX+28,GY+2,'B')}</svg>`;
+}
+const G={swing:!reduceMotion,th:0,t0:0,raf:0,res:null};
+const PERIOD=1.7,AMP=84;
+const segOf=th=>Math.max(0,Math.min(4,Math.floor((th+90)/36)));
+function gaugeMsg(l){
+  const ui=UI[l];
+  if(G.res==='bonus')return ui.gRes(MULT[segOf(G.th)]);
+  if(G.res==='next')return ui.gNext;
+  return G.swing?ui.gTap:ui.gStart;
+}
+function setNeedle(){const n=document.getElementById('needle');if(n)n.setAttribute('transform',`rotate(${G.th.toFixed(2)} ${GX} ${GY})`);}
+function gaugeTick(ts){
+  if(!G.swing){G.raf=0;return;}
+  if(!G.t0)G.t0=ts;
+  G.th=AMP*Math.sin((ts-G.t0)/1000*Math.PI*2/PERIOD);
+  setNeedle();
+  G.raf=requestAnimationFrame(gaugeTick);
+}
+function startSwing(){
+  const ph=Math.asin(Math.max(-1,Math.min(1,G.th/AMP)));
+  G.t0=performance.now()-ph/(Math.PI*2/PERIOD)*1000;
+  G.swing=true;
+  if(!G.raf)G.raf=requestAnimationFrame(gaugeTick);
+}
+function gaugeUI(){
+  const g=$('#gauge');if(!g)return;
+  const ui=UI[lang];
+  g.classList.toggle('stopped',!G.swing);
+  const on=!G.swing&&G.res==='bonus'?segOf(G.th):-1;
+  $$('.gseg',g).forEach(p=>p.classList.toggle('on',+p.dataset.seg===on));
+  const b=$('#gBonus');if(b)b.textContent=G.swing?ui.bonus:(G.res?ui.again:ui.swing);
+  const r=$('#gRes');if(r)r.innerHTML=gaugeMsg(lang);
+  setNeedle();
+}
 /* ---------- page content (English, Vietnamese) ---------- */
 let paused=false;
 function view(l){
@@ -487,15 +773,18 @@ function view(l){
   const ol=items=>`<ol class="steps">${items.map(i=>`<li>${i}</li>`).join('')}</ol>`;
   const params=items=>`<ul class="params">${items.map(([a,b])=>`<li><b>${a}</b><span>${b}</span></li>`).join('')}</ul>`;
   const nm=(en,v)=>vi?`${v} <span class="orig">${en}</span>`:en;
-  const ent=(name,body,tags)=>`<div class="ent"><div class="ent-h"><h4>${name}</h4>${tags?`<p class="tags">${[].concat(tags).map(x=>`<span>${x}</span>`).join(' ')}</p>`:''}</div><div class="ent-b">${body}</div></div>`;
+  const ent=(name,body,tags,dm)=>`<div class="ent"><div class="ent-h"><h4>${name}</h4>${tags?`<p class="tags">${[].concat(tags).map(x=>`<span>${x}</span>`).join(' ')}</p>`:''}${dm||''}</div><div class="ent-b">${body}</div></div>`;
   const defs=pairs=>`<dl class="defs">${pairs.map(([a,b])=>`<div class="blk"><dt>${a}</dt><dd>${b}</dd></div>`).join('')}</dl>`;
   const table=(label,heads,rows,cls)=>`<div class="tbl ${cls||''}" tabindex="0" role="region" aria-label="${esc(label)}"><table><thead><tr>${heads.map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map((c,i)=>i===0?`<th scope="row">${c}</th>`:`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
   const popup=(text,v)=>`<span class="popup" lang="en">${text}</span>${vi?`<span class="gloss">${v}</span>`:''}`;
   const dash=`<span class="dash">–</span>`;
   const lvl=n=>`<span class="lvl">${n}</span>`;
   const wip=`<span class="wip">${ui.wip}</span>`;
+  const tbd=`<span class="dash">${t('TBD','Chưa chốt')}</span>`;
   const empty=`<p class="empty">${t('Nothing written here yet.','Chưa có nội dung.')}</p>`;
   const note=body=>`<p class="note"><b>${t('Editor’s note.','Ghi chú biên tập.')}</b> ${body}</p>`;
+  /* marks a part that came from the GDD template and still carries the template's default numbers */
+  const tpl=(en,v)=>`<p class="note"><b>${t('From the GDD template.','Lấy từ template GDD.')}</b> ${t(en,v)}</p>`;
   const unlock=n=>t(`Unlocks at level ${n}`,`Mở ở màn ${n}`);
   const unlockB=n=>[unlock(n),t(`3 free`,`Tặng 3 lượt`)];
   const hap=n=>n?`<span class="hap"><i aria-hidden="true" data-nosearch>${'●'.repeat(n)+'○'.repeat(3-n)}</i>${[0,t('Weak','Nhẹ'),t('Medium','Vừa'),t('Strong','Mạnh')][n]}</span>`:dash;
@@ -528,14 +817,6 @@ function view(l){
                          `Tất cả các chồng thẻ trên bàn đã được đưa lên cột cùng màu, và mọi cột đều đã được dọn khỏi màn chơi.`)],
       [t('Lose','Thua'),t(`Every waiting slot is taken, none of the cards in the waiting slots matches an available pole, and none of the unblocked stacks on the table matches an available pole either.`,
                          `Các ô chờ đã kín chỗ, không thẻ nào trong ô chờ cùng màu với cột đang nhận thẻ, và trên bàn cũng không còn chồng thẻ không bị đè nào cùng màu với cột đang nhận thẻ.`)]
-    ]))+
-    ent(nm('Revive','Hồi sinh'),ul([
-      t(`When the player revives, the game uses 2 free Remove boosters on the poles at the bottom of the queues that hold the fewest cards.`,
-        `Khi người chơi hồi sinh, trò chơi dùng miễn phí 2 lượt Loại bỏ cho các cột đang ở dưới cùng hàng chờ và có ít thẻ nhất.`),
-      t(`If the game is still stuck after that, it uses the free Remove again and repeats until the game can continue.`,
-        `Nếu sau đó vẫn còn bị kẹt, trò chơi tiếp tục dùng Loại bỏ miễn phí cho tới khi chơi tiếp được.`),
-      t(`These free Removes do not use up the player's Remove boosters, and the player does not need to own any.`,
-        `Các lượt miễn phí này không trừ vào số công cụ Loại bỏ người chơi đang có, và người chơi cũng không cần có sẵn công cụ này.`)
     ]));
 
   B['main-game-mechanics']=
@@ -569,6 +850,7 @@ function view(l){
   const kv=pairs=>`<dl class="kv">${pairs.map(([k,v])=>`<div class="blk"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
   const lead=x=>`<p class="lead">${x}</p>`;
 
+  /* 1.3 order: hearts, element unlock progress, win screen bonus, RV slot, level loop back, revive */
   B['additional-mechanics']=
     sys(nm('Heart system (lives)','Hệ thống tim'),
       lead(t(`The heart system limits how many times the player can lose and replay the game within a certain span of time.`,
@@ -590,7 +872,22 @@ function view(l){
            <li>${t(`Lose a level and restart it`,`Thua màn và chơi lại màn đó`)}</li>
            <li>${t(`Choose to restart the level manually`,`Tự chọn chơi lại màn`)}</li>
            <li>${t(`Exit to the home screen`,`Thoát về màn hình chính`)}</li>
-         </ul>`))+
+         </ul>`)+
+      panel(t('Unlimited lives','Tim vô hạn'),
+        kv([
+          [t('Source','Nguồn'),t(`IAP packs (Unlimited lives column in 6.1).`,`Các gói IAP (cột Tim vô hạn ở mục 6.1).`)],
+          [t('While active','Khi đang có'),t(`No life is lost. The HUD heart shows ∞ and the timer.`,`Không mất tim. Tim trên HUD hiện ∞ kèm đồng hồ.`)],
+          [t('Timer','Đồng hồ'),t(`Real time, also while the game is closed.`,`Theo giờ thực, kể cả khi tắt game.`)],
+          [t('Stacking','Cộng dồn'),t(`New time adds to the time left (2 h + 6 h = 8 h).`,`Thời gian mới cộng vào thời gian còn lại (2 giờ + 6 giờ = 8 giờ).`)],
+          [t('When it ends','Khi hết giờ'),t(`Normal life count and refill resume.`,`Số tim và việc hồi tim trở lại bình thường.`)]
+        ])+
+        table(t('Unlimited lives timer format','Định dạng đồng hồ tim vô hạn'),
+          [t('Time left','Thời gian còn lại'),t('Format','Định dạng'),t('Example','Ví dụ')],
+          [[t('≥ 1 day','≥ 1 ngày'),'<code>xxd</code>','<code>2d</code>'],
+           [t('≥ 1 hour','≥ 1 giờ'),'<code>xxh yym</code>','<code>12h 23m</code>'],
+           [t('< 1 hour','< 1 giờ'),'<code>mm:ss</code>','<code>15:12</code>']],'compact')+
+        tpl(`Unlimited lives was not in the Card Slots GDD before. Confirm it for this game.`,
+            `Tim vô hạn chưa có trong GDD Card Slots trước đây. Cần xác nhận cho game này.`)))+
 
     sys(nm('Element unlock progress system','Thanh tiến độ mở khóa yếu tố'),
       lead(t(`A progress bar on the Victory screen that shows the player how many levels are left until the next element unlocks.`,
@@ -652,32 +949,131 @@ function view(l){
             `Thanh hiện mỗi con số sau khi người chơi hoàn thành màn tương ứng. Sau màn 7, thanh hiện “3/5”.`)
         ])))+
 
+    sys(nm('Win screen bonus','Thưởng thêm ở màn hình thắng'),
+      lead(t(`On the Victory screen, a swinging needle picks a multiplier for the level’s coins. The player watches a rewarded ad to get it.`,
+             `Ở màn hình chiến thắng, kim lắc chọn hệ số nhân cho số xu của màn. Người chơi xem quảng cáo có thưởng để nhận.`))+
+      panel(t('Try it','Thử ngay'),
+        `<div class="gauge${G.swing?'':' stopped'}" id="gauge">${gaugeSVG(t('Half-circle bonus gauge with five segments: ×2, ×3, ×5, ×3, ×2, and a needle from the bottom center.','Đồng hồ thưởng hình bán nguyệt gồm năm ô: ×2, ×3, ×5, ×3, ×2, kim nằm ở giữa phía dưới.'))}
+           <p class="gbase">${t(`Base reward: ${GBASE} coins`,`Phần thưởng gốc: ${GBASE} xu`)}</p></div>
+         <div class="gctl" data-nosearch>
+           <span><span class="pinl" aria-hidden="true">C</span><button type="button" class="gbtn primary" id="gBonus">${G.swing?ui.bonus:(G.res?ui.again:ui.swing)}</button></span>
+           <span><span class="pinl" aria-hidden="true">D</span><button type="button" class="gbtn" id="gNext">${ui.next}</button></span>
+         </div>
+         <p class="gres" id="gRes" aria-live="polite" data-nosearch>${gaugeMsg(l)}</p>`,
+        t('Sketch only. Speed and odds are not final.','Chỉ là minh họa. Tốc độ và tỉ lệ chưa chốt.'))+
+      panel(t('Parts','Thành phần'),
+        `<ul class="parts">
+          <li><span class="pinl" data-nosearch>A</span><span><b>${nm('Bonus gauge','Đồng hồ thưởng')}</b><span class="d">${t(`Half circle: ×2 | ×3 | ×5 | ×3 | ×2.`,`Bán nguyệt: ×2 | ×3 | ×5 | ×3 | ×2.`)}</span></span></li>
+          <li><span class="pinl" data-nosearch>B</span><span><b>${nm('Needle','Kim chỉ')}</b><span class="d">${t(`Swings left and right non-stop.`,`Lắc qua lại liên tục.`)}</span></span></li>
+          <li><span class="pinl" data-nosearch>C</span><span><b>${nm('Bonus button','Nút Thưởng thêm')}</b><span class="d">${t(`Video icon. Stops the needle, plays the ad.`,`Có biểu tượng video. Dừng kim, phát quảng cáo.`)}</span></span></li>
+          <li><span class="pinl" data-nosearch>D</span><span><b>${nm('Next Level button','Nút Màn tiếp theo')}</b><span class="d">${t(`Base reward only.`,`Chỉ nhận thưởng gốc.`)}</span></span></li>
+        </ul>
+        <p class="upm-cap">${t('Placed between the element unlock progress bar and the buttons.','Nằm giữa thanh tiến độ mở khóa yếu tố và các nút.')}</p>`)+
+      panel(t('Flow','Diễn biến'),ol([
+        t(`Screen opens with the base reward (${GBASE}). Needle swings.`,`Màn hình mở với thưởng gốc (${GBASE}). Kim lắc.`),
+        t(`Tap <b>Bonus</b>: needle stops on the multiplier.`,`Chạm <b>Thưởng thêm</b>: kim dừng ở hệ số nhân.`),
+        t(`1 s pause, then the ad plays.`,`Chờ 1 giây, rồi phát quảng cáo.`),
+        t(`Ad ends: coins × multiplier (×3 → ${GBASE*3}).`,`Hết quảng cáo: xu × hệ số (×3 → ${GBASE*3}).`)
+      ]))+
+      panel(t('Edge cases','Trường hợp đặc biệt'),
+        table(t('Win screen bonus edge cases','Trường hợp đặc biệt của thưởng thêm'),[t('Case','Trường hợp'),t('Result','Kết quả')],[
+          [t('Ad closed early or failed','Quảng cáo tắt sớm hoặc lỗi'),t('Base reward only','Chỉ nhận thưởng gốc')],
+          [t('No ad available','Không có quảng cáo'),t('Bonus button disabled','Nút Thưởng thêm bị mờ')],
+          [t('Daily ad limit reached','Hết lượt quảng cáo trong ngày'),t('Hide gauge and Bonus, re-center','Ẩn đồng hồ và nút Thưởng thêm, căn giữa lại')],
+          [t('1 s pause and ad','1 giây chờ và lúc quảng cáo chạy'),t('All input locked','Khóa mọi thao tác')]
+        ],'compact')+
+        `<p class="note">${t(`Swing speed, segment multipliers and the daily ad limit are remote config.`,`Tốc độ kim, hệ số từng ô và giới hạn quảng cáo mỗi ngày nằm trong cấu hình từ xa.`)}</p>`+
+        tpl(`The win screen bonus was not in the Card Slots GDD before. The base reward and multipliers are template defaults.`,
+            `Thưởng thêm ở màn hình thắng chưa có trong GDD Card Slots trước đây. Thưởng gốc và các hệ số là giá trị mặc định của template.`)))+
+
     sys(nm('Reward ads waiting slot (RV Slot)','Ô chờ quảng cáo thưởng'),
       lead(t(`RV Slots let the player watch a rewarded ad to earn extra waiting slots in the level.`,
              `Ô chờ quảng cáo thưởng (RV Slot) cho phép người chơi xem quảng cáo có thưởng để nhận thêm ô chờ trong màn chơi.`))+
       tiles([
         ['2',t('RV Slots in each level','Ô chờ quảng cáo thưởng trong mỗi màn')],
         ['+8',t('Waiting slots added each time an RV Slot is used','Ô chờ được thêm mỗi lần dùng một ô chờ quảng cáo thưởng')]
-      ]));
+      ]))+
+
+    sys(nm('Level loop back','Lặp lại màn chơi'),
+      lead(t(`After the last level, earlier levels replay. The level number keeps counting up.`,
+             `Sau màn cuối, game cho chơi lại các màn trước. Số màn vẫn tăng dần.`))+
+      tiles([
+        ['40',t('Last level','Màn cuối cùng')],
+        ['21',t('Loop starts from','Bắt đầu lặp từ màn')],
+        ['20',t('Levels per loop (21–40)','Số màn mỗi vòng (21–40)')]
+      ])+
+      panel(t('Level mapping','Cách tính màn'),
+        `<p class="fx"><code>${t('content level = 21 + (shown level − 41) mod 20, for shown ≥ 41','màn nội dung = 21 + (màn hiển thị − 41) mod 20, khi hiển thị ≥ 41')}</code></p>`+
+        table(t('Level loop back examples','Ví dụ lặp lại màn'),[t('Shown level','Màn hiển thị'),'40','41','42','…','60','61'],
+          [[t('Content level','Màn nội dung'),'40','21','22','…','40','21']],'compact'))+
+      panel(t('Rules','Quy tắc'),ul([
+        t(`All UI and level checks (offers, Skip Level, remote config) use the shown level.`,`Mọi giao diện và điều kiện theo màn (ưu đãi, Bỏ qua màn, cấu hình từ xa) dùng màn hiển thị.`),
+        t(`Looped levels play like any level: same rewards, bonus, hearts, revive.`,`Màn lặp chơi như mọi màn: cùng thưởng, thưởng thêm, tim, hồi sinh.`),
+        t(`An update that adds levels: players inside the new range play the real level.`,`Bản cập nhật thêm màn: người chơi trong khoảng màn mới chơi đúng màn đó.`),
+        t(`Analytics logs both shown and content level.`,`Analytics ghi cả màn hiển thị và màn nội dung.`)
+      ])+`<p class="note">${t(`Remote config: <code>level_loop_last_level</code>, <code>level_loop_start_level</code>.`,`Cấu hình từ xa: <code>level_loop_last_level</code>, <code>level_loop_start_level</code>.`)}</p>`+
+      tpl(`Level loop back was not in the Card Slots GDD before. The level numbers are template defaults.`,
+          `Lặp lại màn chơi chưa có trong GDD Card Slots trước đây. Các số màn là giá trị mặc định của template.`)))+
+
+    sys(nm('Revive','Hồi sinh'),
+      lead(t(`When the player loses, one more chance to continue the same attempt. Shows before the lose screen.`,
+             `Khi thua, người chơi có thêm một cơ hội chơi tiếp lượt đang chơi. Hiện trước màn hình thua.`))+
+      tiles([
+        [t(`2 free`,`2 miễn phí`),t(`${P.remove} used on revive`,`${P.remove} dùng khi hồi sinh`),'hot'],
+        ['900',t('Coins for the 1st revive','Xu cho lần hồi sinh đầu')],
+        ['1',t('Revive by ad per attempt','Lần hồi sinh bằng quảng cáo mỗi lượt')]
+      ])+
+      panel(t('Options','Lựa chọn'),
+        table(t('Revive options','Lựa chọn hồi sinh'),[t('Option','Lựa chọn'),t('Cost','Giá'),t('Limit and notes','Giới hạn và ghi chú')],[
+          [t('Coins','Xu'),t(`<code>revive_base_cost</code> (900), × <code>revive_cost_growth</code> per extra revive`,`<code>revive_base_cost</code> (900), × <code>revive_cost_growth</code> mỗi lần thêm`),t('Not enough coins → store, then back','Không đủ xu → cửa hàng, rồi quay lại')],
+          [t('Rewarded ad','Quảng cáo có thưởng'),t('Free','Miễn phí'),t(`<code>revive_max_ads_per_attempt</code> (1), then hidden`,`<code>revive_max_ads_per_attempt</code> (1), sau đó ẩn`)],
+          [t('Give up','Bỏ cuộc'),dash,t('→ Lose screen','→ Màn hình thua')]
+        ],'compact')+
+        tpl(`The costs and limits here are template defaults. The Card Slots rules under “On revive” come from the earlier 1.1.`,
+            `Giá và giới hạn ở đây là giá trị mặc định của template. Các quy tắc Card Slots ở mục “Khi hồi sinh” lấy từ mục 1.1 trước đây.`))+
+      panel(t('On revive','Khi hồi sinh'),ul([
+        t(`When the player revives, the game uses 2 free Remove boosters on the poles at the bottom of the queues that hold the fewest cards.`,
+          `Khi người chơi hồi sinh, trò chơi dùng miễn phí 2 lượt Loại bỏ cho các cột đang ở dưới cùng hàng chờ và có ít thẻ nhất.`),
+        t(`If the game is still stuck after that, it uses the free Remove again and repeats until the game can continue.`,
+          `Nếu sau đó vẫn còn bị kẹt, trò chơi tiếp tục dùng Loại bỏ miễn phí cho tới khi chơi tiếp được.`),
+        t(`These free Removes do not use up the player's Remove boosters, and the player does not need to own any.`,
+          `Các lượt miễn phí này không trừ vào số công cụ Loại bỏ người chơi đang có, và người chơi cũng không cần có sẵn công cụ này.`),
+        t(`Continue from where it stopped. No restart, no life lost.`,`Chơi tiếp từ chỗ dừng. Không chơi lại, không mất tim.`),
+        t(`Revive count and price reset on a new attempt.`,`Số lần và giá hồi sinh tính lại khi bắt đầu lượt mới.`),
+        t(`Ad or purchase fails: back to the popup. Input locked while the booster plays.`,`Quảng cáo hoặc giao dịch lỗi: quay lại popup. Khóa thao tác khi công cụ đang chạy.`)
+      ])));
+
+  const DCAP={
+    hiddenS:t('The stack on top is sent up. The hidden stack below is unblocked and shows its color.','Chồng thẻ nằm trên được đưa lên. Chồng thẻ ẩn bên dưới hết bị đè và hiện màu.'),
+    hiddenP:t('The bottom pole fills and clears. The hidden pole moves to the bottom and shows its color.','Cột dưới cùng đầy và được dọn. Cột ẩn đi xuống dưới cùng và hiện màu.'),
+    locked:t('Two poles clear, the number hits 0 and the ice breaks.','Hai cột được dọn, con số về 0 và lớp băng vỡ.'),
+    hand:t('The player taps a blocked stack. It lifts out and flies to its pole.','Người chơi chạm vào một chồng thẻ bị đè. Chồng thẻ được nhấc ra và bay tới cột cùng màu.'),
+    shuffle:t('The poles mix, and poles that match the table come to the bottom.','Các cột được xáo lại, cột hợp màu với thẻ trên bàn được đưa xuống dưới cùng.'),
+    remove:t('The player taps a pole in a queue. It pulls in the cards of its color and clears.','Người chơi chạm vào một cột trong hàng chờ. Cột hút hết thẻ cùng màu rồi được dọn.')
+  };
+  /* demo(key) shows DEMOS[key] with its DCAP caption */
+  const demo=(k,c)=>{const cp=c||DCAP[k]||'';return DEMOS[k]?`<figure class="demo" data-demo="${k}"><div class="demo-box"><svg viewBox="0 0 200 196" role="img" aria-label="${esc(cp.replace(/<[^>]+>/g,''))}"><g class="scene">${DEMOS[k].svg()}</g></svg>`+
+    `<button type="button" class="demo-btn" aria-pressed="false" aria-label="${esc(ui.pauseDemo)}"><svg class="i-pause" viewBox="0 0 12 12" aria-hidden="true"><rect x="1.5" y="1" width="3" height="10" rx="1"/><rect x="7.5" y="1" width="3" height="10" rx="1"/></svg><svg class="i-play" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.2v9.6L10.5 6z"/></svg></button></div>`+
+    `<figcaption>${cp}</figcaption></figure>`:'';};
 
   B['elements-mechanics']=
     ent(N.hiddenS,ul([
       t(`A Hidden Card Stack hides its real color while it is blocked.`,`Chồng thẻ ẩn che đi màu thật khi còn bị đè.`),
       t(`Once it is unblocked, it reveals its real color.`,`Khi hết bị đè, chồng thẻ hiện màu thật.`)
-    ]),unlock(7))+
+    ]),unlock(7),demo('hiddenS'))+
     ent(N.hiddenP,ul([
       t(`A Hidden Color Pole hides its real color while it is not at the bottom of its queue.`,`Cột ẩn màu che đi màu thật khi chưa xuống tới dưới cùng hàng chờ.`),
       t(`Once it reaches the bottom of its queue, it reveals its real color.`,`Khi xuống tới vị trí dưới cùng của hàng chờ, cột hiện màu thật.`)
-    ]),unlock(12))+
+    ]),unlock(12),demo('hiddenP'))+
     ent(N.locked,ul([
       t(`A Locked Card Stack is locked away and can't be tapped to send up.`,`Chồng thẻ bị khóa không thể chạm để đưa lên.`),
       t(`It still shows its color, but the player can't interact with it.`,`Chồng thẻ vẫn hiện màu, nhưng người chơi chưa làm gì được với nó.`),
       t(`It shows a countdown: the number of poles that must be cleared before it unlocks.`,`Trên chồng thẻ có một con số đếm ngược, cho biết cần dọn xong bao nhiêu cột thì chồng thẻ mới mở khóa.`),
       t(`The countdown only starts once the stack is unblocked. Poles cleared before that do not count.`,`Con số chỉ bắt đầu đếm khi chồng thẻ hết bị đè. Các cột được dọn xong trước đó không được tính.`),
       t(`Each cleared pole lowers the countdown by 1.`,`Mỗi cột được dọn xong thì con số giảm đi 1.`),
-      t(`If every other pole has been cleared and only the poles for the locked cards remain, the stack unlocks immediately.`,`Nếu mọi cột khác đều đã được dọn xong, chỉ còn lại các cột dành cho thẻ bị khóa, chồng thẻ sẽ mở khóa ngay.`),
+      `<b>${t('Fail-safe','Chống kẹt')}:</b> `+t(`If every other pole has been cleared and only the poles for the locked cards remain, the stack unlocks immediately.`,`Nếu mọi cột khác đều đã được dọn xong, chỉ còn lại các cột dành cho thẻ bị khóa, chồng thẻ sẽ mở khóa ngay.`),
       t(`Once unlocked, it can be tapped and sent up like a normal stack.`,`Mở khóa xong, người chơi chạm để đưa lên như chồng thẻ thường.`)
-    ]),unlock(17));
+    ]),unlock(17),demo('locked'));
 
   B['booster-mechanics']=
     ent(N.hand,ul([
@@ -687,7 +1083,7 @@ function view(l){
         t(`Hidden Card Stack and Locked Card Stack: both can be selected.`,`Chồng thẻ ẩn và Chồng thẻ bị khóa: đều chọn được.`),
         t(`A selected Locked Card Stack unlocks immediately.`,`Chồng thẻ bị khóa được chọn sẽ mở khóa ngay.`)
       ])
-    ]),unlockB(5))+
+    ]),unlockB(5),demo('hand'))+
     ent(N.shuffle,ul([
       t(`Rearranges the poles in the queues. The game does the following in order:`,
         `Xếp lại thứ tự các cột trong các hàng chờ. Trò chơi làm lần lượt các bước sau:`)+ol([
@@ -701,7 +1097,7 @@ function view(l){
         t(`When choosing which poles move down, the order of priority is normal pole → Hidden Color Pole.`,
           `Khi chọn cột để đưa xuống, thứ tự ưu tiên là cột thường → Cột ẩn màu.`)
       ])
-    ]),unlockB(8))+
+    ]),unlockB(8),demo('shuffle'))+
     ent(N.remove,ul([
       t(`Lets the player pick any pole in the queues and clear it immediately.`,
         `Cho phép người chơi chọn bất kỳ cột nào trong các hàng chờ để dọn cột đó ngay lập tức.`),
@@ -712,7 +1108,7 @@ function view(l){
         t(`Hidden Card Stacks`,`Chồng thẻ ẩn`),
         t(`Locked Card Stacks. A locked stack that gets pulled unlocks immediately.`,`Chồng thẻ bị khóa. Chồng thẻ bị khóa khi được hút sẽ mở khóa ngay.`)
       ])
-    ]),unlockB(10));
+    ]),unlockB(10),demo('remove'));
 
   /* ===== 2. FTUE & tutorial ===== */
   B['ftue--tutorial']=`<p class="sec-intro">${t(
@@ -809,6 +1205,7 @@ function view(l){
     ent(N.remove,params([[an,t('The picked pole flies toward the table, then pulls in all the cards of its color.','Cột được chọn bay về phía bàn rồi hút hết các thẻ cùng màu.')]]));
 
   /* ===== 4. SFX & haptics ===== */
+  /* Haptic: 0 none, 1 weak, 2 medium, 3 strong */
   const cat={ui:t('UI','Giao diện (UI)'),core:t('Core game SFX','Lối chơi chính'),el:t('Element SFX','Yếu tố đặc biệt'),bo:t('Booster SFX','Công cụ hỗ trợ')};
   const sfx=[
     ['BGM In Game','ui',t('Gameplay starts','Bắt đầu vào chơi'),0],
@@ -830,34 +1227,235 @@ function view(l){
     sfx.map(r=>[`<span lang="en">${r[0]}</span>`,`<span class="cat">${cat[r[1]]}</span>`,r[2],hap(r[3])]));
 
   /* ===== 5. Remote config ===== */
+  /* rows with no key yet (k = null) are Card Slots settings the template has no key for */
+  const rcHeads=[t('Key','Key'),t('Description','Mô tả'),t('Value','Giá trị'),t('Unit','Đơn vị')];
+  const rc=(name,rows,after)=>ent(name,table(name,rcHeads,
+    rows.map(([k,d,v,u])=>[k?`<code lang="en">${k}</code>`:dash,d,v,u]))+(after||''));
+  const coin=t('coin','xu'),coins=t('coins','xu'),lives=t('lives','mạng'),boosters=t('boosters','công cụ');
+  const cost=u=>`${t('cost','giá')} · ${u}`,rew=u=>`${t('reward','thưởng')} · ${u}`;
   const unl=t('0 means unlimited.','0 nghĩa là không giới hạn.');
+  /* a Card Slots setting name in bold, then its description */
+  const lab=(en,v,d)=>`<b>${t(en,v)}.</b> ${d}`;
+  const perDay=t('count per day','lần mỗi ngày');
   B['remote-config']=`<p class="sec-intro">${t(
       `Values the team can change without releasing a new build.`,
       `Các thông số mà đội có thể chỉnh mà không cần phát hành bản game mới.`)}</p>`+
-    ent(t('Rewards: coins and boosters','Phần thưởng: xu và công cụ hỗ trợ'),
-      params([
-        [t('Coins earned per level','Số xu nhận mỗi màn'),t('How many coins the player earns per level.','Người chơi nhận bao nhiêu xu sau mỗi màn.')],
-        [t('Ad multiplier on the level reward','Hệ số nhân thưởng khi xem quảng cáo'),t('How much a rewarded ad multiplies the level reward (2×, 3×, …).','Phần thưởng của màn được nhân lên bao nhiêu khi xem quảng cáo (2×, 3×, …).')],
-        [t('Reward per purchase','Số lượng nhận mỗi lần mua'),t('How many boosters one purchase gives. Set separately for each booster.','Mỗi lần mua nhận được bao nhiêu công cụ hỗ trợ. Đặt riêng cho từng công cụ.')],
-        [t('Coin cost','Giá bằng xu'),t('The price of one purchase, in coins. Set separately for each booster.','Giá của một lần mua, tính bằng xu. Đặt riêng cho từng công cụ.')]
-      ])+
+    tpl(`The Card Slots list had descriptions but no keys or values. Keys and values here are template defaults, except lives (5, 20 min) from 1.3. A dash in the Key column is a Card Slots setting with no key yet.`,
+        `Danh sách Card Slots trước đây chỉ có mô tả, chưa có key và giá trị. Key và giá trị ở đây là mặc định của template, trừ số tim (5, 20 phút) lấy từ mục 1.3. Dấu gạch ở cột Key là thông số của Card Slots chưa có key.`)+
+    rc(t('Rewards: coins and boosters','Phần thưởng: xu và công cụ hỗ trợ')+` <span class="orig">${t('Level reward','Thưởng qua màn')}</span>`,[
+      ['level_win_coin',lab('Coins earned per level','Số xu nhận mỗi màn',t('How many coins the player earns per level.','Người chơi nhận bao nhiêu xu sau mỗi màn.')),'40',coin],
+      ['level_win_ad_multiplier',lab('Ad multiplier on the level reward','Hệ số nhân thưởng khi xem quảng cáo',t('How much a rewarded ad multiplies the level reward (2×, 3×, …).','Phần thưởng của màn được nhân lên bao nhiêu khi xem quảng cáo (2×, 3×, …).')),'2.0×','×']
+    ])+
+    rc(t('Ads: limits and placement','Quảng cáo: giới hạn và vị trí'),[
+      [null,lab('Max ads per day for the multiplier','Số quảng cáo tối đa mỗi ngày để nhân thưởng',t('How many ads a player can watch per day to double or triple rewards.','Mỗi ngày người chơi được xem tối đa bao nhiêu quảng cáo để nhân đôi hoặc nhân ba phần thưởng.')+' '+unl),tbd,perDay],
+      [null,lab('Max ads per day for revive','Số quảng cáo tối đa mỗi ngày để hồi sinh',t('How many ads a player can watch per day to revive.','Mỗi ngày người chơi được xem tối đa bao nhiêu quảng cáo để hồi sinh.')+' '+unl),tbd,perDay],
+      [null,lab('Max ads per day for boosters','Số quảng cáo tối đa mỗi ngày để nhận công cụ hỗ trợ',t('How many ads a player can watch per day to get boosters.','Mỗi ngày người chơi được xem tối đa bao nhiêu quảng cáo để nhận công cụ hỗ trợ.')+' '+unl),tbd,perDay]
+    ])+
+    rc(t('Sub-mechanics: revive and others','Cơ chế phụ: hồi sinh và các phần khác'),[
+      ['revive_base_cost',lab('First revive cost','Giá lần hồi sinh đầu tiên',t('The cost of the first revive.','Giá của lần hồi sinh đầu tiên.')),'900',coin],
+      ['revive_cost_growth',lab('Price growth per extra revive','Mức tăng giá mỗi lần hồi sinh thêm',t('The multiplier applied to the cost of each following revive.','Hệ số nhân giá áp dụng cho mỗi lần hồi sinh tiếp theo.')),'1.00×','×'],
+      ['revive_max_ads_per_attempt',t('Max revives by ad in one attempt','Số lần hồi sinh bằng quảng cáo tối đa trong một lượt chơi'),'1',t('count','lần')],
+      [null,lab('Max revives per level','Số lần hồi sinh tối đa mỗi màn',t('How many revives are allowed in one level.','Mỗi màn được hồi sinh tối đa bao nhiêu lần.')+' '+unl),tbd,t('count','lần')]
+    ])+
+    rc(t('Level loop back','Lặp lại màn chơi'),[
+      ['level_loop_last_level',t('Last level. After it, the game loops back.','Màn cuối cùng. Sau màn này, game quay lại lặp màn.'),'40',t('level','màn')],
+      ['level_loop_start_level',t('Level the loop starts from','Màn bắt đầu vòng lặp'),'21',t('level','màn')]
+    ])+
+    rc(t('Lives','Mạng'),[
+      ['lives_max',t('Maximum lives','Số mạng tối đa'),'5',lives],
+      ['life_refill_minutes',t('Minutes to regenerate 1 life','Số phút để hồi 1 mạng'),'20',t('min','phút')]
+    ])+
+    rc(t('Lives refill — cost and reward (offered at 0 lives)','Nạp mạng — giá và thưởng (hiện khi còn 0 mạng)'),[
+      ['lives_refill_coin_cost',t('Refill with coins — COST: coins paid','Nạp bằng xu — GIÁ: số xu phải trả'),'900',cost(coins)],
+      ['lives_refill_coin_amount',t('Refill with coins — REWARD: lives given','Nạp bằng xu — THƯỞNG: số mạng nhận'),'5',rew(lives)],
+      ['lives_refill_ad_amount',t('Refill with ads — REWARD: lives given','Nạp bằng quảng cáo — THƯỞNG: số mạng nhận'),'1',rew(lives)]
+    ])+
+    rc(t('Boosters — cost and reward','Công cụ hỗ trợ — giá và thưởng'),[
+      ['booster_{id}_coin_price',lab('Coin cost','Giá bằng xu',t('The price of one purchase, in coins. Set separately for each booster.','Giá của một lần mua, tính bằng xu. Đặt riêng cho từng công cụ.')),tbd,cost(coins)],
+      ['booster_{id}_coin_amount',lab('Reward per purchase','Số lượng nhận mỗi lần mua',t('How many boosters one purchase gives. Set separately for each booster.','Mỗi lần mua nhận được bao nhiêu công cụ hỗ trợ. Đặt riêng cho từng công cụ.')),'3',rew(boosters)],
+      ['booster_{id}_ad_amount',t('Watch ads — REWARD: boosters given','Xem quảng cáo — THƯỞNG: số công cụ nhận'),'1',rew(boosters)]
+    ],
       `<p>${t('Boosters listed for purchase:','Các công cụ được liệt kê để mua:')}</p>
        <div class="chips blk" lang="en"><span>Paper Box</span><span>Magnet</span><span>Remove</span></div>`+
       note(t(
          `The source lists Paper Box, Magnet and Remove here, but the rest of this GDD names the boosters Hand, Shuffle and Remove. The names are kept as written and need confirming.`,
          `Bản gốc ghi Paper Box, Magnet và Remove ở mục này, trong khi các phần khác của tài liệu gọi công cụ là Hand, Shuffle và Remove. Tên được giữ nguyên như bản gốc và cần xác nhận lại.`)))+
-    ent(t('Ads: limits and placement','Quảng cáo: giới hạn và vị trí'),params([
-      [t('Max ads per day for the multiplier','Số quảng cáo tối đa mỗi ngày để nhân thưởng'),t('How many ads a player can watch per day to double or triple rewards.','Mỗi ngày người chơi được xem tối đa bao nhiêu quảng cáo để nhân đôi hoặc nhân ba phần thưởng.')+' '+unl],
-      [t('Max ads per day for revive','Số quảng cáo tối đa mỗi ngày để hồi sinh'),t('How many ads a player can watch per day to revive.','Mỗi ngày người chơi được xem tối đa bao nhiêu quảng cáo để hồi sinh.')+' '+unl],
-      [t('Max ads per day for boosters','Số quảng cáo tối đa mỗi ngày để nhận công cụ hỗ trợ'),t('How many ads a player can watch per day to get boosters.','Mỗi ngày người chơi được xem tối đa bao nhiêu quảng cáo để nhận công cụ hỗ trợ.')+' '+unl]
-    ]))+
-    ent(t('Sub-mechanics: revive and others','Cơ chế phụ: hồi sinh và các phần khác'),params([
-      [t('First revive cost','Giá lần hồi sinh đầu tiên'),t('The cost of the first revive.','Giá của lần hồi sinh đầu tiên.')],
-      [t('Price growth per extra revive','Mức tăng giá mỗi lần hồi sinh thêm'),t('The multiplier applied to the cost of each following revive.','Hệ số nhân giá áp dụng cho mỗi lần hồi sinh tiếp theo.')],
-      [t('Max revives per level','Số lần hồi sinh tối đa mỗi màn'),t('How many revives are allowed in one level.','Mỗi màn được hồi sinh tối đa bao nhiêu lần.')+' '+unl]
-    ]));
+    rc(t('Unlock popups — offer unlock level','Popup mở khóa — màn mở ưu đãi'),[
+      ['starter_pack_unlock_level',t('Starter Pack (IAP) — level from which the offer popup can show','Gói Khởi đầu (IAP) — màn bắt đầu có thể hiện popup ưu đãi'),'12',t('level','màn')],
+      ['remove_ads_unlock_level',t('Remove Ads (IAP) — level from which the offer popup can show','Gỡ quảng cáo (IAP) — màn bắt đầu có thể hiện popup ưu đãi'),'15',t('level','màn')],
+      ['garage_gift_unlock_level',t('Limited Time Reward / Garage Gift (rewarded ad) — level from which the gift popup can show','Quà giới hạn thời gian / Garage Gift (quảng cáo thưởng) — màn bắt đầu có thể hiện popup quà'),'10',t('level','màn')]
+    ])+
+    rc(t('Live ops','Live Ops'),[
+      ['skip_level_max_per_day',t('Skip Level — max skips per day (ad or coins). The count resets each new day.','Bỏ qua màn — số lần bỏ qua tối đa mỗi ngày (bằng quảng cáo hoặc xu). Số lần được tính lại mỗi ngày mới.'),'3',t('count','lần')],
+      ['retry_booster_max_per_day',t('Retry with Booster — max uses per day (rewarded ad). The count resets each new day.','Chơi lại kèm công cụ — số lần dùng tối đa mỗi ngày (quảng cáo có thưởng). Số lần được tính lại mỗi ngày mới.'),'3',t('count','lần')]
+    ]);
 
-  /* ===== 6. Level config ===== */
+  /* ===== 6. IAP & offers ===== */
+  /* 6.1 lists every pack and 6.2 every popup, one row each. Add or change a pack or popup there first,
+     then give it a detail entry (6.5, 6.6 or section 7) only if its rules don't fit in one row. */
+  B['iap--offers']=`<p class="sec-intro">${t(`Packs and every popup that offers something (money, coins or rewarded ad). Keep 6.1 and 6.2 up to date. Unlock levels are remote config.`,
+    `Các gói và mọi popup mời nhận ưu đãi (tiền, xu hoặc quảng cáo có thưởng). Luôn cập nhật mục 6.1 và 6.2. Màn mở khóa nằm trong cấu hình từ xa.`)}</p>`+
+    tpl(`This whole section is new for Card Slots. Packs, prices, timings and the product ID prefix <code>${PID}</code> are template defaults to confirm.`,
+        `Toàn bộ mục này mới với Card Slots. Các gói, giá, thời gian và tiền tố mã sản phẩm <code>${PID}</code> là mặc định của template, cần xác nhận.`);
+  const pid=s=>`<code>${PID}.${s}</code>`;
+  const see=(id,n)=>`<a href="#${id}">${n}</a>`;
+  const bx=n=>t(`${n}× each booster`,`Mỗi công cụ ×${n}`);
+  const hr=n=>t(`${n} hour${n>1?'s':''}`,`${n} giờ`);
+  const packs=[
+    [t('Remove Ads','Gỡ quảng cáo')],
+    ['Remove Ads Pack',pid('remove_ads'),'1,500',bx(1),dash,t('No interstitial and banner ads, forever','Gỡ vĩnh viễn quảng cáo xen kẽ và banner'),'$5.99'],
+    [t('Limited Time Pack','Gói giới hạn thời gian')],
+    ['Starter Pack',pid('starter_pack'),'2,500',bx(2),hr(2),dash,'$1.99'],
+    [t('Special Pack','Gói đặc biệt')],
+    ['Small Pack',pid('pack_small'),'2,500',bx(2),hr(1),dash,'$4.99'],
+    ['Medium Pack',pid('pack_medium'),'10,000',bx(5),hr(2),dash,'$9.99'],
+    ['Ultra Pack',pid('pack_ultra'),'25,000',bx(10),hr(6),dash,'$24.99'],
+    [t('Gold Pack','Gói vàng')],
+    ['1,000 Gold',pid('coins_1K'),'1,000',dash,dash,dash,'$1.99'],
+    ['5,000 Gold',pid('coins_5K'),'5,000',dash,dash,dash,'$4.99'],
+    ['10,000 Gold',pid('coins_10K'),'10,000',dash,dash,dash,'$9.99'],
+    ['25,000 Gold',pid('coins_25K'),'25,000',dash,dash,dash,'$24.99'],
+    ['50,000 Gold',pid('coins_50K'),'50,000',dash,dash,dash,'$49.99'],
+    ['100,000 Gold',pid('coins_100K'),'100,000',dash,dash,dash,'$99.99']
+  ];
+  const NUMC={2:1,6:1};
+  const packHead=[t('Pack','Gói'),'ID',t('Gold','Vàng'),t('Boosters','Công cụ hỗ trợ'),t('Unlimited lives','Tim vô hạn'),t('Other benefit','Lợi ích khác'),t('Price (USD)','Giá (USD)')];
+  B['pack-list']=`<p class="sec-intro">${t(`All IAP packs, in store order. IDs use the prefix <code>${PID}</code>.`,
+      `Mọi gói IAP, theo thứ tự trong cửa hàng. Mã sản phẩm dùng tiền tố <code>${PID}</code>.`)}</p>`+
+    `<div class="tbl xwide" tabindex="0" role="region" aria-label="${esc(t('Pack list','Danh sách gói'))}"><table><thead><tr>${packHead.map((h,i)=>`<th scope="col"${NUMC[i]?' class="num"':''}>${h}</th>`).join('')}</tr></thead><tbody>${
+    packs.map(r=>r.length===1?`<tr class="grp"><th scope="rowgroup" colspan="7">${r[0]}</th></tr>`
+      :`<tr><th scope="row">${r[0]}</th><td>${r[1]}</td>${r.slice(2).map((c,i)=>`<td${NUMC[i+2]?' class="num"':(i+2===5?' class="wrap"':'')}>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+
+  /* one row per popup: [name, paid with, unlock, when it shows, repeats & limits, Home/HUD icon, in store, rules] */
+  const popRows=[
+    [t('IAP popups','Popup IAP')],
+    [nm('Starter Pack','Gói Khởi đầu'),`IAP<br>${pid('starter_pack')}`,lvl(12),
+      t(`Session start, priority 1, while the 72 h window runs.`,`Khi mở game, ưu tiên 1, trong 72 giờ.`),
+      t(`72 h from the 1st popup. Gone once bought or expired.`,`72 giờ từ popup đầu. Mất khi đã mua hoặc hết hạn.`),
+      t(`Home, with countdown`,`Màn hình chính, kèm đồng hồ`),
+      t(`During the 72 h`,`Trong 72 giờ`),see('starter-pack','6.5')],
+    [nm('Remove Ads','Gỡ quảng cáo'),`IAP<br>${pid('remove_ads')}`,lvl(15),
+      t(`After interstitial ads (see 6.6). Never at session start.`,`Sau quảng cáo xen kẽ (xem 6.6). Không hiện khi mở game.`),
+      t(`Gap grows over time. Stops once bought.`,`Khoảng cách tăng dần. Dừng khi đã mua.`),
+      t(`Home, after the 1st popup`,`Màn hình chính, sau popup đầu`),
+      t(`Always, until bought`,`Luôn có, tới khi mua`),see('remove-ads','6.6')],
+    [t('Rewarded-ad and coin popups','Popup quảng cáo có thưởng và xu')],
+    [nm('Limited Time Reward','Quà giới hạn thời gian'),t('Rewarded ad','Quảng cáo có thưởng'),lvl(10),
+      t(`Session start (priority 2), Home after a win, a win while unclaimed.`,`Khi mở game (ưu tiên 2), về màn hình chính sau khi thắng, thắng khi quà chưa nhận.`),
+      t(`Every 4 h. 10 min to claim.`,`Mỗi 4 giờ. 10 phút để nhận.`),
+      t(`HUD, while unclaimed`,`HUD, khi quà chưa nhận`),dash,see('limited-time-reward','7.1')],
+    [nm('Skip Level','Bỏ qua màn'),t('Rewarded ad or coins','Quảng cáo có thưởng hoặc xu'),lvl('X'),
+      t(`Lose screen, 3 fails in a row on the same level.`,`Màn hình thua, thua 3 lần liên tiếp cùng một màn.`),
+      t(`3 a day`,`3 lần/ngày`),dash,dash,see('skip-retry','7.2')],
+    [nm('Retry with Booster','Chơi lại kèm công cụ'),t('Rewarded ad','Quảng cáo có thưởng'),t(`${P.remove} unlock`,`Mở ${P.remove}`),
+      t(`Restarting a level with 0 ${P.remove}.`,`Chơi lại một màn khi có 0 ${P.remove}.`),
+      t(`3 a day`,`3 lần/ngày`),dash,dash,see('skip-retry','7.2')],
+    [nm('Revive','Hồi sinh'),t('Coins or rewarded ad','Xu hoặc quảng cáo có thưởng'),t('Always','Luôn có'),
+      t(`The moment the player loses.`,`Ngay khi người chơi thua.`),
+      t(`1 ad revive per attempt`,`1 lần bằng quảng cáo mỗi lượt`),dash,dash,see('additional-mechanics','1.3')],
+    [nm('Refill lives','Nạp tim'),t('Coins or rewarded ad','Xu hoặc quảng cáo có thưởng'),t('Always','Luôn có'),
+      t(`Starting a level with 0 lives.`,`Bắt đầu màn khi còn 0 tim.`),
+      t(`900 coins → 5 lives, 1 ad → 1 life`,`900 xu → 5 tim, 1 quảng cáo → 1 tim`),dash,dash,see('remote-config','5')]
+  ];
+  const popHead=[t('Popup','Popup'),t('Paid with','Trả bằng'),t('Unlock level','Màn mở khóa'),t('When it shows','Khi nào hiện'),t('Repeats & limits','Lặp lại & giới hạn'),t('Icon','Biểu tượng'),t('In store','Trong cửa hàng'),t('Rules','Quy tắc')];
+  B['popup-list']=`<p class="sec-intro">${t(`Every offer popup. Use it as the checklist when adding or changing one.`,
+      `Mọi popup ưu đãi. Dùng làm danh sách kiểm tra khi thêm hoặc đổi.`)}</p>`+
+    `<div class="tbl pops" tabindex="0" role="region" aria-label="${esc(t('Popup list','Danh sách popup'))}"><table><thead><tr>${popHead.map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${
+    popRows.map(r=>r.length===1?`<tr class="grp"><th scope="rowgroup" colspan="8">${r[0]}</th></tr>`
+      :`<tr><th scope="row">${r[0]}</th>${r.slice(1).map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+
+  B['session-start-popup']=
+    `<p class="sec-intro">${t(`At most one popup per game open. Check in order, show the first that passes.`,
+      `Mỗi lần mở game tối đa một popup. Kiểm tra theo thứ tự, hiện popup đầu tiên thỏa điều kiện.`)}</p>`+
+    table(t('Session-start priority','Thứ tự popup khi mở game'),[t('Priority','Ưu tiên'),t('Popup','Popup'),t('Shows if all are true','Hiện khi thỏa tất cả'),t('Otherwise','Nếu không')],[
+      ['1',t('Starter Pack','Gói Khởi đầu'),t(`Level ≥ 12 · not bought · inside 72 h`,`Màn ≥ 12 · chưa mua · còn trong 72 giờ`),t('Check 2','Kiểm tra 2')],
+      ['2',t('Limited Time Reward','Quà giới hạn thời gian'),t(`Level ≥ 10 · ≥ 4 h since last gift`,`Màn ≥ 10 · đã qua ≥ 4 giờ từ quà trước`),t('Go to Home','Vào màn hình chính')]
+    ],'compact')+
+    `<p class="note">${t(`Remove Ads is never checked here. No popups during an FTUE step.`,`Gỡ quảng cáo không nằm trong lượt kiểm tra này. Không popup nào hiện khi đang làm dở FTUE.`)}</p>`;
+
+  B['store']=kv([
+      [t('Opens from','Mở từ'),t(`Home screen, HUD gold counter.`,`Màn hình chính, ô đếm vàng trên HUD.`)],
+      [t('Order','Thứ tự'),t(`Remove Ads → Limited Time → Special → Gold (as in 6.1).`,`Gỡ quảng cáo → Giới hạn thời gian → Đặc biệt → Vàng (như mục 6.1).`)],
+      [t('Visibility','Hiển thị'),t(`Starter Pack and Remove Ads: “In store” column in 6.2. Others: always, buy any number of times.`,`Gói Khởi đầu và Gỡ quảng cáo: theo cột “Trong cửa hàng” ở mục 6.2. Các gói khác: luôn có, mua nhiều lần.`)],
+      [t('Tags','Nhãn'),t(`“Best Value” on 100,000 Gold. “Hot” on Remove Ads.`,`“Best Value” cho gói 100.000 vàng. “Hot” cho Gỡ quảng cáo.`)],
+      [t('Purchase OK','Mua thành công'),t(`Reward animation to the HUD, then update counters.`,`Hiệu ứng thưởng bay lên HUD, rồi cập nhật con số.`)],
+      [t('Purchase fails','Mua lỗi'),t(`Close loading, stay in the store, nothing changes.`,`Tắt trạng thái tải, ở lại cửa hàng, không đổi gì.`)]
+    ]);
+
+  B['starter-pack']=
+    sys(nm('Starter Pack','Gói Khởi đầu'),
+      lead(t(`One-time, low-price pack for first buyers, shown as “60% OFF – Limited Time”.`,`Gói giá rẻ mua một lần cho người mua lần đầu, hiện là “60% OFF – Limited Time”.`))+
+      tiles([['2,500',t('Gold','Vàng')],['2×',t('Each booster','Mỗi công cụ')],[t('2 h','2 giờ'),t('Unlimited lives','Tim vô hạn')],['$1.99',t('Price','Giá'),'hot']])+
+      kv([
+        [t('Why a deal','Vì sao hời'),t(`Same price as 1,000 Gold, 2.5× the gold plus boosters. Small Pack content at 40% of its price.`,`Cùng giá gói 1.000 vàng nhưng gấp 2,5 lần vàng, thêm công cụ. Nội dung như Gói Nhỏ với 40% giá.`)],
+        [t('Lifecycle','Vòng đời'),`<span class="chips"><span>${t('Open game at level ≥ 12','Mở game ở màn ≥ 12')}</span><span>→ ${t('1st popup, 72 h starts','Popup đầu, bắt đầu 72 giờ')}</span><span>→ ${t('Popup each session start, Home icon, store entry','Popup mỗi lần mở game, biểu tượng, mục cửa hàng')}</span><span>→ ${t('Bought or 72 h over: gone for good','Đã mua hoặc hết 72 giờ: mất hẳn')}</span></span>`],
+        [t('Product ID','Mã sản phẩm'),pid('starter_pack')]
+      ]));
+
+  B['remove-ads']=
+    sys(nm('Remove Ads','Gỡ quảng cáo'),
+      lead(t(`Removes interstitial and banner ads forever. Rewarded ads stay.`,`Gỡ vĩnh viễn quảng cáo xen kẽ và banner. Quảng cáo có thưởng vẫn giữ.`))+
+      tiles([[t('No ads','Không QC'),t('Interstitials and banners','Xen kẽ và banner')],['1,500',t('Gold','Vàng')],['1×',t('Each booster','Mỗi công cụ')],['$5.99',t('Price','Giá'),'hot']])+
+      panel(t('Popup schedule','Lịch hiện popup'),
+        table(t('Remove Ads popup schedule','Lịch hiện popup Gỡ quảng cáo'),[t('Popup','Lần hiện'),t('Shows after','Hiện sau'),t('Limit','Giới hạn')],[
+          [t('1st','Lần 1'),t('1st interstitial past level 15','Quảng cáo xen kẽ đầu tiên sau màn 15'),t('Once','1 lần')],
+          [t('2nd–4th','Lần 2–4'),t('Every 4 interstitials','Mỗi 4 quảng cáo xen kẽ'),t('20 min cooldown or new session','Chờ 20 phút hoặc phiên mới')],
+          [t('5th +','Từ lần 5'),t('Every 8 interstitials','Mỗi 8 quảng cáo xen kẽ'),t('2 a day (resets after 24 h)','2 lần/ngày (tính lại sau 24 giờ)')]
+        ],'compact'))+
+      kv([
+        [t('Store','Cửa hàng'),t(`Always, even before level 15. Bought first: popup never shows. Home icon after the 1st popup.`,`Luôn có, kể cả trước màn 15. Mua trước: popup không bao giờ hiện. Biểu tượng ở màn hình chính sau popup đầu.`)],
+        [t('Bought','Đã mua'),t(`Popup, icon and store entry hide. No expiry.`,`Ẩn popup, biểu tượng và mục cửa hàng. Không hết hạn.`)],
+        [t('Restore','Khôi phục'),t(`Non-consumable: Restore Purchases in Settings and Store.`,`Mua một lần dùng mãi: nút Khôi phục giao dịch trong Cài đặt và Cửa hàng.`)],
+        [t('Product ID','Mã sản phẩm'),pid('remove_ads')]
+      ]));
+
+  /* ===== 7. Live ops ===== */
+  B['live-ops']=`<p class="sec-intro">${t(`Features that bring players back or help past hard levels, mostly for rewarded ads. Also listed in 6.2.`,
+    `Tính năng kéo người chơi quay lại hoặc giúp qua màn khó, phần lớn đổi bằng quảng cáo có thưởng. Cũng có trong mục 6.2.`)}</p>`+
+    tpl(`This whole section is new for Card Slots. Rewards, timings and limits are template defaults to confirm. Retry with Booster uses ${P.remove}, the booster revive already uses.`,
+        `Toàn bộ mục này mới với Card Slots. Phần thưởng, thời gian và giới hạn là mặc định của template, cần xác nhận. Chơi lại kèm công cụ dùng ${P.remove}, công cụ mà hồi sinh đang dùng.`);
+  B['limited-time-reward']=
+    sys(nm('Limited Time Reward','Quà giới hạn thời gian'),
+      lead(t(`A free gift every 4 hours, claimed with a rewarded ad.`,`Quà miễn phí mỗi 4 giờ, nhận bằng quảng cáo có thưởng.`))+
+      tiles([[`200 + 1`,t('Gold + booster (“Gold Brick Package!”)','Vàng + công cụ (“Gold Brick Package!”)')],[t('4 h','4 giờ'),t('Between gifts','Giữa hai lần quà')],[t('10 min','10 phút'),t('To claim','Để nhận quà')],[t('Level 10','Màn 10'),t('Unlocks','Mở khóa')]])+
+      panel(t('States','Các trạng thái'),
+        table(t('Limited Time Reward states','Trạng thái Quà giới hạn thời gian'),[t('State','Trạng thái'),t('Player sees','Người chơi thấy'),t('Next','Tiếp theo')],[
+          [t('Locked','Đang khóa'),t('Nothing. 4 h cooldown runs.','Không có gì. Đang chờ 4 giờ.'),t('Cooldown over + trigger → Available','Hết giờ chờ + có kích hoạt → Sẵn sàng')],
+          [t('Available','Sẵn sàng'),t('Popup','Popup'),t('Claim → Claimed · Close → Pending','Nhận → Đã nhận · Đóng → Chờ nhận')],
+          [t('Pending','Chờ nhận'),t('HUD icon, 10 min countdown','Biểu tượng HUD, đếm 10 phút'),t('Tap and claim → Claimed · 10 min over → Locked','Chạm và nhận → Đã nhận · Hết 10 phút → Đang khóa')],
+          [t('Claimed','Đã nhận'),t('Reward animation','Hiệu ứng nhận thưởng'),t('→ Locked (new 4 h)','→ Đang khóa (4 giờ mới)')]
+        ],'compact')+
+        `<p>${t(`<b>Triggers:</b> session start (6.3), Home after a win, a win while Pending.`,`<b>Kích hoạt:</b> mở game (6.3), về màn hình chính sau khi thắng, thắng khi đang Chờ nhận.`)}</p>`+
+        `<p>${t(`<b>Ad fails:</b> no reward, state unchanged. Not sold in the store.`,`<b>Quảng cáo lỗi:</b> không có quà, giữ nguyên trạng thái. Không bán trong cửa hàng.`)}</p>`));
+
+  B['skip-retry']=
+    `<p class="sec-intro">${t(`Two rewarded-ad helpers for a hard level, side by side.`,`Hai công cụ hỗ trợ bằng quảng cáo có thưởng khi gặp màn khó, đặt cạnh nhau.`)}</p>`+
+    table(t('Skip Level and Retry with Booster','Bỏ qua màn và Chơi lại kèm công cụ'),
+      ['',nm('Skip Level','Bỏ qua màn'),nm('Retry with Booster','Chơi lại kèm công cụ')],[
+      [t('Unlock','Mở khóa'),t('Level X (remote config, TBD)','Màn X (cấu hình từ xa, chưa chốt)'),t(`${P.remove} unlocks`,`Khi mở ${P.remove}`)],
+      [t('Shows when','Khi nào hiện'),t('Lose screen, after 3 fails in a row on the same level (resets on win or skip)','Màn hình thua, sau 3 lần thua liên tiếp cùng một màn (tính lại khi thắng hoặc bỏ qua)'),t(`Restarting a level (lose screen or restart button) with 0 ${P.remove}, before the level starts`,`Chơi lại một màn (màn hình thua hoặc nút chơi lại) khi có 0 ${P.remove}, trước khi màn bắt đầu`)],
+      [t('Cost','Chi phí'),t('1 rewarded ad or coins (remote config)','1 quảng cáo có thưởng hoặc xu (cấu hình từ xa)'),t('1 rewarded ad','1 quảng cáo có thưởng')],
+      [t('Result','Kết quả'),t('Level counts as done. No coins, no bonus. Counts toward element unlock. No life lost.','Màn tính là đã qua. Không xu, không thưởng thêm. Vẫn tính vào thanh mở khóa yếu tố. Không mất tim.'),t(`Restart with 1 free ${P.remove} selected. Not from inventory, lost if unused. Restart still costs 1 life.`,`Chơi lại với 1 ${P.remove} miễn phí đã chọn sẵn. Không trừ kho, mất nếu không dùng. Chơi lại vẫn tốn 1 tim.`)],
+      [t('Daily limit','Giới hạn ngày'),'<code>skip_level_max_per_day</code> = 3','<code>retry_booster_max_per_day</code> = 3'],
+      [t('Not allowed','Không áp dụng'),t('FTUE levels, levels that introduce an element or booster','Màn FTUE, màn giới thiệu yếu tố hoặc công cụ'),dash],
+      [t('Ad fails or closed','Quảng cáo lỗi hoặc bị đóng'),t('No skip, stay on lose screen, not counted','Không bỏ qua, ở lại màn hình thua, không tính lượt'),t('Normal restart, not counted','Chơi lại bình thường, không tính lượt')]
+    ],'wide')+
+    `<p class="note">${t(`Limits reset each new day (device time). At the limit, the button or popup hides.`,`Giới hạn tính lại mỗi ngày mới (giờ thiết bị). Khi hết lượt, nút hoặc popup được ẩn.`)}</p>`;
+
+  /* ===== 8. Change note ===== */
+  /* Add one day() block per day, newest first, with one ent per area changed */
+  const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
+  B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
+    day(t('26 October 2026','26/10/2026'),
+      ent(t('Moved to the GDD template','Chuyển sang template GDD'),ul([
+        t(`Restyled the document to the GDD template layout. The Card Slots content is kept.`,`Đổi tài liệu sang bố cục của template GDD. Giữ nguyên nội dung Card Slots.`),
+        t(`Revive moved from 1.1 into 1.3, with the template's revive cost and options added.`,`Hồi sinh chuyển từ mục 1.1 sang 1.3, thêm giá và lựa chọn hồi sinh theo template.`),
+        t(`Added from the template: unlimited lives, win screen bonus and level loop back in 1.3, sections 6 IAP & offers, 7 Live ops and 8 Change note.`,`Thêm từ template: tim vô hạn, thưởng thêm ở màn hình thắng và lặp lại màn chơi ở mục 1.3, các mục 6 Mua trong game & ưu đãi, 7 Live Ops và 8 Ghi chú thay đổi.`),
+        t(`Remote config now uses the template's key table. Level config moved to section 9.`,`Cấu hình từ xa dùng bảng key của template. Cấu hình màn chơi chuyển sang mục 9.`),
+        t(`Added an animated demo for each element and booster in 1.4 and 1.5.`,`Thêm minh họa chuyển động cho từng yếu tố và công cụ ở mục 1.4 và 1.5.`)
+      ])));
+
+  /* ===== 9. Level config ===== */
   B['level-config']=ent(t('Planned content','Nội dung dự kiến'),ul([
     t('JSON format','Định dạng JSON'),
     t('Tutorial on how to use the level builder tool','Hướng dẫn cách dùng công cụ dựng màn (level builder)')
@@ -873,7 +1471,7 @@ function view(l){
   ];
   const hero=`<div class="hero" id="top" data-sec="top" data-spy="top">
     <div>
-      <h1>Card Slots</h1>
+      <h1>${GAME}</h1>
       <p class="kind">${ui.sub}</p>
       <p class="pitch">${t(`Tap stacks of cards to send them to poles of the same color, park the rest in the waiting slots, and clear the table.`,
                            `Chạm vào các chồng thẻ để đưa thẻ lên cột cùng màu, thẻ chưa có chỗ thì tạm nằm ở ô chờ, rồi dọn sạch bàn để thắng.`)}</p>
@@ -1092,6 +1690,33 @@ function jump(id){
   try{history.replaceState(null,'',id==='top'?location.pathname+location.search:'#'+id);}catch(e){}
 }
 
+/* ---------- element demo engine (Web Animations, one loop per demo) ---------- */
+let demoStates=[],demoIO=null;
+function kfs(frames,prop,D){
+  const f=frames.slice().sort((a,b)=>a[0]-b[0]);
+  if(f[0][0]>0)f.unshift([0,f[0][1]]);
+  if(f[f.length-1][0]<D)f.push([D,f[f.length-1][1]]);
+  return f.map(([t,v,e])=>({offset:Math.min(1,Math.max(0,t/D)),[prop]:v,easing:e||'ease-in-out'}));
+}
+function applyDemo(st){const run=st.vis&&!st.user;st.anims.forEach(a=>{try{if(run)a.play();else a.pause();}catch(e){}});}
+function startDemos(){
+  demoStates.forEach(st=>st.anims.forEach(a=>{try{a.cancel();}catch(e){}}));demoStates=[];
+  if(demoIO){demoIO.disconnect();demoIO=null;}
+  if(!Element.prototype.animate)return;
+  $$('.demo',main).forEach(fig=>{
+    const def=DEMOS[fig.dataset.demo];if(!def)return;
+    const D=def.D,anims=[];
+    [['.scene','opacity',[[0,0],[.35,1],[D-.45,1],[D,0]]]].concat(def.tracks()).forEach(([sel,prop,frames])=>{
+      fig.querySelectorAll(sel).forEach(el=>{try{anims.push(el.animate(kfs(frames,prop,D),{duration:D*1000,iterations:Infinity}));}catch(e){}});
+    });
+    const st={fig,anims,user:false,vis:true};fig._demo=st;demoStates.push(st);
+  });
+  if('IntersectionObserver' in window){
+    demoIO=new IntersectionObserver(es=>es.forEach(e=>{const st=e.target._demo;if(!st)return;st.vis=e.isIntersecting;applyDemo(st);}),{rootMargin:'120px 0px'});
+    demoStates.forEach(st=>demoIO.observe(st.fig));
+  }
+}
+
 /* ---------- render + language ---------- */
 function render(){
   const ui=UI[lang];
@@ -1107,6 +1732,9 @@ function render(){
   spyEls=$$('[data-spy]',main);
   runSearch(false);
   spy();
+  startDemos();
+  gaugeUI();
+  if(G.swing&&!G.raf)G.raf=requestAnimationFrame(gaugeTick);
 }
 function setLang(l){
   if(l===lang||(l!=='en'&&l!=='vi'))return;
@@ -1142,6 +1770,14 @@ document.addEventListener('click',e=>{
     setOpen(false);
     return;
   }
+  const db=tg.closest('.demo-btn');
+  if(db){const st=db.closest('.demo')._demo;const on=db.getAttribute('aria-pressed')!=='true';db.setAttribute('aria-pressed',on?'true':'false');db.setAttribute('aria-label',on?UI[lang].playDemo:UI[lang].pauseDemo);if(st){st.user=on;applyDemo(st);}return;}
+  if(tg.closest('#gBonus')){
+    if(G.swing){G.swing=false;G.res='bonus';}
+    else{G.res=null;startSwing();}
+    gaugeUI();return;
+  }
+  if(tg.closest('#gNext')){G.res='next';startSwing();gaugeUI();return;}
   const pb=tg.closest('#pauseBtn');
   if(pb){paused=!paused;$('#field').classList.toggle('paused',paused);pb.textContent=paused?UI[lang].play:UI[lang].pause;return;}
   const lg=tg.closest('.legend button');
