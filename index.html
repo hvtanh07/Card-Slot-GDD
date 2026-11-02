@@ -1126,9 +1126,9 @@ function view(l){
        `Một số bước sẽ lưu lại trạng thái đã hoàn thành. Nếu người chơi thoát game giữa chừng rồi mở lại, FTUE bỏ qua các bước đã lưu và tiếp tục từ bước kế tiếp.`)]
   ]);
 
-  const tapCond=t('The player taps the highlighted stack of chips.','Người chơi chạm vào chồng chip đang được làm nổi bật.');
-  const tapStep=(n,enOrd,viOrd)=>[t(`Tap stack ${n}`,`Chạm vào chồng chip ${n}`),tapCond,
-    t(`The ${enOrd} stack the player should tap`,`Chồng chip ${viOrd} cần chạm`),popup('Tap to send chips','Chạm để đưa chip lên'),dash];
+  const tapCond=t('The player taps the highlighted chip stack.','Người chơi chạm vào chồng chip đang được làm nổi bật.');
+  const tapStep=(n,enOrd,viOrd)=>[t(`Tap red stack ${n}`,`Chạm vào chồng chip đỏ ${n}`),tapCond,
+    t(`The ${enOrd} red chip stack`,`Chồng chip đỏ ${viOrd}`),popup('Tap to send chip stack','Chạm để đưa chồng chip lên'),dash];
   B['ftue-steps']=table(t('FTUE steps','Các bước FTUE'),
     [t('Step','Bước'),t('Complete condition','Điều kiện hoàn thành'),t('Highlight','Phần được làm nổi bật'),t('Text box','Nội dung hộp thoại'),t('Progress save','Lưu tiến độ')],
     [
@@ -1137,7 +1137,8 @@ function view(l){
        t('The player taps to agree to the Terms &amp; Conditions / Privacy Policy.','Người chơi chạm đồng ý với Điều khoản / Chính sách quyền riêng tư.'),dash,dash,dash],
       tapStep(1,'1st','thứ nhất'),
       tapStep(2,'2nd','thứ hai'),
-      tapStep(3,'3rd','thứ ba'),
+      [t('Stack up all poles','Xếp đầy mọi cột'),t('The player sends up every chip stack. The popup stays on screen until then.','Người chơi đưa hết các chồng chip lên. Popup ở trên màn hình cho tới lúc đó.'),
+       dash,popup('Stack up all pole to win!','Xếp đầy mọi cột để thắng!'),dash],
       [t('Level complete','Hoàn thành màn'),t('The player sends up all the chips and completes the level.','Người chơi đưa hết chip lên và hoàn thành màn.'),dash,dash,t('Yes','Có')]
     ],'wide steps-tbl');
 
@@ -1434,6 +1435,10 @@ function view(l){
   const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
     day(t('2 November 2026','2/11/2026'),
+      ent(t('FTUE steps updated','Cập nhật các bước FTUE'),ul([
+        t(`Steps 3 and 4 now highlight the 1st and 2nd red chip stack, with the popup “Tap to send chip stack”.`,`Bước 3 và 4 nay làm nổi bật chồng chip đỏ thứ nhất và thứ hai, kèm popup “Tap to send chip stack”.`),
+        t(`Step 5 shows “Stack up all pole to win!” with no highlight. The popup stays until the player sends up every chip stack. Step 6 is level complete.`,`Bước 5 hiện “Stack up all pole to win!”, không làm nổi bật gì. Popup ở lại cho tới khi người chơi đưa hết các chồng chip lên. Bước 6 là hoàn thành màn.`)
+      ]))+
       ent(t('Section 7 renamed','Đổi tên mục 7'),ul([
         t(`Section 7 is now called Reward ads placement (was Live ops). Its content is unchanged.`,`Mục 7 nay có tên Vị trí quảng cáo thưởng (trước là Tính năng Live Ops). Nội dung giữ nguyên.`)
       ]))+
