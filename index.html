@@ -1153,9 +1153,9 @@ function view(l){
   B['booster-tutorial']=table(t('Booster tutorial','Hướng dẫn công cụ hỗ trợ'),
     [t('Booster','Công cụ'),t('Popup text','Nội dung popup'),t('Unlocks at level','Mở ở màn'),t('Free boosters','Số lượt tặng')],
     [
-      [N.hand,popup('Pick any stack of chips!','Chọn bất kỳ chồng chip nào!'),lvl(5),lvl(3)],
-      [N.shuffle,popup('Shuffle the poles<br>in queues!','Xáo trộn các cột<br>trong hàng chờ!'),lvl(8),lvl(3)],
-      [N.magnet,popup('Tap the pole<br>to sort it instantly!','Chạm vào cột<br>để xếp xong ngay!'),lvl(10),lvl(3)]
+      [N.hand,popup('Pick up any chip stack','Nhặt bất kỳ chồng chip nào'),lvl(5),lvl(3)],
+      [N.shuffle,popup('Shuffle all poles!','Xáo trộn mọi cột!'),lvl(8),lvl(3)],
+      [N.magnet,popup('Clear any pole instantly!','Dọn ngay bất kỳ cột nào!'),lvl(10),lvl(3)]
     ]);
 
   const stops=[
@@ -1435,6 +1435,9 @@ function view(l){
   const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
     day(t('2 November 2026','2/11/2026'),
+      ent(t('Booster tutorial text','Nội dung hướng dẫn công cụ'),ul([
+        t(`New popup text in 2.4: Hand “Pick up any chip stack”, Shuffle “Shuffle all poles!”, Magnet “Clear any pole instantly!”.`,`Nội dung popup mới ở mục 2.4: Hand “Pick up any chip stack”, Shuffle “Shuffle all poles!”, Magnet “Clear any pole instantly!”.`)
+      ]))+
       ent(t('FTUE steps updated','Cập nhật các bước FTUE'),ul([
         t(`Steps 3 and 4 now highlight the 1st and 2nd red chip stack, with the popup “Tap to send chip stack”.`,`Bước 3 và 4 nay làm nổi bật chồng chip đỏ thứ nhất và thứ hai, kèm popup “Tap to send chip stack”.`),
         t(`Step 5 shows “Stack up all poles to win!” with no highlight. The popup stays until the player sends up every chip stack. Step 6 is level complete.`,`Bước 5 hiện “Stack up all poles to win!”, không làm nổi bật gì. Popup ở lại cho tới khi người chơi đưa hết các chồng chip lên. Bước 6 là hoàn thành màn.`)
