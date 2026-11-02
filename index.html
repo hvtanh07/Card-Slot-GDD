@@ -700,7 +700,7 @@ const DEMOS={
       ['.new','transform',[[1.45,'scale(.55) rotate(8deg)'],[1.9,'scale(1)']]],
       ...fly('.s1',2.6,3.3,-17,-84),show('.pfn',3.3)
     ]},
-  remove:{D:6, /* tap any pole in a queue: it pulls in the cards of its color and clears */
+  magnet:{D:6, /* tap any pole in a queue: it pulls in the cards of its color and clears */
     svg:()=>lane(40,88)+lane(112,88)+dpole(64,76,2)+dpole(136,76,3)+dpole(136,36,6)+
       dtable(102)+`<g class="r1">${dstack(20,126,1,3)}</g><g class="r2">${dstack(138,134,1,3)}</g>${dstack(120,118,3,3)}`+
       `<g class="rp">${dpole(64,36,1)}<g class="rf" style="opacity:0">${dfill(64,36,1)}</g></g>`+tap(64,22)+puff(100,120),
@@ -790,11 +790,11 @@ function view(l){
   /* names reused across sections */
   const N={
     hiddenS:nm('Hidden Card Stack','Chồng thẻ ẩn'),hiddenP:nm('Hidden Color Pole','Cột ẩn màu'),locked:nm('Locked Card Stack','Chồng thẻ bị khóa'),
-    hand:nm('Hand','Bàn tay'),shuffle:nm('Shuffle','Xáo trộn'),remove:nm('Remove','Loại bỏ')
+    hand:nm('Hand','Bàn tay'),shuffle:nm('Shuffle','Xáo trộn'),magnet:nm('Magnet','Nam châm')
   };
   const P={ /* plain names for running text and tables */
     hiddenS:t('Hidden Card Stack','Chồng thẻ ẩn'),hiddenP:t('Hidden Color Pole','Cột ẩn màu'),locked:t('Locked Card Stack','Chồng thẻ bị khóa'),
-    hand:t('Hand','Bàn tay'),shuffle:t('Shuffle','Xáo trộn'),remove:t('Remove','Loại bỏ')
+    hand:t('Hand','Bàn tay'),shuffle:t('Shuffle','Xáo trộn'),magnet:t('Magnet','Nam châm')
   };
   const withEl=t('With elements','Khi gặp yếu tố đặc biệt');
 
@@ -1011,7 +1011,7 @@ function view(l){
       lead(t(`When the player loses, one more chance to continue the same attempt. Shows before the lose screen.`,
              `Khi thua, người chơi có thêm một cơ hội chơi tiếp lượt đang chơi. Hiện trước màn hình thua.`))+
       tiles([
-        [t(`2 free`,`2 miễn phí`),t(`${P.remove} used on revive`,`${P.remove} dùng khi hồi sinh`),'hot'],
+        [t(`2 free`,`2 miễn phí`),t(`${P.magnet} used on revive`,`${P.magnet} dùng khi hồi sinh`),'hot'],
         ['900',t('Coins for the 1st revive','Xu cho lần hồi sinh đầu')],
         ['1',t('Revive by ad per attempt','Lần hồi sinh bằng quảng cáo mỗi lượt')]
       ])+
@@ -1022,12 +1022,12 @@ function view(l){
           [t('Give up','Bỏ cuộc'),dash,t('→ Lose screen','→ Màn hình thua')]
         ],'compact'))+
       panel(t('On revive','Khi hồi sinh'),ul([
-        t(`When the player revives, the game uses 2 free Remove boosters on the poles at the bottom of the queues that hold the fewest cards.`,
-          `Khi người chơi hồi sinh, trò chơi dùng miễn phí 2 lượt Loại bỏ cho các cột đang ở dưới cùng hàng chờ và có ít thẻ nhất.`),
-        t(`If the game is still stuck after that, it uses the free Remove again and repeats until the game can continue.`,
-          `Nếu sau đó vẫn còn bị kẹt, trò chơi tiếp tục dùng Loại bỏ miễn phí cho tới khi chơi tiếp được.`),
-        t(`These free Removes do not use up the player's Remove boosters, and the player does not need to own any.`,
-          `Các lượt miễn phí này không trừ vào số công cụ Loại bỏ người chơi đang có, và người chơi cũng không cần có sẵn công cụ này.`),
+        t(`When the player revives, the game uses 2 free Magnet boosters on the poles at the bottom of the queues that hold the fewest cards.`,
+          `Khi người chơi hồi sinh, trò chơi dùng miễn phí 2 lượt Nam châm cho các cột đang ở dưới cùng hàng chờ và có ít thẻ nhất.`),
+        t(`If the game is still stuck after that, it uses the free Magnet again and repeats until the game can continue.`,
+          `Nếu sau đó vẫn còn bị kẹt, trò chơi tiếp tục dùng Nam châm miễn phí cho tới khi chơi tiếp được.`),
+        t(`These free Magnets do not use up the player's Magnet boosters, and the player does not need to own any.`,
+          `Các lượt miễn phí này không trừ vào số công cụ Nam châm người chơi đang có, và người chơi cũng không cần có sẵn công cụ này.`),
         t(`Continue from where it stopped. No restart, no life lost.`,`Chơi tiếp từ chỗ dừng. Không chơi lại, không mất tim.`),
         t(`Revive count and price reset on a new attempt.`,`Số lần và giá hồi sinh tính lại khi bắt đầu lượt mới.`),
         t(`Ad or purchase fails: back to the popup. Input locked while the booster plays.`,`Quảng cáo hoặc giao dịch lỗi: quay lại popup. Khóa thao tác khi công cụ đang chạy.`)
@@ -1039,7 +1039,7 @@ function view(l){
     locked:t('Two poles clear, the number hits 0 and the ice breaks.','Hai cột được dọn, con số về 0 và lớp băng vỡ.'),
     hand:t('The player taps a blocked stack. It lifts out and flies to its pole.','Người chơi chạm vào một chồng thẻ bị đè. Chồng thẻ được nhấc ra và bay tới cột cùng màu.'),
     shuffle:t('The poles mix, and poles that match the table come to the bottom.','Các cột được xáo lại, cột hợp màu với thẻ trên bàn được đưa xuống dưới cùng.'),
-    remove:t('The player taps a pole in a queue. It pulls in the cards of its color and clears.','Người chơi chạm vào một cột trong hàng chờ. Cột hút hết thẻ cùng màu rồi được dọn.')
+    magnet:t('The player taps a pole in a queue. It pulls in the cards of its color and clears.','Người chơi chạm vào một cột trong hàng chờ. Cột hút hết thẻ cùng màu rồi được dọn.')
   };
   /* demo(key) shows DEMOS[key] with its DCAP caption */
   const demo=(k,c)=>{const cp=c||DCAP[k]||'';return DEMOS[k]?`<figure class="demo" data-demo="${k}"><div class="demo-box"><svg viewBox="0 0 200 196" role="img" aria-label="${esc(cp.replace(/<[^>]+>/g,''))}"><g class="scene">${DEMOS[k].svg()}</g></svg>`+
@@ -1088,7 +1088,7 @@ function view(l){
           `Khi chọn cột để đưa xuống, thứ tự ưu tiên là cột thường → Cột ẩn màu.`)
       ])
     ]),unlockB(8),demo('shuffle'))+
-    ent(N.remove,ul([
+    ent(N.magnet,ul([
       t(`Lets the player pick any pole in the queues and clear it immediately.`,
         `Cho phép người chơi chọn bất kỳ cột nào trong các hàng chờ để dọn cột đó ngay lập tức.`),
       t(`The picked pole pulls cards of its color up from the table, in this order of priority:`,
@@ -1098,7 +1098,7 @@ function view(l){
         t(`Hidden Card Stacks`,`Chồng thẻ ẩn`),
         t(`Locked Card Stacks. A locked stack that gets pulled unlocks immediately.`,`Chồng thẻ bị khóa. Chồng thẻ bị khóa khi được hút sẽ mở khóa ngay.`)
       ])
-    ]),unlockB(10),demo('remove'));
+    ]),unlockB(10),demo('magnet'));
 
   /* ===== 2. FTUE & tutorial ===== */
   B['ftue--tutorial']=`<p class="sec-intro">${t(
@@ -1151,13 +1151,13 @@ function view(l){
     [
       [N.hand,popup('Pick any stack of cards!','Chọn bất kỳ chồng thẻ nào!'),lvl(5),lvl(3)],
       [N.shuffle,popup('Shuffle the poles<br>in queues!','Xáo trộn các cột<br>trong hàng chờ!'),lvl(8),lvl(3)],
-      [N.remove,popup('Tap the pole<br>to sort it instantly!','Chạm vào cột<br>để xếp xong ngay!'),lvl(10),lvl(3)]
+      [N.magnet,popup('Tap the pole<br>to sort it instantly!','Chạm vào cột<br>để xếp xong ngay!'),lvl(10),lvl(3)]
     ]);
 
   const stops=[
     [1,t('First tutorial','Hướng dẫn đầu tiên'),'ftue','ftue-steps','FTUE'],
     [5,P.hand,'boost','booster-mechanics'],[7,P.hiddenS,'elem','elements-mechanics'],
-    [8,P.shuffle,'boost','booster-mechanics'],[10,P.remove,'boost','booster-mechanics'],
+    [8,P.shuffle,'boost','booster-mechanics'],[10,P.magnet,'boost','booster-mechanics'],
     [12,P.hiddenP,'elem','elements-mechanics'],[17,P.locked,'elem','elements-mechanics']
   ];
   B['ftue--tutorial:after']=`<div class="glance">
@@ -1192,7 +1192,7 @@ function view(l){
 
   B['booster-object-concept']=
     ent(N.shuffle,params([[an,t('The shuffle animation mixes up the poles in the queues.','Hiệu ứng xáo trộn đảo vị trí các cột trong các hàng chờ.')]]))+
-    ent(N.remove,params([[an,t('The picked pole flies toward the table, then pulls in all the cards of its color.','Cột được chọn bay về phía bàn rồi hút hết các thẻ cùng màu.')]]));
+    ent(N.magnet,params([[an,t('The picked pole flies toward the table, then pulls in all the cards of its color.','Cột được chọn bay về phía bàn rồi hút hết các thẻ cùng màu.')]]));
 
   /* ===== 4. SFX & haptics ===== */
   /* Haptic: 0 none, 1 weak, 2 medium, 3 strong */
@@ -1266,8 +1266,8 @@ function view(l){
       `<p>${t('Boosters listed for purchase:','Các công cụ được liệt kê để mua:')}</p>
        <div class="chips blk" lang="en"><span>Paper Box</span><span>Magnet</span><span>Remove</span></div>`+
       note(t(
-         `The source lists Paper Box, Magnet and Remove here, but the rest of this GDD names the boosters Hand, Shuffle and Remove. The names are kept as written and need confirming.`,
-         `Bản gốc ghi Paper Box, Magnet và Remove ở mục này, trong khi các phần khác của tài liệu gọi công cụ là Hand, Shuffle và Remove. Tên được giữ nguyên như bản gốc và cần xác nhận lại.`)))+
+         `The source lists Paper Box, Magnet and Remove here, but the rest of this GDD names the boosters Hand, Shuffle and Magnet. The names are kept as written and need confirming.`,
+         `Bản gốc ghi Paper Box, Magnet và Remove ở mục này, trong khi các phần khác của tài liệu gọi công cụ là Hand, Shuffle và Magnet. Tên được giữ nguyên như bản gốc và cần xác nhận lại.`)))+
     rc(t('Unlock popups — offer unlock level','Popup mở khóa — màn mở ưu đãi'),[
       ['starter_pack_unlock_level',t('Starter Pack (IAP) — level from which the offer popup can show','Gói Khởi đầu (IAP) — màn bắt đầu có thể hiện popup ưu đãi'),'12',t('level','màn')],
       ['remove_ads_unlock_level',t('Remove Ads (IAP) — level from which the offer popup can show','Gỡ quảng cáo (IAP) — màn bắt đầu có thể hiện popup ưu đãi'),'15',t('level','màn')],
@@ -1333,8 +1333,8 @@ function view(l){
     [nm('Skip Level','Bỏ qua màn'),t('Rewarded ad or coins','Quảng cáo có thưởng hoặc xu'),lvl('X'),
       t(`Lose screen, 3 fails in a row on the same level.`,`Màn hình thua, thua 3 lần liên tiếp cùng một màn.`),
       t(`3 a day`,`3 lần/ngày`),dash,dash,see('skip-retry','7.2')],
-    [nm('Retry with Booster','Chơi lại kèm công cụ'),t('Rewarded ad','Quảng cáo có thưởng'),t(`${P.remove} unlock`,`Mở ${P.remove}`),
-      t(`Restarting a level with 0 ${P.remove}.`,`Chơi lại một màn khi có 0 ${P.remove}.`),
+    [nm('Retry with Booster','Chơi lại kèm công cụ'),t('Rewarded ad','Quảng cáo có thưởng'),t(`${P.magnet} unlock`,`Mở ${P.magnet}`),
+      t(`Restarting a level with 0 ${P.magnet}.`,`Chơi lại một màn khi có 0 ${P.magnet}.`),
       t(`3 a day`,`3 lần/ngày`),dash,dash,see('skip-retry','7.2')],
     [nm('Revive','Hồi sinh'),t('Coins or rewarded ad','Xu hoặc quảng cáo có thưởng'),t('Always','Luôn có'),
       t(`The moment the player loses.`,`Ngay khi người chơi thua.`),
@@ -1416,10 +1416,10 @@ function view(l){
     `<p class="sec-intro">${t(`Two rewarded-ad helpers for a hard level, side by side.`,`Hai công cụ hỗ trợ bằng quảng cáo có thưởng khi gặp màn khó, đặt cạnh nhau.`)}</p>`+
     table(t('Skip Level and Retry with Booster','Bỏ qua màn và Chơi lại kèm công cụ'),
       ['',nm('Skip Level','Bỏ qua màn'),nm('Retry with Booster','Chơi lại kèm công cụ')],[
-      [t('Unlock','Mở khóa'),t('Level X (remote config, TBD)','Màn X (cấu hình từ xa, chưa chốt)'),t(`${P.remove} unlocks`,`Khi mở ${P.remove}`)],
-      [t('Shows when','Khi nào hiện'),t('Lose screen, after 3 fails in a row on the same level (resets on win or skip)','Màn hình thua, sau 3 lần thua liên tiếp cùng một màn (tính lại khi thắng hoặc bỏ qua)'),t(`Restarting a level (lose screen or restart button) with 0 ${P.remove}, before the level starts`,`Chơi lại một màn (màn hình thua hoặc nút chơi lại) khi có 0 ${P.remove}, trước khi màn bắt đầu`)],
+      [t('Unlock','Mở khóa'),t('Level X (remote config, TBD)','Màn X (cấu hình từ xa, chưa chốt)'),t(`${P.magnet} unlocks`,`Khi mở ${P.magnet}`)],
+      [t('Shows when','Khi nào hiện'),t('Lose screen, after 3 fails in a row on the same level (resets on win or skip)','Màn hình thua, sau 3 lần thua liên tiếp cùng một màn (tính lại khi thắng hoặc bỏ qua)'),t(`Restarting a level (lose screen or restart button) with 0 ${P.magnet}, before the level starts`,`Chơi lại một màn (màn hình thua hoặc nút chơi lại) khi có 0 ${P.magnet}, trước khi màn bắt đầu`)],
       [t('Cost','Chi phí'),t('1 rewarded ad or coins (remote config)','1 quảng cáo có thưởng hoặc xu (cấu hình từ xa)'),t('1 rewarded ad','1 quảng cáo có thưởng')],
-      [t('Result','Kết quả'),t('Level counts as done. No coins, no bonus. Counts toward element unlock. No life lost.','Màn tính là đã qua. Không xu, không thưởng thêm. Vẫn tính vào thanh mở khóa yếu tố. Không mất tim.'),t(`Restart with 1 free ${P.remove} selected. Not from inventory, lost if unused. Restart still costs 1 life.`,`Chơi lại với 1 ${P.remove} miễn phí đã chọn sẵn. Không trừ kho, mất nếu không dùng. Chơi lại vẫn tốn 1 tim.`)],
+      [t('Result','Kết quả'),t('Level counts as done. No coins, no bonus. Counts toward element unlock. No life lost.','Màn tính là đã qua. Không xu, không thưởng thêm. Vẫn tính vào thanh mở khóa yếu tố. Không mất tim.'),t(`Restart with 1 free ${P.magnet} selected. Not from inventory, lost if unused. Restart still costs 1 life.`,`Chơi lại với 1 ${P.magnet} miễn phí đã chọn sẵn. Không trừ kho, mất nếu không dùng. Chơi lại vẫn tốn 1 tim.`)],
       [t('Daily limit','Giới hạn ngày'),'<code>skip_level_max_per_day</code> = 3','<code>retry_booster_max_per_day</code> = 3'],
       [t('Not allowed','Không áp dụng'),t('FTUE levels, levels that introduce an element or booster','Màn FTUE, màn giới thiệu yếu tố hoặc công cụ'),dash],
       [t('Ad fails or closed','Quảng cáo lỗi hoặc bị đóng'),t('No skip, stay on lose screen, not counted','Không bỏ qua, ở lại màn hình thua, không tính lượt'),t('Normal restart, not counted','Chơi lại bình thường, không tính lượt')]
@@ -1430,6 +1430,10 @@ function view(l){
   /* Add one day() block per day, newest first, with one ent per area changed */
   const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
+    day(t('2 November 2026','2/11/2026'),
+      ent(t('Booster renamed','Đổi tên công cụ'),ul([
+        t(`The third booster, Remove, is now called Magnet. Its logic is unchanged.`,`Công cụ thứ ba, Loại bỏ, nay đổi tên thành Nam châm. Cách hoạt động giữ nguyên.`)
+      ])))+
     day(t('26 October 2026','26/10/2026'),
       ent(t('Moved to the GDD template','Chuyển sang template GDD'),ul([
         t(`Restyled the document to the GDD template layout. The Card Slots content is kept.`,`Đổi tài liệu sang bố cục của template GDD. Giữ nguyên nội dung Card Slots.`),
