@@ -1146,7 +1146,7 @@ function view(l){
     [t('Element','Yếu tố'),t('Popup text','Nội dung popup'),t('Unlocks at level','Mở ở màn')],
     [
       [N.hiddenS,popup('Unblock the stack<br>to reveal its color.','Dọn chồng chip nằm trên<br>để hiện màu.'),lvl(7)],
-      [N.hiddenP,popup('Move to the bottom<br>to reveal its color.','Đưa xuống dưới cùng<br>để hiện màu.'),lvl(12)],
+      [N.hiddenP,popup('Move pole to the bottom<br>to reveal its color.','Đưa cột xuống dưới cùng<br>để hiện màu.'),lvl(12)],
       [N.locked,popup('Send chips up<br>to unlock the stack.','Đưa chip lên<br>để mở khóa chồng chip.'),lvl(17)]
     ]);
 
@@ -1435,8 +1435,9 @@ function view(l){
   const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
     day(t('2 November 2026','2/11/2026'),
-      ent(t('Booster tutorial text','Nội dung hướng dẫn công cụ'),ul([
-        t(`New popup text in 2.4: Hand “Pick up any chip stack”, Shuffle “Shuffle all poles!”, Magnet “Clear any pole instantly!”.`,`Nội dung popup mới ở mục 2.4: Hand “Pick up any chip stack”, Shuffle “Shuffle all poles!”, Magnet “Clear any pole instantly!”.`)
+      ent(t('Booster and element tutorial text','Nội dung hướng dẫn công cụ và yếu tố'),ul([
+        t(`New popup text in 2.4: Hand “Pick up any chip stack”, Shuffle “Shuffle all poles!”, Magnet “Clear any pole instantly!”.`,`Nội dung popup mới ở mục 2.4: Hand “Pick up any chip stack”, Shuffle “Shuffle all poles!”, Magnet “Clear any pole instantly!”.`),
+        t(`New popup text in 2.3 for Hidden Color Pole: “Move pole to the bottom to reveal its color.”`,`Nội dung popup mới ở mục 2.3 cho Cột ẩn màu: “Move pole to the bottom to reveal its color.”`)
       ]))+
       ent(t('FTUE steps updated','Cập nhật các bước FTUE'),ul([
         t(`Steps 3 and 4 now highlight the 1st and 2nd red chip stack, with the popup “Tap to send chip stack”.`,`Bước 3 và 4 nay làm nổi bật chồng chip đỏ thứ nhất và thứ hai, kèm popup “Tap to send chip stack”.`),
