@@ -130,7 +130,9 @@ main{container-type:inline-size;padding:48px clamp(20px,5vw,64px) 30vh;width:100
 .rod{opacity:.6}
 .edge{stroke:#000;stroke-opacity:.24;stroke-width:1}
 .sheen{fill:#fff;opacity:.16}
-.fly rect{opacity:0;transform-box:fill-box;transform-origin:center;animation:fly 3.8s cubic-bezier(.4,.1,.3,1) infinite;animation-delay:var(--d,0s)}
+.rim{fill:none;stroke:#fff;stroke-opacity:.6;stroke-width:4;stroke-dasharray:7 6.2}
+.rim.sm{stroke-width:2.6;stroke-dasharray:4 3.85}
+.fly circle{opacity:0;transform-box:fill-box;transform-origin:center;animation:fly 3.8s cubic-bezier(.4,.1,.3,1) infinite;animation-delay:var(--d,0s)}
 @keyframes fly{
   0%{opacity:0;transform:translate(0,0) scale(1)}
   6%{opacity:1}
@@ -413,7 +415,7 @@ mark.hit{background:var(--mark);color:#18203A;border-radius:3px;padding:0 1px}
   .sec>h2 .badge{width:42px;height:42px;font-size:1.4rem}
 }
 @media (prefers-reduced-motion:reduce){
-  .fly rect{animation:none}
+  .fly circle{animation:none}
   .field-foot{display:none}
   .part{transition:none}
 }
@@ -422,18 +424,19 @@ mark.hit{background:var(--mark);color:#18203A;border-radius:3px;padding:0 1px}
   .app{display:block}
   main{padding:0;max-width:none}
   .sec{margin-top:40px}
-  .fly rect{animation:none}
+  .fly circle{animation:none}
 }
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
-    <symbol id="card" viewBox="-50 -50 100 100">
-      <rect x="-31" y="-42" width="62" height="84" rx="12" transform="rotate(13)" fill="currentColor" opacity=".42"/>
-      <rect x="-31" y="-42" width="62" height="84" rx="12" fill="currentColor"/>
-      <rect x="-24" y="-35" width="48" height="70" rx="7" fill="#fff" opacity=".17"/>
-      <rect x="-24" y="-35" width="48" height="70" rx="7" fill="none" stroke="#000" stroke-opacity=".12" stroke-width="1.5"/>
+    <symbol id="chip" viewBox="-50 -50 100 100">
+      <circle r="45" fill="currentColor"/>
+      <g fill="#fff" opacity=".5"><rect x="-5.5" y="-45" width="11" height="12" rx="2" transform="rotate(0)"/><rect x="-5.5" y="-45" width="11" height="12" rx="2" transform="rotate(45)"/><rect x="-5.5" y="-45" width="11" height="12" rx="2" transform="rotate(90)"/><rect x="-5.5" y="-45" width="11" height="12" rx="2" transform="rotate(135)"/><rect x="-5.5" y="-45" width="11" height="12" rx="2" transform="rotate(180)"/><rect x="-5.5" y="-45" width="11" height="12" rx="2" transform="rotate(225)"/><rect x="-5.5" y="-45" width="11" height="12" rx="2" transform="rotate(270)"/><rect x="-5.5" y="-45" width="11" height="12" rx="2" transform="rotate(315)"/></g>
+      <circle r="45" fill="none" stroke="#000" stroke-opacity=".15" stroke-width="1.5"/>
+      <circle r="29" fill="#fff" opacity=".17"/>
+      <circle r="29" fill="none" stroke="#000" stroke-opacity=".12" stroke-width="1.5"/>
     </symbol>
   </defs>
 </svg>
@@ -441,7 +444,7 @@ mark.hit{background:var(--mark);color:#18203A;border-radius:3px;padding:0 1px}
 <div class="app">
   <header class="rail" id="rail" data-view="toc" data-open="">
     <a class="brand" href="#top">
-      <span class="badge c2"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#card"/></svg></span>
+      <span class="badge c2"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#chip"/></svg></span>
       <span>Card Slots<small id="brandSub">Game design document</small></span>
     </a>
     <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="panel" aria-label="Contents">
@@ -481,8 +484,8 @@ const GAME='Card Slots';
 const GBASE=40;  /* win-screen base coin reward, matches level_win_coin */
 const PID='card.slots';  /* product ID prefix for every IAP pack */
 
-/* card badge: a small stack of cards, used for section numbers and the color list */
-const badge=(c,label)=>`<span class="badge c${c}" data-nosearch><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#card"/></svg>${label!=null?`<b>${label}</b>`:''}</span>`;
+/* chip badge: a poker chip, used for section numbers and the color list */
+const badge=(c,label)=>`<span class="badge c${c}" data-nosearch><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#chip"/></svg>${label!=null?`<b>${label}</b>`:''}</span>`;
 
 /* ---------- document outline ---------- */
 const SECTIONS=[
@@ -542,18 +545,18 @@ const UI={
 };
 
 /* ---------- play-screen sketch ---------- */
-/* one pole seen from the front: a base, a rod, and the cards already stacked on it */
+/* one pole seen from the front: a base, a rod, and the chips already stacked on it */
 function poleSVG(cx,base,c,filled){
   let s=`<rect class="f${c} rod" x="${cx-2.5}" y="${base-40}" width="5" height="42" rx="2.5"/>`+
         `<rect class="f${c}" x="${cx-22}" y="${base}" width="44" height="9" rx="4.5"/>`;
   for(let i=0;i<filled;i++){s+=`<rect class="f${c} edge" x="${cx-17}" y="${(base-6-i*6.5).toFixed(1)}" width="34" height="5" rx="2"/>`;}
   return s;
 }
-/* one stack of cards lying on the table, seen from above */
+/* one stack of chips lying on the table, seen from above: the top chip shows its rim stripes */
 function stackSVG(cx,cy,rot,c,n){
   let s='';
-  for(let k=n-1;k>=0;k--){s+=`<rect class="f${c} edge" x="${cx-28}" y="${(cy-37+k*3.2).toFixed(1)}" width="56" height="74" rx="9"/>`;}
-  s+=`<rect class="sheen" x="${cx-21}" y="${cy-30}" width="42" height="60" rx="5"/>`;
+  for(let k=n-1;k>=0;k--){s+=`<circle class="f${c} edge" cx="${cx}" cy="${(cy+k*3.2).toFixed(1)}" r="34"/>`;}
+  s+=`<circle class="rim" cx="${cx}" cy="${cy}" r="29"/><circle class="sheen" cx="${cx}" cy="${cy}" r="18"/>`;
   return `<g transform="rotate(${rot} ${cx} ${cy})">${s}</g>`;
 }
 function pin(x,y,l){return `<g class="pin"><circle cx="${x}" cy="${y}" r="11"/><text x="${x}" y="${y}" dy=".34em">${l}</text></g>`;}
@@ -567,17 +570,17 @@ function fieldSVG(label){
     qu.forEach((c,r)=>{const p=poleSVG(cx,bases[r],c,r===2?filled[i]:0);if(r===2)bottom+=p;else waiting+=p;});
   });
   let slots='';
-  for(let i=0;i<8;i++){slots+=`<rect class="slot" x="${29+i*36}" y="210" width="30" height="40" rx="7"/>`;}
+  for(let i=0;i<8;i++){slots+=`<rect class="slot" x="${29+i*36}" y="213" width="30" height="34" rx="8"/>`;}
   [[0,6],[1,2]].forEach(([i,c])=>{
-    const x=29+i*36+5;
-    slots+=`<rect class="f${c} edge" x="${x}" y="218" width="20" height="27" rx="4"/><rect class="f${c} edge" x="${x}" y="215.5" width="20" height="27" rx="4"/>`;
+    const cx=29+i*36+15;
+    slots+=`<circle class="f${c} edge" cx="${cx}" cy="233" r="11"/><circle class="f${c} edge" cx="${cx}" cy="230" r="11"/><circle class="rim" cx="${cx}" cy="230" r="8"/>`;
   });
   const table=`<rect class="table" x="14" y="270" width="312" height="190" rx="24"/>`;
   const blocked=[[64,312,-10,2,3],[150,306,6,4,2],[252,310,-5,7,3],[110,408,8,3,2],[232,410,-7,5,3]].map(a=>stackSVG(...a)).join('');
   const free=[[98,356,5,1,3],[186,360,-6,8,2],[284,372,9,6,3]].map(a=>stackSVG(...a)).join('');
-  /* three red cards leave the red stack and land on the red pole */
+  /* three red chips leave the red stack and land on the red pole */
   let fly='';
-  for(let k=0;k<3;k++){fly+=`<rect class="f1 edge" x="87" y="342" width="22" height="28" rx="4" style="--d:${(k*.32).toFixed(2)}s;--dy:${(-200.5-k*6.5).toFixed(1)}px"/>`;}
+  for(let k=0;k<3;k++){fly+=`<circle class="f1 edge" cx="98" cy="356" r="14" style="--d:${(k*.32).toFixed(2)}s;--dy:${(-200.5-k*6.5).toFixed(1)}px"/>`;}
   return `<svg viewBox="0 0 340 470" role="img" aria-label="${esc(label)}">
     <g class="part part-A part-B">${lanes}</g>
     <g class="part part-A">${waiting}${pin(14,84,'A')}</g>
@@ -592,7 +595,7 @@ function fieldSVG(label){
 
 /* ---------- element and booster demos: small looping sketches, one per element and booster ----------
    DEMOS key:{D:<loop seconds>, svg:()=>`<markup inside a 200×196 box>`, tracks:()=>[[selector,property,[[time,value],…]],…]}
-   Poles stand in lanes at the top, stacks of cards lie on the table below. */
+   Poles stand in lanes at the top, stacks of chips lie on the table below. */
 function T(x,y,s){return `translate(${x}px,${y}px)`+(s!=null?` scale(${s})`:'');}
 const lane=(x,h)=>`<rect class="trackfill" x="${x}" y="4" width="48" height="${h||82}" rx="14"/>`;
 const dtable=y=>`<rect class="table" x="6" y="${y}" width="188" height="${192-y}" rx="16"/>`;
@@ -602,13 +605,13 @@ function dpole(cx,base,c,hid){
   return `<rect class="${f} rod" x="${cx-2}" y="${base-30}" width="4" height="32" rx="2"/><rect class="${f}" x="${cx-16}" y="${base}" width="32" height="7" rx="3.5"/>`+
     (hid?`<text class="qmark" x="${cx}" y="${base-14}" dy=".35em">?</text>`:'');
 }
-/* cards sitting on a pole once a stack has landed on it */
+/* chips sitting on a pole once a stack has landed on it */
 function dfill(cx,base,c,n){let s='';for(let i=0;i<(n||3);i++)s+=`<rect class="f${c} edge" x="${cx-12}" y="${(base-5-i*5).toFixed(1)}" width="24" height="4" rx="1.5"/>`;return s;}
-/* a stack of cards on the table; hid draws it grey with a question mark */
+/* a stack of chips on the table, centered in the 30×40 box at x,y; hid draws it grey with a question mark */
 function dstack(x,y,c,n,hid){
-  const f=hid?'hidbox':'f'+c;let s='';
-  for(let k=(n||3)-1;k>=0;k--)s+=`<rect class="${f} edge" x="${x}" y="${(y+k*2.5).toFixed(1)}" width="30" height="40" rx="5"/>`;
-  s+=`<rect class="sheen" x="${x+5}" y="${y+5}" width="20" height="30" rx="3"/>`;
+  const f=hid?'hidbox':'f'+c,cx=x+15,cy=y+20;let s='';
+  for(let k=(n||3)-1;k>=0;k--)s+=`<circle class="${f} edge" cx="${cx}" cy="${(cy+k*2.5).toFixed(1)}" r="16"/>`;
+  s+=hid?'':`<circle class="rim sm" cx="${cx}" cy="${cy}" r="12.5"/><circle class="sheen" cx="${cx}" cy="${cy}" r="7"/>`;
   return s+(hid?`<text class="qmark" x="${x+15}" y="${y+20}" dy=".35em">?</text>`:'');
 }
 function cdBadge(cx,cy,extra){
@@ -659,7 +662,7 @@ const DEMOS={
     svg:()=>lane(40)+lane(112)+
       `<g class="pr">${dpole(64,66,1)}<g class="pf1" style="opacity:0">${dfill(64,66,1)}</g></g>`+
       `<g class="pb">${dpole(136,66,2)}<g class="pf2" style="opacity:0">${dfill(136,66,2)}</g></g>`+dtable(96)+
-      dstack(85,122,7,3)+`<rect class="ice" x="81" y="118" width="38" height="50" rx="8"/>`+cdBadge(119,118)+
+      dstack(85,122,7,3)+`<circle class="ice" cx="100" cy="143" r="21"/>`+cdBadge(116,124)+
       `<g class="s1">${dstack(18,126,1,3)}</g><g class="s2">${dstack(152,126,2,3)}</g>`+tap(33,146),
     tracks:()=>[
       ...tapTracks(.3),
@@ -700,7 +703,7 @@ const DEMOS={
       ['.new','transform',[[1.45,'scale(.55) rotate(8deg)'],[1.9,'scale(1)']]],
       ...fly('.s1',2.6,3.3,-17,-84),show('.pfn',3.3)
     ]},
-  magnet:{D:6, /* tap any pole in a queue: it pulls in the cards of its color and clears */
+  magnet:{D:6, /* tap any pole in a queue: it pulls in the chips of its color and clears */
     svg:()=>lane(40,88)+lane(112,88)+dpole(64,76,2)+dpole(136,76,3)+dpole(136,36,6)+
       dtable(102)+`<g class="r1">${dstack(20,126,1,3)}</g><g class="r2">${dstack(138,134,1,3)}</g>${dstack(120,118,3,3)}`+
       `<g class="rp">${dpole(64,36,1)}<g class="rf" style="opacity:0">${dfill(64,36,1)}</g></g>`+tap(64,22)+puff(100,120),
@@ -789,11 +792,11 @@ function view(l){
 
   /* names reused across sections */
   const N={
-    hiddenS:nm('Hidden Card Stack','Chồng thẻ ẩn'),hiddenP:nm('Hidden Color Pole','Cột ẩn màu'),locked:nm('Locked Card Stack','Chồng thẻ bị khóa'),
+    hiddenS:nm('Hidden Chip Stack','Chồng chip ẩn'),hiddenP:nm('Hidden Color Pole','Cột ẩn màu'),locked:nm('Locked Chip Stack','Chồng chip bị khóa'),
     hand:nm('Hand','Bàn tay'),shuffle:nm('Shuffle','Xáo trộn'),magnet:nm('Magnet','Nam châm')
   };
   const P={ /* plain names for running text and tables */
-    hiddenS:t('Hidden Card Stack','Chồng thẻ ẩn'),hiddenP:t('Hidden Color Pole','Cột ẩn màu'),locked:t('Locked Card Stack','Chồng thẻ bị khóa'),
+    hiddenS:t('Hidden Chip Stack','Chồng chip ẩn'),hiddenP:t('Hidden Color Pole','Cột ẩn màu'),locked:t('Locked Chip Stack','Chồng chip bị khóa'),
     hand:t('Hand','Bàn tay'),shuffle:t('Shuffle','Xáo trộn'),magnet:t('Magnet','Nam châm')
   };
   const withEl=t('With elements','Khi gặp yếu tố đặc biệt');
@@ -803,40 +806,40 @@ function view(l){
   /* ===== 1. Game mechanics ===== */
   B['gameplay-overview']=
     ent(t('How it plays','Cách chơi'),ul([
-      t(`The player taps a stack of cards on the table to send it up. The cards go straight to a pole of the same color, or to the waiting slots if no matching pole is ready.`,
-        `Người chơi chạm vào một chồng thẻ trên bàn để đưa thẻ lên. Thẻ bay thẳng tới cột cùng màu, hoặc vào ô chờ nếu chưa có cột nào phù hợp.`),
-      t(`Cards in the waiting slots look for a pole of their color and fly to it as soon as one is available.`,
-        `Thẻ đang nằm trong ô chờ sẽ tự tìm cột cùng màu và bay tới ngay khi có cột phù hợp.`),
-      t(`The player wins by clearing every card from the table.`,
-        `Dọn hết thẻ trên bàn là thắng màn.`)
+      t(`The player taps a stack of chips on the table to send it up. The chips go straight to a pole of the same color, or to the waiting slots if no matching pole is ready.`,
+        `Người chơi chạm vào một chồng chip trên bàn để đưa chip lên. Chip bay thẳng tới cột cùng màu, hoặc vào ô chờ nếu chưa có cột nào phù hợp.`),
+      t(`Chips in the waiting slots look for a pole of their color and fly to it as soon as one is available.`,
+        `Chip đang nằm trong ô chờ sẽ tự tìm cột cùng màu và bay tới ngay khi có cột phù hợp.`),
+      t(`The player wins by clearing every chip from the table.`,
+        `Dọn hết chip trên bàn là thắng màn.`)
     ]))+
     ent(t('Win and lose','Thắng và thua'),params([
-      [t('Win','Thắng'),t(`Every stack of cards on the table has been sent to a pole of its color, and every pole has been cleared from the level.`,
-                         `Tất cả các chồng thẻ trên bàn đã được đưa lên cột cùng màu, và mọi cột đều đã được dọn khỏi màn chơi.`)],
-      [t('Lose','Thua'),t(`Every waiting slot is taken, none of the cards in the waiting slots matches an available pole, and none of the unblocked stacks on the table matches an available pole either.`,
-                         `Các ô chờ đã kín chỗ, không thẻ nào trong ô chờ cùng màu với cột đang nhận thẻ, và trên bàn cũng không còn chồng thẻ không bị đè nào cùng màu với cột đang nhận thẻ.`)]
+      [t('Win','Thắng'),t(`Every stack of chips on the table has been sent to a pole of its color, and every pole has been cleared from the level.`,
+                         `Tất cả các chồng chip trên bàn đã được đưa lên cột cùng màu, và mọi cột đều đã được dọn khỏi màn chơi.`)],
+      [t('Lose','Thua'),t(`Every waiting slot is taken, none of the chips in the waiting slots matches an available pole, and none of the unblocked stacks on the table matches an available pole either.`,
+                         `Các ô chờ đã kín chỗ, không chip nào trong ô chờ cùng màu với cột đang nhận chip, và trên bàn cũng không còn chồng chip không bị đè nào cùng màu với cột đang nhận chip.`)]
     ]));
 
   B['main-game-mechanics']=
-    ent(nm('Card','Thẻ'),ul([
-      t(`Every card has one color. Cards of the same color sit together in a stack, and stacks come in different sizes.`,
-        `Mỗi thẻ có một màu. Các thẻ cùng màu nằm chung thành một chồng, mỗi chồng có số thẻ khác nhau.`),
+    ent(nm('Chip','Chip'),ul([
+      t(`Every chip has one color. Chips of the same color sit together in a stack, and stacks come in different sizes.`,
+        `Mỗi chip có một màu. Các chip cùng màu nằm chung thành một chồng, mỗi chồng có số chip khác nhau.`),
       t(`Stacks lie on the table and overlap, so some stacks block others.`,
-        `Các chồng thẻ nằm trên bàn và đè lên nhau.`),
+        `Các chồng chip nằm trên bàn và đè lên nhau.`),
       t(`A stack blocks any stack of a different color that lies underneath it.`,
-        `Chồng thẻ nằm trên sẽ đè chồng thẻ khác màu nằm dưới nó.`),
+        `Chồng chip nằm trên sẽ đè chồng chip khác màu nằm dưới nó.`),
       t(`The player can only tap a stack that is not blocked.`,
-        `Người chơi chỉ chạm được vào chồng thẻ không bị đè.`),
-      t(`Tapping a stack sends its cards up. If a pole of the same color is at the bottom of a queue, the cards fly to that pole. If not, they fly to the waiting slots.`,
-        `Chạm vào một chồng thẻ để đưa thẻ lên. Nếu có cột cùng màu đang ở dưới cùng hàng chờ, thẻ bay tới cột đó. Nếu không, thẻ bay vào ô chờ.`),
+        `Người chơi chỉ chạm được vào chồng chip không bị đè.`),
+      t(`Tapping a stack sends its chips up. If a pole of the same color is at the bottom of a queue, the chips fly to that pole. If not, they fly to the waiting slots.`,
+        `Chạm vào một chồng chip để đưa chip lên. Nếu có cột cùng màu đang ở dưới cùng hàng chờ, chip bay tới cột đó. Nếu không, chip bay vào ô chờ.`),
       t(`Once the stack on top has been sent up, the stack below is unblocked and can be sent up too.`,
-        `Khi chồng thẻ nằm trên được đưa đi, chồng bên dưới hết bị đè và cũng có thể đưa lên.`)
+        `Khi chồng chip nằm trên được đưa đi, chồng bên dưới hết bị đè và cũng có thể đưa lên.`)
     ]))+
     ent(nm('Pole','Cột'),ul([
       t(`Every pole has one color. Poles line up in queues.`,
         `Mỗi cột có một màu. Các cột xếp thành từng hàng chờ.`),
-      t(`When a pole reaches the bottom of its queue, it becomes available: cards can start stacking on it.`,
-        `Khi cột xuống tới vị trí dưới cùng của hàng chờ, cột bắt đầu nhận thẻ.`),
+      t(`When a pole reaches the bottom of its queue, it becomes available: chips can start stacking on it.`,
+        `Khi cột xuống tới vị trí dưới cùng của hàng chờ, cột bắt đầu nhận chip.`),
       t(`When a pole is full, it clears from the level.`,
         `Khi đầy, cột biến mất khỏi màn chơi.`)
     ]));
@@ -1022,8 +1025,8 @@ function view(l){
           [t('Give up','Bỏ cuộc'),dash,t('→ Lose screen','→ Màn hình thua')]
         ],'compact'))+
       panel(t('On revive','Khi hồi sinh'),ul([
-        t(`When the player revives, the game uses 2 free Magnet boosters on the poles at the bottom of the queues that hold the fewest cards.`,
-          `Khi người chơi hồi sinh, trò chơi dùng miễn phí 2 lượt Nam châm cho các cột đang ở dưới cùng hàng chờ và có ít thẻ nhất.`),
+        t(`When the player revives, the game uses 2 free Magnet boosters on the poles at the bottom of the queues that hold the fewest chips.`,
+          `Khi người chơi hồi sinh, trò chơi dùng miễn phí 2 lượt Nam châm cho các cột đang ở dưới cùng hàng chờ và có ít chip nhất.`),
         t(`If the game is still stuck after that, it uses the free Magnet again and repeats until the game can continue.`,
           `Nếu sau đó vẫn còn bị kẹt, trò chơi tiếp tục dùng Nam châm miễn phí cho tới khi chơi tiếp được.`),
         t(`These free Magnets do not use up the player's Magnet boosters, and the player does not need to own any.`,
@@ -1034,12 +1037,12 @@ function view(l){
       ])));
 
   const DCAP={
-    hiddenS:t('The stack on top is sent up. The hidden stack below is unblocked and shows its color.','Chồng thẻ nằm trên được đưa lên. Chồng thẻ ẩn bên dưới hết bị đè và hiện màu.'),
+    hiddenS:t('The stack on top is sent up. The hidden stack below is unblocked and shows its color.','Chồng chip nằm trên được đưa lên. Chồng chip ẩn bên dưới hết bị đè và hiện màu.'),
     hiddenP:t('The bottom pole fills and clears. The hidden pole moves to the bottom and shows its color.','Cột dưới cùng đầy và được dọn. Cột ẩn đi xuống dưới cùng và hiện màu.'),
     locked:t('Two poles clear, the number hits 0 and the ice breaks.','Hai cột được dọn, con số về 0 và lớp băng vỡ.'),
-    hand:t('The player taps a blocked stack. It lifts out and flies to its pole.','Người chơi chạm vào một chồng thẻ bị đè. Chồng thẻ được nhấc ra và bay tới cột cùng màu.'),
-    shuffle:t('The poles mix, and poles that match the table come to the bottom.','Các cột được xáo lại, cột hợp màu với thẻ trên bàn được đưa xuống dưới cùng.'),
-    magnet:t('The player taps a pole in a queue. It pulls in the cards of its color and clears.','Người chơi chạm vào một cột trong hàng chờ. Cột hút hết thẻ cùng màu rồi được dọn.')
+    hand:t('The player taps a blocked stack. It lifts out and flies to its pole.','Người chơi chạm vào một chồng chip bị đè. Chồng chip được nhấc ra và bay tới cột cùng màu.'),
+    shuffle:t('The poles mix, and poles that match the table come to the bottom.','Các cột được xáo lại, cột hợp màu với chip trên bàn được đưa xuống dưới cùng.'),
+    magnet:t('The player taps a pole in a queue. It pulls in the chips of its color and clears.','Người chơi chạm vào một cột trong hàng chờ. Cột hút hết chip cùng màu rồi được dọn.')
   };
   /* demo(key) shows DEMOS[key] with its DCAP caption */
   const demo=(k,c)=>{const cp=c||DCAP[k]||'';return DEMOS[k]?`<figure class="demo" data-demo="${k}"><div class="demo-box"><svg viewBox="0 0 200 196" role="img" aria-label="${esc(cp.replace(/<[^>]+>/g,''))}"><g class="scene">${DEMOS[k].svg()}</g></svg>`+
@@ -1048,37 +1051,37 @@ function view(l){
 
   B['elements-mechanics']=
     ent(N.hiddenS,ul([
-      t(`A Hidden Card Stack hides its real color while it is blocked.`,`Chồng thẻ ẩn che đi màu thật khi còn bị đè.`),
-      t(`Once it is unblocked, it reveals its real color.`,`Khi hết bị đè, chồng thẻ hiện màu thật.`)
+      t(`A Hidden Chip Stack hides its real color while it is blocked.`,`Chồng chip ẩn che đi màu thật khi còn bị đè.`),
+      t(`Once it is unblocked, it reveals its real color.`,`Khi hết bị đè, chồng chip hiện màu thật.`)
     ]),unlock(7),demo('hiddenS'))+
     ent(N.hiddenP,ul([
       t(`A Hidden Color Pole hides its real color while it is not at the bottom of its queue.`,`Cột ẩn màu che đi màu thật khi chưa xuống tới dưới cùng hàng chờ.`),
       t(`Once it reaches the bottom of its queue, it reveals its real color.`,`Khi xuống tới vị trí dưới cùng của hàng chờ, cột hiện màu thật.`)
     ]),unlock(12),demo('hiddenP'))+
     ent(N.locked,ul([
-      t(`A Locked Card Stack is locked away and can't be tapped to send up.`,`Chồng thẻ bị khóa không thể chạm để đưa lên.`),
-      t(`It still shows its color, but the player can't interact with it.`,`Chồng thẻ vẫn hiện màu, nhưng người chơi chưa làm gì được với nó.`),
-      t(`It shows a countdown: the number of poles that must be cleared before it unlocks.`,`Trên chồng thẻ có một con số đếm ngược, cho biết cần dọn xong bao nhiêu cột thì chồng thẻ mới mở khóa.`),
-      t(`The countdown only starts once the stack is unblocked. Poles cleared before that do not count.`,`Con số chỉ bắt đầu đếm khi chồng thẻ hết bị đè. Các cột được dọn xong trước đó không được tính.`),
+      t(`A Locked Chip Stack is locked away and can't be tapped to send up.`,`Chồng chip bị khóa không thể chạm để đưa lên.`),
+      t(`It still shows its color, but the player can't interact with it.`,`Chồng chip vẫn hiện màu, nhưng người chơi chưa làm gì được với nó.`),
+      t(`It shows a countdown: the number of poles that must be cleared before it unlocks.`,`Trên chồng chip có một con số đếm ngược, cho biết cần dọn xong bao nhiêu cột thì chồng chip mới mở khóa.`),
+      t(`The countdown only starts once the stack is unblocked. Poles cleared before that do not count.`,`Con số chỉ bắt đầu đếm khi chồng chip hết bị đè. Các cột được dọn xong trước đó không được tính.`),
       t(`Each cleared pole lowers the countdown by 1.`,`Mỗi cột được dọn xong thì con số giảm đi 1.`),
-      `<b>${t('Fail-safe','Chống kẹt')}:</b> `+t(`If every other pole has been cleared and only the poles for the locked cards remain, the stack unlocks immediately.`,`Nếu mọi cột khác đều đã được dọn xong, chỉ còn lại các cột dành cho thẻ bị khóa, chồng thẻ sẽ mở khóa ngay.`),
-      t(`Once unlocked, it can be tapped and sent up like a normal stack.`,`Mở khóa xong, người chơi chạm để đưa lên như chồng thẻ thường.`)
+      `<b>${t('Fail-safe','Chống kẹt')}:</b> `+t(`If every other pole has been cleared and only the poles for the locked chips remain, the stack unlocks immediately.`,`Nếu mọi cột khác đều đã được dọn xong, chỉ còn lại các cột dành cho chip bị khóa, chồng chip sẽ mở khóa ngay.`),
+      t(`Once unlocked, it can be tapped and sent up like a normal stack.`,`Mở khóa xong, người chơi chạm để đưa lên như chồng chip thường.`)
     ]),unlock(17),demo('locked'));
 
   B['booster-mechanics']=
     ent(N.hand,ul([
-      t(`Lets the player pick any stack of cards on the table and send it up, even a blocked one.`,
-        `Cho phép người chơi chọn bất kỳ chồng thẻ nào trên bàn để đưa lên, kể cả chồng đang bị đè.`),
+      t(`Lets the player pick any stack of chips on the table and send it up, even a blocked one.`,
+        `Cho phép người chơi chọn bất kỳ chồng chip nào trên bàn để đưa lên, kể cả chồng đang bị đè.`),
       withEl+':'+ul([
-        t(`Hidden Card Stack and Locked Card Stack: both can be selected.`,`Chồng thẻ ẩn và Chồng thẻ bị khóa: đều chọn được.`),
-        t(`A selected Locked Card Stack unlocks immediately.`,`Chồng thẻ bị khóa được chọn sẽ mở khóa ngay.`)
+        t(`Hidden Chip Stack and Locked Chip Stack: both can be selected.`,`Chồng chip ẩn và Chồng chip bị khóa: đều chọn được.`),
+        t(`A selected Locked Chip Stack unlocks immediately.`,`Chồng chip bị khóa được chọn sẽ mở khóa ngay.`)
       ])
     ]),unlockB(5),demo('hand'))+
     ent(N.shuffle,ul([
       t(`Rearranges the poles in the queues. The game does the following in order:`,
         `Xếp lại thứ tự các cột trong các hàng chờ. Trò chơi làm lần lượt các bước sau:`)+ol([
-        t(`Pick up to 3 colors from the cards in the waiting slots. If the waiting slots are empty or hold fewer than 3 colors, pick the remaining colors from the unblocked stacks on the table.`,
-          `Chọn tối đa 3 màu từ các thẻ đang nằm trong ô chờ. Nếu ô chờ trống hoặc chưa đủ 3 màu, trò chơi lấy thêm màu từ các chồng thẻ không bị đè trên bàn.`),
+        t(`Pick up to 3 colors from the chips in the waiting slots. If the waiting slots are empty or hold fewer than 3 colors, pick the remaining colors from the unblocked stacks on the table.`,
+          `Chọn tối đa 3 màu từ các chip đang nằm trong ô chờ. Nếu ô chờ trống hoặc chưa đủ 3 màu, trò chơi lấy thêm màu từ các chồng chip không bị đè trên bàn.`),
         t(`Move 3 poles of the picked colors down to the bottom of the queues.`,
           `Đưa 3 cột thuộc các màu đã chọn xuống dưới cùng các hàng chờ.`),
         t(`Shuffle the rest of the poles randomly.`,`Xáo ngẫu nhiên các cột còn lại.`)
@@ -1091,12 +1094,12 @@ function view(l){
     ent(N.magnet,ul([
       t(`Lets the player pick any pole in the queues and clear it immediately.`,
         `Cho phép người chơi chọn bất kỳ cột nào trong các hàng chờ để dọn cột đó ngay lập tức.`),
-      t(`The picked pole pulls cards of its color up from the table, in this order of priority:`,
-        `Cột được chọn sẽ hút các thẻ cùng màu từ trên bàn lên, theo thứ tự ưu tiên:`)+ol([
-        t(`Normal stacks that are not blocked`,`Chồng thẻ thường không bị đè`),
-        t(`Blocked stacks`,`Chồng thẻ bị đè`),
-        t(`Hidden Card Stacks`,`Chồng thẻ ẩn`),
-        t(`Locked Card Stacks. A locked stack that gets pulled unlocks immediately.`,`Chồng thẻ bị khóa. Chồng thẻ bị khóa khi được hút sẽ mở khóa ngay.`)
+      t(`The picked pole pulls chips of its color up from the table, in this order of priority:`,
+        `Cột được chọn sẽ hút các chip cùng màu từ trên bàn lên, theo thứ tự ưu tiên:`)+ol([
+        t(`Normal stacks that are not blocked`,`Chồng chip thường không bị đè`),
+        t(`Blocked stacks`,`Chồng chip bị đè`),
+        t(`Hidden Chip Stacks`,`Chồng chip ẩn`),
+        t(`Locked Chip Stacks. A locked stack that gets pulled unlocks immediately.`,`Chồng chip bị khóa. Chồng chip bị khóa khi được hút sẽ mở khóa ngay.`)
       ])
     ]),unlockB(10),demo('magnet'));
 
@@ -1123,9 +1126,9 @@ function view(l){
        `Một số bước sẽ lưu lại trạng thái đã hoàn thành. Nếu người chơi thoát game giữa chừng rồi mở lại, FTUE bỏ qua các bước đã lưu và tiếp tục từ bước kế tiếp.`)]
   ]);
 
-  const tapCond=t('The player taps the highlighted stack of cards.','Người chơi chạm vào chồng thẻ đang được làm nổi bật.');
-  const tapStep=(n,enOrd,viOrd)=>[t(`Tap stack ${n}`,`Chạm vào chồng thẻ ${n}`),tapCond,
-    t(`The ${enOrd} stack the player should tap`,`Chồng thẻ ${viOrd} cần chạm`),popup('Tap to send cards','Chạm để đưa thẻ lên'),dash];
+  const tapCond=t('The player taps the highlighted stack of chips.','Người chơi chạm vào chồng chip đang được làm nổi bật.');
+  const tapStep=(n,enOrd,viOrd)=>[t(`Tap stack ${n}`,`Chạm vào chồng chip ${n}`),tapCond,
+    t(`The ${enOrd} stack the player should tap`,`Chồng chip ${viOrd} cần chạm`),popup('Tap to send chips','Chạm để đưa chip lên'),dash];
   B['ftue-steps']=table(t('FTUE steps','Các bước FTUE'),
     [t('Step','Bước'),t('Complete condition','Điều kiện hoàn thành'),t('Highlight','Phần được làm nổi bật'),t('Text box','Nội dung hộp thoại'),t('Progress save','Lưu tiến độ')],
     [
@@ -1135,21 +1138,21 @@ function view(l){
       tapStep(1,'1st','thứ nhất'),
       tapStep(2,'2nd','thứ hai'),
       tapStep(3,'3rd','thứ ba'),
-      [t('Level complete','Hoàn thành màn'),t('The player sends up all the cards and completes the level.','Người chơi đưa hết thẻ lên và hoàn thành màn.'),dash,dash,t('Yes','Có')]
+      [t('Level complete','Hoàn thành màn'),t('The player sends up all the chips and completes the level.','Người chơi đưa hết chip lên và hoàn thành màn.'),dash,dash,t('Yes','Có')]
     ],'wide steps-tbl');
 
   B['element-tutorial']=table(t('Element tutorial','Hướng dẫn yếu tố đặc biệt'),
     [t('Element','Yếu tố'),t('Popup text','Nội dung popup'),t('Unlocks at level','Mở ở màn')],
     [
-      [N.hiddenS,popup('Unblock the stack<br>to reveal its color.','Dọn chồng thẻ nằm trên<br>để hiện màu.'),lvl(7)],
+      [N.hiddenS,popup('Unblock the stack<br>to reveal its color.','Dọn chồng chip nằm trên<br>để hiện màu.'),lvl(7)],
       [N.hiddenP,popup('Move to the bottom<br>to reveal its color.','Đưa xuống dưới cùng<br>để hiện màu.'),lvl(12)],
-      [N.locked,popup('Send cards up<br>to unlock the stack.','Đưa thẻ lên<br>để mở khóa chồng thẻ.'),lvl(17)]
+      [N.locked,popup('Send chips up<br>to unlock the stack.','Đưa chip lên<br>để mở khóa chồng chip.'),lvl(17)]
     ]);
 
   B['booster-tutorial']=table(t('Booster tutorial','Hướng dẫn công cụ hỗ trợ'),
     [t('Booster','Công cụ'),t('Popup text','Nội dung popup'),t('Unlocks at level','Mở ở màn'),t('Free boosters','Số lượt tặng')],
     [
-      [N.hand,popup('Pick any stack of cards!','Chọn bất kỳ chồng thẻ nào!'),lvl(5),lvl(3)],
+      [N.hand,popup('Pick any stack of chips!','Chọn bất kỳ chồng chip nào!'),lvl(5),lvl(3)],
       [N.shuffle,popup('Shuffle the poles<br>in queues!','Xáo trộn các cột<br>trong hàng chờ!'),lvl(8),lvl(3)],
       [N.magnet,popup('Tap the pole<br>to sort it instantly!','Chạm vào cột<br>để xếp xong ngay!'),lvl(10),lvl(3)]
     ]);
@@ -1173,11 +1176,11 @@ function view(l){
   const anim=n=>t('Animation '+n,'Chuyển động '+n);
   B['core-game-object-concept']=
     ent(t('Color list','Bảng màu'),
-      `<p>${t('One list of 8 colors is shared by cards and poles.','Thẻ và cột dùng chung một bảng 8 màu.')}</p>
+      `<p>${t('One list of 8 colors is shared by chips and poles.','Chip và cột dùng chung một bảng 8 màu.')}</p>
        <ol class="colors">${colors.map((c,i)=>`<li>${badge(i+1,i+1)}<span><span class="sr">${i+1}: </span>${c}</span></li>`).join('')}</ol>`)+
-    ent(nm('Card','Thẻ'),params([
-      [anim(1),t('Cards move from the table to a pole.','Thẻ bay từ bàn lên cột.')],
-      [anim(2),t('Cards move from the table to the waiting slots.','Thẻ bay từ bàn vào ô chờ.')]
+    ent(nm('Chip','Chip'),params([
+      [anim(1),t('Chips move from the table to a pole.','Chip bay từ bàn lên cột.')],
+      [anim(2),t('Chips move from the table to the waiting slots.','Chip bay từ bàn vào ô chờ.')]
     ]))+
     ent(nm('Pole','Cột'),params([
       [anim(1),t('The pole moves down its queue.','Cột đi xuống trong hàng chờ.')],
@@ -1186,13 +1189,13 @@ function view(l){
 
   const an=t('Animation','Chuyển động');
   B['element-object-concept']=
-    ent(N.hiddenS,params([[an,t('A smoke particle effect covers the swap from hidden stack to normal stack.','Hiệu ứng khói che đi lúc chồng thẻ ẩn đổi thành chồng thẻ thường.')]]))+
+    ent(N.hiddenS,params([[an,t('A smoke particle effect covers the swap from hidden stack to normal stack.','Hiệu ứng khói che đi lúc chồng chip ẩn đổi thành chồng chip thường.')]]))+
     ent(N.hiddenP,params([[an,t('A smoke particle effect covers the swap from hidden pole to normal pole.','Hiệu ứng khói che đi lúc cột ẩn màu đổi thành cột thường.')]]))+
-    ent(N.locked,params([[an,t('The ice breaks into pieces when the stack unlocks.','Lớp băng vỡ vụn khi chồng thẻ được mở khóa.')]]));
+    ent(N.locked,params([[an,t('The ice breaks into pieces when the stack unlocks.','Lớp băng vỡ vụn khi chồng chip được mở khóa.')]]));
 
   B['booster-object-concept']=
     ent(N.shuffle,params([[an,t('The shuffle animation mixes up the poles in the queues.','Hiệu ứng xáo trộn đảo vị trí các cột trong các hàng chờ.')]]))+
-    ent(N.magnet,params([[an,t('The picked pole flies toward the table, then pulls in all the cards of its color.','Cột được chọn bay về phía bàn rồi hút hết các thẻ cùng màu.')]]));
+    ent(N.magnet,params([[an,t('The picked pole flies toward the table, then pulls in all the chips of its color.','Cột được chọn bay về phía bàn rồi hút hết các chip cùng màu.')]]));
 
   /* ===== 4. SFX & haptics ===== */
   /* Haptic: 0 none, 1 weak, 2 medium, 3 strong */
@@ -1205,11 +1208,11 @@ function view(l){
     ['Tap','ui',t('The player taps the UI','Người chơi chạm vào giao diện'),1],
     ['Coin Reward','ui',t('The player receives a coin reward','Người chơi nhận thưởng xu'),0],
     ['Booster Reward','ui',t('The player receives a booster reward','Người chơi nhận thưởng công cụ hỗ trợ'),0],
-    ['Card Selected','core',t('The player taps a stack of cards','Người chơi chạm vào chồng thẻ'),2],
-    ['Card Move to column','core',t('A card slides onto the pole','Thẻ trượt vào cột'),0],
+    ['Chip Selected','core',t('The player taps a stack of chips','Người chơi chạm vào chồng chip'),2],
+    ['Chip Move to column','core',t('A chip slides onto the pole','Chip trượt vào cột'),0],
     ['Pole Clear','core',t('A pole is full and clears','Cột đầy và được dọn đi'),2],
-    ['Hidden Pole/Card Stack','el',t('A Hidden Card Stack or Hidden Color Pole reveals its color','Chồng thẻ ẩn hoặc Cột ẩn màu hiện màu thật'),0],
-    ['Locked Card Stack Unlock','el',t('A Locked Card Stack unlocks','Chồng thẻ bị khóa được mở khóa'),0],
+    ['Hidden Pole/Chip Stack','el',t('A Hidden Chip Stack or Hidden Color Pole reveals its color','Chồng chip ẩn hoặc Cột ẩn màu hiện màu thật'),0],
+    ['Locked Chip Stack Unlock','el',t('A Locked Chip Stack unlocks','Chồng chip bị khóa được mở khóa'),0],
     ['Shuffle','bo',t('The game shuffles the poles','Trò chơi xáo trộn các cột'),0]
   ];
   B['sfx--haptics']=table(t('SFX and haptics','Âm thanh và rung'),
@@ -1431,6 +1434,10 @@ function view(l){
   const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
     day(t('2 November 2026','2/11/2026'),
+      ent(t('Poker chip theme','Chủ đề phỉnh poker'),ul([
+        t(`The game uses poker chips, so every card is now a chip, in both languages. Card Stack is now Chip Stack.`,`Game dùng phỉnh poker, nên mọi thẻ nay là chip, ở cả hai ngôn ngữ. Chồng thẻ nay là Chồng chip.`),
+        t(`The play-screen sketch, the demos and the section icons now show chips.`,`Hình minh họa màn chơi, các minh họa chuyển động và biểu tượng mục nay vẽ chip.`)
+      ]))+
       ent(t('Booster renamed','Đổi tên công cụ'),ul([
         t(`The third booster, Remove, is now called Magnet. Its logic is unchanged.`,`Công cụ thứ ba, Loại bỏ, nay đổi tên thành Nam châm. Cách hoạt động giữ nguyên.`)
       ])))+
@@ -1453,24 +1460,24 @@ function view(l){
   /* ----- hero ----- */
   const legend=[
     ['A',t('Queues','Hàng chờ'),t('Poles line up here. Each pole has one color.','Các cột xếp hàng ở đây. Mỗi cột có một màu.')],
-    ['B',t('Bottom poles','Cột dưới cùng'),t('The pole at the bottom of each queue. Only these collect cards.','Cột nằm dưới cùng của mỗi hàng chờ. Chỉ những cột này mới nhận thẻ.')],
-    ['C',t('Waiting slots','Ô chờ'),t('Cards with no matching pole wait here.','Thẻ chưa có cột cùng màu thì nằm đợi ở đây.')],
-    ['D',t('Free stacks','Chồng thẻ không bị đè'),t('Nothing lies on top, so the player can tap them.','Không có gì đè lên, nên người chơi chạm được.')],
-    ['E',t('Blocked stacks','Chồng thẻ bị đè'),t('Covered by another stack. They can’t be tapped yet.','Đang bị chồng khác đè lên nên chưa chạm được.')]
+    ['B',t('Bottom poles','Cột dưới cùng'),t('The pole at the bottom of each queue. Only these collect chips.','Cột nằm dưới cùng của mỗi hàng chờ. Chỉ những cột này mới nhận chip.')],
+    ['C',t('Waiting slots','Ô chờ'),t('Chips with no matching pole wait here.','Chip chưa có cột cùng màu thì nằm đợi ở đây.')],
+    ['D',t('Free stacks','Chồng chip không bị đè'),t('Nothing lies on top, so the player can tap them.','Không có gì đè lên, nên người chơi chạm được.')],
+    ['E',t('Blocked stacks','Chồng chip bị đè'),t('Covered by another stack. They can’t be tapped yet.','Đang bị chồng khác đè lên nên chưa chạm được.')]
   ];
   const hero=`<div class="hero" id="top" data-sec="top" data-spy="top">
     <div>
       <h1>${GAME}</h1>
       <p class="kind">${ui.sub}</p>
-      <p class="pitch">${t(`Tap stacks of cards to send them to poles of the same color, park the rest in the waiting slots, and clear the table.`,
-                           `Chạm vào các chồng thẻ để đưa thẻ lên cột cùng màu, thẻ chưa có chỗ thì tạm nằm ở ô chờ, rồi dọn sạch bàn để thắng.`)}</p>
+      <p class="pitch">${t(`Tap stacks of chips to send them to poles of the same color, park the rest in the waiting slots, and clear the table.`,
+                           `Chạm vào các chồng chip để đưa chip lên cột cùng màu, chip chưa có chỗ thì tạm nằm ở ô chờ, rồi dọn sạch bàn để thắng.`)}</p>
       <ul class="legend">${legend.map(g=>`<li><button type="button" data-part="${g[0]}" aria-pressed="false"><span class="pinl" data-nosearch>${g[0]}</span><span><b>${g[1]}</b><span class="d">${g[2]}</span></span></button></li>`).join('')}</ul>
     </div>
     <figure class="field${paused?' paused':''}" id="field">
-      <div class="field-box">${fieldSVG(t('Sketch of the play screen: queues of poles on top, a row of waiting slots in the middle, and overlapping stacks of cards on the table below.','Hình minh họa màn chơi: các hàng chờ của cột ở phía trên, hàng ô chờ ở giữa, và các chồng thẻ đè lên nhau trên bàn ở phía dưới.'))}</div>
+      <div class="field-box">${fieldSVG(t('Sketch of the play screen: queues of poles on top, a row of waiting slots in the middle, and overlapping stacks of chips on the table below.','Hình minh họa màn chơi: các hàng chờ của cột ở phía trên, hàng ô chờ ở giữa, và các chồng chip đè lên nhau trên bàn ở phía dưới.'))}</div>
       <div class="field-foot"><button type="button" class="pause" id="pauseBtn">${paused?ui.play:ui.pause}</button></div>
-      <figcaption>${t(`Simplified sketch. The number of queues, poles, waiting slots and stacks, and how the poles and cards look, are examples, not final values.`,
-                      `Hình minh họa đơn giản. Số hàng chờ, số cột, số ô chờ, số chồng thẻ cũng như hình dáng cột và thẻ chỉ là ví dụ, chưa phải thông số chính thức.`)}</figcaption>
+      <figcaption>${t(`Simplified sketch. The number of queues, poles, waiting slots and stacks, and how the poles and chips look, are examples, not final values.`,
+                      `Hình minh họa đơn giản. Số hàng chờ, số cột, số ô chờ, số chồng chip cũng như hình dáng cột và chip chỉ là ví dụ, chưa phải thông số chính thức.`)}</figcaption>
     </figure>
   </div>`;
 
