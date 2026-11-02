@@ -514,7 +514,7 @@ const SECTIONS=[
     {id:'store',n:'6.4',en:'Store',vi:'Cửa hàng'},
     {id:'starter-pack',n:'6.5',en:'Starter Pack',vi:'Gói Khởi đầu'},
     {id:'remove-ads',n:'6.6',en:'Remove Ads',vi:'Gỡ quảng cáo'}]},
-  {id:'live-ops',n:'7',c:6,en:'Live ops',vi:'Tính năng Live Ops',subs:[
+  {id:'live-ops',n:'7',c:6,en:'Reward ads placement',vi:'Vị trí quảng cáo thưởng',subs:[
     {id:'limited-time-reward',n:'7.1',en:'Limited Time Reward',vi:'Quà giới hạn thời gian'},
     {id:'skip-retry',n:'7.2',en:'Skip Level & Retry with Booster',vi:'Bỏ qua màn & Chơi lại kèm công cụ'}]},
   {id:'change-note',n:'8',c:7,en:'Change note',vi:'Ghi chú thay đổi'},
@@ -1276,7 +1276,7 @@ function view(l){
       ['remove_ads_unlock_level',t('Remove Ads (IAP) — level from which the offer popup can show','Gỡ quảng cáo (IAP) — màn bắt đầu có thể hiện popup ưu đãi'),'15',t('level','màn')],
       ['garage_gift_unlock_level',t('Limited Time Reward / Garage Gift (rewarded ad) — level from which the gift popup can show','Quà giới hạn thời gian / Garage Gift (quảng cáo thưởng) — màn bắt đầu có thể hiện popup quà'),'10',t('level','màn')]
     ])+
-    rc(t('Live ops','Live Ops'),[
+    rc(t('Reward ads placement','Vị trí quảng cáo thưởng'),[
       ['skip_level_max_per_day',t('Skip Level — max skips per day (ad or coins). The count resets each new day.','Bỏ qua màn — số lần bỏ qua tối đa mỗi ngày (bằng quảng cáo hoặc xu). Số lần được tính lại mỗi ngày mới.'),'3',t('count','lần')],
       ['retry_booster_max_per_day',t('Retry with Booster — max uses per day (rewarded ad). The count resets each new day.','Chơi lại kèm công cụ — số lần dùng tối đa mỗi ngày (quảng cáo có thưởng). Số lần được tính lại mỗi ngày mới.'),'3',t('count','lần')]
     ]);
@@ -1398,7 +1398,7 @@ function view(l){
         [t('Product ID','Mã sản phẩm'),pid('remove_ads')]
       ]));
 
-  /* ===== 7. Live ops ===== */
+  /* ===== 7. Reward ads placement ===== */
   B['live-ops']=`<p class="sec-intro">${t(`Features that bring players back or help past hard levels, mostly for rewarded ads. Also listed in 6.2.`,
     `Tính năng kéo người chơi quay lại hoặc giúp qua màn khó, phần lớn đổi bằng quảng cáo có thưởng. Cũng có trong mục 6.2.`)}</p>`;
   B['limited-time-reward']=
@@ -1434,6 +1434,9 @@ function view(l){
   const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
     day(t('2 November 2026','2/11/2026'),
+      ent(t('Section 7 renamed','Đổi tên mục 7'),ul([
+        t(`Section 7 is now called Reward ads placement (was Live ops). Its content is unchanged.`,`Mục 7 nay có tên Vị trí quảng cáo thưởng (trước là Tính năng Live Ops). Nội dung giữ nguyên.`)
+      ]))+
       ent(t('Poker chip theme','Chủ đề phỉnh poker'),ul([
         t(`The game uses poker chips, so every card is now a chip, in both languages. Card Stack is now Chip Stack.`,`Game dùng phỉnh poker, nên mọi thẻ nay là chip, ở cả hai ngôn ngữ. Chồng thẻ nay là Chồng chip.`),
         t(`The play-screen sketch, the demos and the section icons now show chips.`,`Hình minh họa màn chơi, các minh họa chuyển động và biểu tượng mục nay vẽ chip.`)
