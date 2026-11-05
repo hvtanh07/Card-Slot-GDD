@@ -792,11 +792,11 @@ function view(l){
 
   /* names reused across sections */
   const N={
-    hiddenS:nm('Hidden Chip Stack','Chồng chip ẩn'),hiddenP:nm('Hidden Color Pole','Cột ẩn màu'),locked:nm('Locked Chip Stack','Chồng chip bị khóa'),
+    hiddenS:nm('Hidden Chip','Chip ẩn'),hiddenP:nm('Hidden Pole','Cột ẩn'),locked:nm('Locked Chip','Chip bị khóa'),
     hand:nm('Hand','Bàn tay'),shuffle:nm('Shuffle','Xáo trộn'),magnet:nm('Magnet','Nam châm')
   };
   const P={ /* plain names for running text and tables */
-    hiddenS:t('Hidden Chip Stack','Chồng chip ẩn'),hiddenP:t('Hidden Color Pole','Cột ẩn màu'),locked:t('Locked Chip Stack','Chồng chip bị khóa'),
+    hiddenS:t('Hidden Chip','Chip ẩn'),hiddenP:t('Hidden Pole','Cột ẩn'),locked:t('Locked Chip','Chip bị khóa'),
     hand:t('Hand','Bàn tay'),shuffle:t('Shuffle','Xáo trộn'),magnet:t('Magnet','Nam châm')
   };
   const withEl=t('With elements','Khi gặp yếu tố đặc biệt');
@@ -1037,7 +1037,7 @@ function view(l){
       ])));
 
   const DCAP={
-    hiddenS:t('The stack on top is sent up. The hidden stack below is unblocked and shows its color.','Chồng chip nằm trên được đưa lên. Chồng chip ẩn bên dưới hết bị đè và hiện màu.'),
+    hiddenS:t('The stack on top is sent up. The hidden stack below is unblocked and shows its color.','Chồng chip nằm trên được đưa lên. Chip ẩn bên dưới hết bị đè và hiện màu.'),
     hiddenP:t('The bottom pole fills and clears. The hidden pole moves to the bottom and shows its color.','Cột dưới cùng đầy và được dọn. Cột ẩn đi xuống dưới cùng và hiện màu.'),
     locked:t('Two poles clear, the number hits 0 and the ice breaks.','Hai cột được dọn, con số về 0 và lớp băng vỡ.'),
     hand:t('The player taps a blocked stack. It lifts out and flies to its pole.','Người chơi chạm vào một chồng chip bị đè. Chồng chip được nhấc ra và bay tới cột cùng màu.'),
@@ -1051,15 +1051,15 @@ function view(l){
 
   B['elements-mechanics']=
     ent(N.hiddenS,ul([
-      t(`A Hidden Chip Stack hides its real color while it is blocked.`,`Chồng chip ẩn che đi màu thật khi còn bị đè.`),
+      t(`A Hidden Chip hides its real color while it is blocked.`,`Chip ẩn che đi màu thật khi còn bị đè.`),
       t(`Once it is unblocked, it reveals its real color.`,`Khi hết bị đè, chồng chip hiện màu thật.`)
     ]),unlock(7),demo('hiddenS'))+
     ent(N.hiddenP,ul([
-      t(`A Hidden Color Pole hides its real color while it is not at the bottom of its queue.`,`Cột ẩn màu che đi màu thật khi chưa xuống tới dưới cùng hàng chờ.`),
+      t(`A Hidden Pole hides its real color while it is not at the bottom of its queue.`,`Cột ẩn che đi màu thật khi chưa xuống tới dưới cùng hàng chờ.`),
       t(`Once it reaches the bottom of its queue, it reveals its real color.`,`Khi xuống tới vị trí dưới cùng của hàng chờ, cột hiện màu thật.`)
     ]),unlock(12),demo('hiddenP'))+
     ent(N.locked,ul([
-      t(`A Locked Chip Stack is locked away and can't be tapped to send up.`,`Chồng chip bị khóa không thể chạm để đưa lên.`),
+      t(`A Locked Chip is locked away and can't be tapped to send up.`,`Chip bị khóa không thể chạm để đưa lên.`),
       t(`It still shows its color, but the player can't interact with it.`,`Chồng chip vẫn hiện màu, nhưng người chơi chưa làm gì được với nó.`),
       t(`It shows a countdown: the number of poles that must be cleared before it unlocks.`,`Trên chồng chip có một con số đếm ngược, cho biết cần dọn xong bao nhiêu cột thì chồng chip mới mở khóa.`),
       t(`The countdown only starts once the stack is unblocked. Poles cleared before that do not count.`,`Con số chỉ bắt đầu đếm khi chồng chip hết bị đè. Các cột được dọn xong trước đó không được tính.`),
@@ -1073,8 +1073,8 @@ function view(l){
       t(`Lets the player pick any stack of chips on the table and send it up, even a blocked one.`,
         `Cho phép người chơi chọn bất kỳ chồng chip nào trên bàn để đưa lên, kể cả chồng đang bị đè.`),
       withEl+':'+ul([
-        t(`Hidden Chip Stack and Locked Chip Stack: both can be selected.`,`Chồng chip ẩn và Chồng chip bị khóa: đều chọn được.`),
-        t(`A selected Locked Chip Stack unlocks immediately.`,`Chồng chip bị khóa được chọn sẽ mở khóa ngay.`)
+        t(`Hidden Chip and Locked Chip: both can be selected.`,`Chip ẩn và Chip bị khóa: đều chọn được.`),
+        t(`A selected Locked Chip unlocks immediately.`,`Chip bị khóa được chọn sẽ mở khóa ngay.`)
       ])
     ]),unlockB(5),demo('hand'))+
     ent(N.shuffle,ul([
@@ -1087,8 +1087,8 @@ function view(l){
         t(`Shuffle the rest of the poles randomly.`,`Xáo ngẫu nhiên các cột còn lại.`)
       ]),
       withEl+':'+ul([
-        t(`When choosing which poles move down, the order of priority is normal pole → Hidden Color Pole.`,
-          `Khi chọn cột để đưa xuống, thứ tự ưu tiên là cột thường → Cột ẩn màu.`)
+        t(`When choosing which poles move down, the order of priority is normal pole → Hidden Pole.`,
+          `Khi chọn cột để đưa xuống, thứ tự ưu tiên là cột thường → Cột ẩn.`)
       ])
     ]),unlockB(8),demo('shuffle'))+
     ent(N.magnet,ul([
@@ -1098,8 +1098,8 @@ function view(l){
         `Cột được chọn sẽ hút các chip cùng màu từ trên bàn lên, theo thứ tự ưu tiên:`)+ol([
         t(`Normal stacks that are not blocked`,`Chồng chip thường không bị đè`),
         t(`Blocked stacks`,`Chồng chip bị đè`),
-        t(`Hidden Chip Stacks`,`Chồng chip ẩn`),
-        t(`Locked Chip Stacks. A locked stack that gets pulled unlocks immediately.`,`Chồng chip bị khóa. Chồng chip bị khóa khi được hút sẽ mở khóa ngay.`)
+        t(`Hidden Chips`,`Chip ẩn`),
+        t(`Locked Chips. A locked stack that gets pulled unlocks immediately.`,`Chip bị khóa. Chip bị khóa khi được hút sẽ mở khóa ngay.`)
       ])
     ]),unlockB(10),demo('magnet'));
 
@@ -1190,8 +1190,8 @@ function view(l){
 
   const an=t('Animation','Chuyển động');
   B['element-object-concept']=
-    ent(N.hiddenS,params([[an,t('A smoke particle effect covers the swap from hidden stack to normal stack.','Hiệu ứng khói che đi lúc chồng chip ẩn đổi thành chồng chip thường.')]]))+
-    ent(N.hiddenP,params([[an,t('A smoke particle effect covers the swap from hidden pole to normal pole.','Hiệu ứng khói che đi lúc cột ẩn màu đổi thành cột thường.')]]))+
+    ent(N.hiddenS,params([[an,t('A smoke particle effect covers the swap from hidden stack to normal stack.','Hiệu ứng khói che đi lúc chip ẩn đổi thành chồng chip thường.')]]))+
+    ent(N.hiddenP,params([[an,t('A smoke particle effect covers the swap from hidden pole to normal pole.','Hiệu ứng khói che đi lúc cột ẩn đổi thành cột thường.')]]))+
     ent(N.locked,params([[an,t('The ice breaks into pieces when the stack unlocks.','Lớp băng vỡ vụn khi chồng chip được mở khóa.')]]));
 
   B['booster-object-concept']=
@@ -1212,8 +1212,8 @@ function view(l){
     ['Chip Selected','core',t('The player taps a stack of chips','Người chơi chạm vào chồng chip'),2],
     ['Chip Move to column','core',t('A chip slides onto the pole','Chip trượt vào cột'),0],
     ['Pole Clear','core',t('A pole is full and clears','Cột đầy và được dọn đi'),2],
-    ['Hidden Pole/Chip Stack','el',t('A Hidden Chip Stack or Hidden Color Pole reveals its color','Chồng chip ẩn hoặc Cột ẩn màu hiện màu thật'),0],
-    ['Locked Chip Stack Unlock','el',t('A Locked Chip Stack unlocks','Chồng chip bị khóa được mở khóa'),0],
+    ['Hidden Pole/Chip','el',t('A Hidden Chip or Hidden Pole reveals its color','Chip ẩn hoặc Cột ẩn hiện màu thật'),0],
+    ['Locked Chip Unlock','el',t('A Locked Chip unlocks','Chip bị khóa được mở khóa'),0],
     ['Shuffle','bo',t('The game shuffles the poles','Trò chơi xáo trộn các cột'),0]
   ];
   B['sfx--haptics']=table(t('SFX and haptics','Âm thanh và rung'),
@@ -1435,6 +1435,9 @@ function view(l){
   const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
     day(t('2 November 2026','2/11/2026'),
+      ent(t('Elements renamed','Đổi tên yếu tố'),ul([
+        t(`The elements now match their popup titles: Hidden Chip Stack is Hidden Chip, Hidden Color Pole is Hidden Pole, and Locked Chip Stack is Locked Chip.`,`Tên yếu tố nay khớp với tiêu đề popup: Chồng chip ẩn thành Chip ẩn, Cột ẩn màu thành Cột ẩn, Chồng chip bị khóa thành Chip bị khóa.`)
+      ]))+
       ent(t('Booster and element tutorial text','Nội dung hướng dẫn công cụ và yếu tố'),ul([
         t(`New popup text in 2.4: Hand “Pick up any chip stack”, Shuffle “Shuffle all poles!”, Magnet “Clear any pole instantly!”.`,`Nội dung popup mới ở mục 2.4: Hand “Pick up any chip stack”, Shuffle “Shuffle all poles!”, Magnet “Clear any pole instantly!”.`),
         t(`New popup text in 2.3 for Hidden Color Pole: “Move pole to the bottom to reveal its color.”`,`Nội dung popup mới ở mục 2.3 cho Cột ẩn màu: “Move pole to the bottom to reveal its color.”`)
