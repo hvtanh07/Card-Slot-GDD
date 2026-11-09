@@ -219,6 +219,9 @@ ol.steps .after{display:block;margin-top:.1em}
 ul.params>li{margin:0 0 .7em;max-width:68ch}
 ul.params>li>b{display:block;font-weight:600}
 ul.params>li>span{display:block}
+.ref-vid{margin:10px 0 4px;max-width:260px}
+.ref-vid video{display:block;width:100%;height:auto;max-height:340px;object-fit:contain;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.ref-vid figcaption{font-size:.8rem;line-height:1.45;color:var(--muted);margin:6px 2px 0}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
 .chips span{background:var(--tint);border-radius:8px;padding:3px 11px;font-weight:500}
 .note{background:var(--tint);border-radius:14px;padding:12px 16px;max-width:68ch;margin:16px 0 4px;font-size:.95rem}
@@ -1175,17 +1178,19 @@ function view(l){
 
   const colors=[t('Red','Đỏ'),t('Blue','Xanh dương'),t('Green','Xanh lá'),t('Yellow','Vàng'),t('Pink','Hồng'),t('Orange','Cam'),t('Purple','Tím'),t('Cyan','Xanh ngọc')];
   const anim=n=>t('Animation '+n,'Chuyển động '+n);
+  /* animation reference video, file in animRef/ named after the animation */
+  const vid=f=>`<figure class="ref-vid"><video src="animRef/${f}.mp4" controls muted loop playsinline preload="metadata" aria-label="${f}"></video><figcaption>${t('Reference','Tham khảo')}: <code lang="en">${f}</code></figcaption></figure>`;
   B['core-game-object-concept']=
     ent(t('Color list','Bảng màu'),
       `<p>${t('One list of 8 colors is shared by chips and poles.','Chip và cột dùng chung một bảng 8 màu.')}</p>
        <ol class="colors">${colors.map((c,i)=>`<li>${badge(i+1,i+1)}<span><span class="sr">${i+1}: </span>${c}</span></li>`).join('')}</ol>`)+
     ent(nm('Chip','Chip'),params([
-      [anim(1),t('Chips move from the table to a pole.','Chip bay từ bàn lên cột.')],
-      [anim(2),t('Chips move from the table to the waiting slots.','Chip bay từ bàn vào ô chờ.')]
+      [anim(1),t('Chips move from the table to a pole.','Chip bay từ bàn lên cột.')+vid('chip_to_pole')],
+      [anim(2),t('Chips move from the table to the waiting slots.','Chip bay từ bàn vào ô chờ.')+vid('chip_to_waiting_slot')]
     ]))+
     ent(nm('Pole','Cột'),params([
       [anim(1),t('The pole moves down its queue.','Cột đi xuống trong hàng chờ.')],
-      [anim(2),t('The pole is full and clears from the level.','Cột đầy và biến mất khỏi màn chơi.')]
+      [anim(2),t('The pole is full and clears from the level.','Cột đầy và biến mất khỏi màn chơi.')+vid('pole_get_clear')]
     ]));
 
   const an=t('Animation','Chuyển động');
