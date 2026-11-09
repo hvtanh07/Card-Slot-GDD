@@ -816,6 +816,12 @@ function view(l){
       t(`The player wins by clearing every chip from the table.`,
         `Dọn hết chip trên bàn là thắng màn.`)
     ]))+
+    ent(t('Waiting slots','Ô chờ'),params([
+      [t('At the start','Lúc bắt đầu'),t(`A default level starts with 10 waiting slots. FTUE levels are the exception and do not use this count.`,
+                         `Màn chơi thường bắt đầu với 10 ô chờ. Màn FTUE là ngoại lệ, không dùng số ô này.`)],
+      [t('Unlock more','Mở thêm'),t(`The player can unlock more waiting slots with the 2 RV Slots. Each RV Slot adds 3 waiting slots, so a level can have up to 16 (see the RV Slot in 1.3).`,
+                         `Người chơi có thể mở thêm ô chờ bằng 2 ô chờ quảng cáo thưởng (RV Slot). Mỗi RV Slot thêm 3 ô chờ, nên một màn có tối đa 16 ô chờ (xem RV Slot ở mục 1.3).`)]
+    ]))+
     ent(t('Win and lose','Thắng và thua'),params([
       [t('Win','Thắng'),t(`Every stack of chips on the table has been sent to a pole of its color, and every pole has been cleared from the level.`,
                          `Tất cả các chồng chip trên bàn đã được đưa lên cột cùng màu, và mọi cột đều đã được dọn khỏi màn chơi.`)],
@@ -990,8 +996,10 @@ function view(l){
       lead(t(`RV Slots let the player watch a rewarded ad to earn extra waiting slots in the level.`,
              `Ô chờ quảng cáo thưởng (RV Slot) cho phép người chơi xem quảng cáo có thưởng để nhận thêm ô chờ trong màn chơi.`))+
       tiles([
+        ['10',t('Waiting slots at the start of a default level (not FTUE levels)','Ô chờ lúc bắt đầu màn thường (trừ màn FTUE)')],
         ['2',t('RV Slots in each level','Ô chờ quảng cáo thưởng trong mỗi màn')],
-        ['+8',t('Waiting slots added each time an RV Slot is used','Ô chờ được thêm mỗi lần dùng một ô chờ quảng cáo thưởng')]
+        ['+3',t('Waiting slots added each time an RV Slot is used','Ô chờ được thêm mỗi lần dùng một ô chờ quảng cáo thưởng')],
+        ['16',t('Most waiting slots in a level, with both RV Slots used','Số ô chờ tối đa trong một màn, khi đã dùng cả 2 RV Slot')]
       ]))+
 
     sys(nm('Level loop back','Lặp lại màn chơi'),
@@ -1439,6 +1447,11 @@ function view(l){
   /* Add one day() block per day, newest first, with one ent per area changed */
   const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
+    day(t('9 November 2026','9/11/2026'),
+      ent(t('Waiting slots','Ô chờ'),ul([
+        t(`1.1 now says how many waiting slots a level has: 10 at the start of a default level (not FTUE levels), and 2 RV Slots that each add 3 more.`,`Mục 1.1 nay ghi số ô chờ của một màn: 10 ô lúc bắt đầu màn thường (trừ màn FTUE), và 2 RV Slot, mỗi ô mở thêm 3 ô chờ.`),
+        t(`The RV Slot in 1.3 now adds 3 waiting slots each time (was 8), so a level has at most 16.`,`RV Slot ở mục 1.3 nay thêm 3 ô chờ mỗi lần (trước là 8), nên một màn có tối đa 16 ô chờ.`)
+      ])))+
     day(t('2 November 2026','2/11/2026'),
       ent(t('Elements renamed','Đổi tên yếu tố'),ul([
         t(`The elements now match their popup titles: Hidden Chip Stack is Hidden Chip, Hidden Color Pole is Hidden Pole, and Locked Chip Stack is Locked Chip.`,`Tên yếu tố nay khớp với tiêu đề popup: Chồng chip ẩn thành Chip ẩn, Cột ẩn màu thành Cột ẩn, Chồng chip bị khóa thành Chip bị khóa.`)
