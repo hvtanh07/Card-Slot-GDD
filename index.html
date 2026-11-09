@@ -1195,12 +1195,12 @@ function view(l){
 
   const an=t('Animation','Chuyển động');
   B['element-object-concept']=
-    ent(N.hiddenS,params([[an,t('A smoke particle effect covers the swap from hidden stack to normal stack.','Hiệu ứng khói che đi lúc chip ẩn đổi thành chồng chip thường.')]]))+
+    ent(N.hiddenS,params([[an,t('A smoke particle effect covers the swap from hidden stack to normal stack.','Hiệu ứng khói che đi lúc chip ẩn đổi thành chồng chip thường.')+vid('hidden_chip')]]))+
     ent(N.hiddenP,params([[an,t('A smoke particle effect covers the swap from hidden pole to normal pole.','Hiệu ứng khói che đi lúc cột ẩn đổi thành cột thường.')]]))+
     ent(N.locked,params([[an,t('The ice breaks into pieces when the stack unlocks.','Lớp băng vỡ vụn khi chồng chip được mở khóa.')]]));
 
   B['booster-object-concept']=
-    ent(N.shuffle,params([[an,t('The shuffle animation mixes up the poles in the queues.','Hiệu ứng xáo trộn đảo vị trí các cột trong các hàng chờ.')]]))+
+    ent(N.shuffle,params([[an,t('The shuffle animation mixes up the poles in the queues.','Hiệu ứng xáo trộn đảo vị trí các cột trong các hàng chờ.')+vid('shuffle')]]))+
     ent(N.magnet,params([[an,t('The picked pole flies toward the table, then pulls in all the chips of its color.','Cột được chọn bay về phía bàn rồi hút hết các chip cùng màu.')]]));
 
   /* ===== 4. SFX & haptics ===== */
