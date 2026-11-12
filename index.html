@@ -719,8 +719,8 @@ const DEMOS={
       const warn=[3,4].map(i=>`<rect class="warn" x="${sx(i)}" y="96" width="28" height="30" rx="7" style="opacity:0"/>`).join('');
       return lane(40)+dpole(64,66,1)+dfill(64,66,1,2)+sl+warn+chip(0,4)+chip(1,6)+
         `<g class="sf" style="opacity:0">${chip(2,8)}</g>`+
-        `<rect class="rvs" x="166" y="96" width="28" height="30" rx="7"/><path class="bub-ic" d="M171 106l6 4-6 4z" style="fill:var(--ink)"/><text class="rvs-t" x="185" y="111" dy=".35em">+3</text>`+
-        `<g class="bub" style="opacity:0"><rect x="128" y="50" width="66" height="28" rx="10"/><path d="M172 77l8 12 4-12z"/><text x="161" y="64" dy=".35em">▶ +3</text></g>`+
+        `<rect class="rvs" x="166" y="96" width="28" height="30" rx="7"/><path class="bub-ic" d="M171 106l6 4-6 4z" style="fill:var(--ink)"/><text class="rvs-t" x="185" y="111" dy=".35em">+5</text>`+
+        `<g class="bub" style="opacity:0"><rect x="128" y="50" width="66" height="28" rx="10"/><path d="M172 77l8 12 4-12z"/><text x="161" y="64" dy=".35em">▶ +5</text></g>`+
         dtable(136)+`<g class="mv">${dstack(40,144,8,3)}</g>${dstack(120,146,3,3)}`+tap(55,164);},
     tracks:()=>{
       const bl=[[0,0]];for(let t=1.7;t<6.5;t+=.6)bl.push([t,0],[t+.3,1],[t+.6,0]);
@@ -844,8 +844,8 @@ function view(l){
     ent(t('Waiting slots','Ô chờ'),params([
       [t('At the start','Lúc bắt đầu'),t(`A default level starts with 10 waiting slots. FTUE levels are the exception and do not use this count.`,
                          `Màn chơi thường bắt đầu với 10 ô chờ. Màn FTUE là ngoại lệ, không dùng số ô này.`)],
-      [t('Unlock more','Mở thêm'),t(`The player can unlock more waiting slots with the 2 RV Slots. Each RV Slot adds 3 waiting slots, so a level can have up to 16 (see the RV Slot in 1.3).`,
-                         `Người chơi có thể mở thêm ô chờ bằng 2 ô chờ quảng cáo thưởng (RV Slot). Mỗi RV Slot thêm 3 ô chờ, nên một màn có tối đa 16 ô chờ (xem RV Slot ở mục 1.3).`)]
+      [t('Unlock more','Mở thêm'),t(`The player can unlock more waiting slots with the 2 RV Slots. Each RV Slot adds 5 waiting slots, so a level can have up to 20 (see the RV Slot in 1.3).`,
+                         `Người chơi có thể mở thêm ô chờ bằng 2 ô chờ quảng cáo thưởng (RV Slot). Mỗi RV Slot thêm 5 ô chờ, nên một màn có tối đa 20 ô chờ (xem RV Slot ở mục 1.3).`)]
     ]))+
     ent(t('Win and lose','Thắng và thua'),params([
       [t('Win','Thắng'),t(`Every stack of chips on the table has been sent to a pole of its color, and every pole has been cleared from the level.`,
@@ -1023,15 +1023,15 @@ function view(l){
       tiles([
         ['10',t('Waiting slots at the start of a default level (not FTUE levels)','Ô chờ lúc bắt đầu màn thường (trừ màn FTUE)')],
         ['2',t('RV Slots in each level','Ô chờ quảng cáo thưởng trong mỗi màn')],
-        ['+3',t('Waiting slots added each time an RV Slot is used','Ô chờ được thêm mỗi lần dùng một ô chờ quảng cáo thưởng')],
-        ['16',t('Most waiting slots in a level, with both RV Slots used','Số ô chờ tối đa trong một màn, khi đã dùng cả 2 RV Slot')]
+        ['+5',t('Waiting slots added each time an RV Slot is used','Ô chờ được thêm mỗi lần dùng một ô chờ quảng cáo thưởng')],
+        ['20',t('Most waiting slots in a level, with both RV Slots used','Số ô chờ tối đa trong một màn, khi đã dùng cả 2 RV Slot')]
       ])+
       panel(t('Low slot warning','Cảnh báo sắp hết ô chờ'),
         `<p>${t(`When 2 or fewer waiting slots are free (<code>rv_nudge_free_slots</code>), the game warns the player in two ways.`,
                `Khi chỉ còn 2 ô chờ trống trở xuống (<code>rv_nudge_free_slots</code>), trò chơi cảnh báo người chơi theo hai cách.`)}</p>`+
         params([
-          [t('Red blink','Nháy đỏ'),t(`The free waiting slots blink red. It always runs while 2 or fewer slots are free, with no limit, even when both RV Slots are used. It stops when more than 2 are free again (chips fly to a pole, or an RV Slot adds 3).`,
-                                      `Các ô chờ còn trống nhấp nháy đỏ. Luôn chạy khi còn 2 ô trống trở xuống, không giới hạn, kể cả khi đã dùng hết 2 RV Slot. Dừng khi số ô trống lại lớn hơn 2 (chip bay lên cột, hoặc RV Slot thêm 3 ô).`)],
+          [t('Red blink','Nháy đỏ'),t(`The free waiting slots blink red. It always runs while 2 or fewer slots are free, with no limit, even when both RV Slots are used. It stops when more than 2 are free again (chips fly to a pole, or an RV Slot adds 5).`,
+                                      `Các ô chờ còn trống nhấp nháy đỏ. Luôn chạy khi còn 2 ô trống trở xuống, không giới hạn, kể cả khi đã dùng hết 2 RV Slot. Dừng khi số ô trống lại lớn hơn 2 (chip bay lên cột, hoặc RV Slot thêm 5 ô).`)],
           [t('Bubble','Bong bóng'),t(`A small bubble points at the next unused RV Slot for 5 s (<code>rv_nudge_bubble_seconds</code>), then fades out. Tapping it works like tapping the RV Slot (plays the ad). It shows only while an RV Slot is unused, and only as the repeat rules below allow. It hides early if the player taps the RV Slot or more than 2 slots are free again.`,
                                      `Một bong bóng nhỏ chỉ vào RV Slot chưa dùng kế tiếp trong 5 giây (<code>rv_nudge_bubble_seconds</code>), rồi mờ dần. Chạm vào bong bóng giống như chạm vào RV Slot (phát quảng cáo). Chỉ hiện khi còn RV Slot chưa dùng, và theo quy tắc lặp lại bên dưới. Ẩn sớm nếu người chơi chạm vào RV Slot hoặc số ô trống lại lớn hơn 2.`)]
         ])+(()=>{const cp=t('A stack goes to the waiting slots and only 2 stay free. The free slots blink red, and a bubble points at the RV Slot (5 s in the game).','Một chồng chip vào ô chờ, chỉ còn 2 ô trống. Các ô trống nháy đỏ, và bong bóng chỉ vào RV Slot (5 giây trong game).');
@@ -1510,6 +1510,7 @@ function view(l){
         t(`New in the RV Slot (1.3): when 2 or fewer waiting slots are free, the free slots blink red and a bubble points at the RV Slot for 5 s.`,`Mới trong RV Slot (1.3): khi còn 2 ô chờ trống trở xuống, các ô trống nháy đỏ và một bong bóng chỉ vào RV Slot trong 5 giây.`),
         t(`The red blink always runs. The bubble has its own repeat rules (30 s cooldown, at most 2 per attempt, fewer after 3 ignored attempts).`,`Nháy đỏ luôn chạy. Bong bóng có quy tắc lặp lại riêng (chờ 30 giây, tối đa 2 lần mỗi lượt, ít hơn sau 3 lượt bị bỏ qua).`),
         t(`5 new remote config keys under Reward ads placement: <code>rv_nudge_*</code>.`,`5 key cấu hình từ xa mới trong mục Vị trí quảng cáo thưởng: <code>rv_nudge_*</code>.`),
+        t(`Each RV Slot now adds 5 waiting slots (was 3), so a level has at most 20 (10 + 5 + 5). Updated in 1.1, 1.3 and the demo.`,`Mỗi RV Slot nay thêm 5 ô chờ (trước là 3), nên một màn có tối đa 20 ô chờ (10 + 5 + 5). Đã sửa ở mục 1.1, 1.3 và hình động.`),
         t(`An animated sketch of the low slot warning (red blink and RV Slot bubble) in 1.3.`,`Thêm hình động minh họa cảnh báo sắp hết ô chờ (nháy đỏ và bong bóng RV Slot) ở mục 1.3.`)
       ])))+
     day(t('9 November 2026','9/11/2026'),
