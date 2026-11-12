@@ -1043,17 +1043,17 @@ function view(l){
             `<b>Mỗi lần giảm chỉ một lần.</b> Bong bóng hiện đúng lúc số ô trống giảm xuống 2 trở xuống. Không hiện lại khi số ô trống vẫn đứng yên ở mức đó.`),
           t(`<b>Cooldown.</b> To show again, the free slots must go above 2, then drop to 2 or fewer again, and at least 30 s must have passed since the last bubble (<code>rv_nudge_bubble_cooldown_seconds</code>). Slots often swing between 2 and 3 free, so without this the bubble would keep popping up.`,
             `<b>Thời gian chờ.</b> Muốn hiện lại, số ô trống phải lên trên 2, rồi lại giảm xuống 2 trở xuống, và đã qua ít nhất 30 giây từ lần bong bóng trước (<code>rv_nudge_bubble_cooldown_seconds</code>). Số ô trống hay dao động giữa 2 và 3, nên nếu không có quy tắc này bong bóng sẽ bật lên liên tục.`),
-          t(`<b>Per attempt.</b> At most 2 bubbles in one attempt (<code>rv_nudge_bubble_max_per_attempt</code>), one for each RV Slot.`,
-            `<b>Mỗi lượt chơi.</b> Tối đa 2 lần bong bóng trong một lượt chơi (<code>rv_nudge_bubble_max_per_attempt</code>), mỗi RV Slot một lần.`),
-          t(`<b>Ignored often.</b> If the player opens no RV Slot in 3 attempts in a row that showed the bubble (<code>rv_nudge_ignore_streak</code>), later attempts show at most 1 bubble. This resets once the player opens an RV Slot.`,
-            `<b>Hay bị bỏ qua.</b> Nếu người chơi không mở RV Slot nào trong 3 lượt chơi liên tiếp có hiện bong bóng (<code>rv_nudge_ignore_streak</code>), các lượt sau chỉ hiện tối đa 1 lần. Tính lại khi người chơi mở một RV Slot.`),
+          t(`<b>Per level play attempt.</b> At most 2 bubbles in one level play attempt, that is one play of a level from start to win or lose (<code>rv_nudge_bubble_max_per_attempt</code>), one for each RV Slot.`,
+            `<b>Mỗi lượt chơi màn.</b> Tối đa 2 lần bong bóng trong một lượt chơi màn, tức một lần chơi màn từ lúc bắt đầu tới khi thắng hoặc thua (<code>rv_nudge_bubble_max_per_attempt</code>), mỗi RV Slot một lần.`),
+          t(`<b>Ignored often.</b> If the player opens no RV Slot in 3 level play attempts in a row that showed the bubble (<code>rv_nudge_ignore_streak</code>), later level play attempts show at most 1 bubble. This resets once the player opens an RV Slot.`,
+            `<b>Hay bị bỏ qua.</b> Nếu người chơi không mở RV Slot nào trong 3 lượt chơi màn liên tiếp có hiện bong bóng (<code>rv_nudge_ignore_streak</code>), các lượt sau chỉ hiện tối đa 1 lần. Tính lại khi người chơi mở một RV Slot.`),
           t(`<b>Never in the way.</b> It waits while a tutorial popup, a booster or a chip animation is playing. If 2 or fewer slots are still free when that ends, the bubble shows then.`,
             `<b>Không che thao tác.</b> Bong bóng chờ khi đang có popup hướng dẫn, công cụ hoặc hiệu ứng chip chạy. Khi xong, nếu vẫn còn 2 ô trống trở xuống thì bong bóng mới hiện.`),
           t(`<b>Not shown</b> in FTUE levels, or once the player has lost (Revive takes over).`,
             `<b>Không hiện</b> ở màn FTUE, hoặc khi người chơi đã thua (Hồi sinh xử lý tiếp).`)
         ])+
-        `<p class="note">${t(`One attempt runs from level start to win or lose. A revive continues the same attempt, so its counts carry on. A restart is a new attempt.`,
-                             `Một lượt chơi tính từ lúc bắt đầu màn tới khi thắng hoặc thua. Hồi sinh vẫn là lượt đang chơi, nên số lần đã đếm giữ nguyên. Chơi lại là lượt mới.`)}</p>`))+
+        `<p class="note">${t(`A level play attempt runs from level start to win or lose. A revive continues the same attempt, so its counts carry on. A restart is a new level play attempt.`,
+                             `Một lượt chơi màn tính từ lúc bắt đầu màn tới khi thắng hoặc thua. Hồi sinh vẫn là lượt đang chơi, nên số lần đã đếm giữ nguyên. Chơi lại là một lượt chơi màn mới.`)}</p>`))+
 
     sys(nm('Level loop back','Lặp lại màn chơi'),
       lead(t(`After the last level, earlier levels replay. The level number keeps counting up.`,
@@ -1349,8 +1349,8 @@ function view(l){
       ['rv_nudge_free_slots',t('Low slot warning — the red blink and bubble start when this many waiting slots or fewer are free.','Cảnh báo sắp hết ô chờ — nháy đỏ và bong bóng bắt đầu khi số ô chờ trống bằng hoặc ít hơn giá trị này.'),'2',t('slots','ô')],
       ['rv_nudge_bubble_seconds',t('Low slot warning — how long the RV Slot bubble stays on screen.','Cảnh báo sắp hết ô chờ — thời gian bong bóng RV Slot ở trên màn hình.'),'5',t('s','giây')],
       ['rv_nudge_bubble_cooldown_seconds',t('Low slot warning — least time between two bubbles.','Cảnh báo sắp hết ô chờ — thời gian tối thiểu giữa hai lần bong bóng.'),'30',t('s','giây')],
-      ['rv_nudge_bubble_max_per_attempt',t('Low slot warning — most bubbles in one attempt.','Cảnh báo sắp hết ô chờ — số lần bong bóng tối đa trong một lượt chơi.'),'2',t('count','lần')],
-      ['rv_nudge_ignore_streak',t('Low slot warning — after the bubble is ignored in this many attempts in a row, later attempts show at most 1 bubble.','Cảnh báo sắp hết ô chờ — sau số lượt chơi liên tiếp bỏ qua bong bóng này, các lượt sau chỉ hiện tối đa 1 lần.'),'3',t('attempts','lượt')]
+      ['rv_nudge_bubble_max_per_attempt',t('Low slot warning — most bubbles in one level play attempt.','Cảnh báo sắp hết ô chờ — số lần bong bóng tối đa trong một lượt chơi màn.'),'2',t('count','lần')],
+      ['rv_nudge_ignore_streak',t('Low slot warning — after the bubble is ignored in this many level play attempts in a row, later level play attempts show at most 1 bubble.','Cảnh báo sắp hết ô chờ — sau số lượt chơi màn liên tiếp bỏ qua bong bóng này, các lượt sau chỉ hiện tối đa 1 lần.'),'3',t('attempts','lượt')]
     ]);
 
   /* ===== 6. IAP & offers ===== */
