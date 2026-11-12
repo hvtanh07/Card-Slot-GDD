@@ -226,6 +226,7 @@ ul.params>li>b{display:block;font-weight:600}
 ul.params>li>span{display:block}
 .ref-vid{margin:10px 0 4px;max-width:260px}
 .ref-vid video{display:block;width:100%;height:auto;max-height:340px;object-fit:contain;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.ref-vid img{display:block;width:100%;height:auto;max-height:340px;object-fit:contain;background:var(--surface);border:1px solid var(--line);border-radius:12px}
 .ref-vid figcaption{font-size:.8rem;line-height:1.45;color:var(--muted);margin:6px 2px 0}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
 .chips span{background:var(--tint);border-radius:8px;padding:3px 11px;font-weight:500}
@@ -1075,13 +1076,28 @@ function view(l){
       ])+`<p class="note">${t(`Remote config: <code>level_loop_last_level</code>, <code>level_loop_start_level</code>.`,`Cấu hình từ xa: <code>level_loop_last_level</code>, <code>level_loop_start_level</code>.`)}</p>`))+
 
     sys(nm('Revive','Hồi sinh'),
-      lead(t(`When the player loses, one more chance to continue the same attempt. Shows before the lose screen.`,
-             `Khi thua, người chơi có thêm một cơ hội chơi tiếp lượt đang chơi. Hiện trước màn hình thua.`))+
+      lead(t(`When the player loses, one more chance to continue the same attempt. Shows after the booster hint and before the lose screen.`,
+             `Khi thua, người chơi có thêm một cơ hội chơi tiếp lượt đang chơi. Hiện sau bước gợi ý công cụ và trước màn hình thua.`))+
       tiles([
         [t(`2 free`,`2 miễn phí`),t(`${P.magnet} used on revive`,`${P.magnet} dùng khi hồi sinh`),'hot'],
         ['900',t('Coins for the 1st revive','Xu cho lần hồi sinh đầu')],
         ['1',t('Revive by ad per attempt','Lần hồi sinh bằng quảng cáo mỗi lượt')]
       ])+
+      panel(t('Before Revive: booster hint','Trước Hồi sinh: gợi ý công cụ'),
+        `<p>${t(`When the player loses, the game first gives a 3 s chance to fix it with a booster (<code>lose_booster_hint_seconds</code>). The Revive (Play on) popup shows only after that.`,
+               `Khi người chơi thua, trò chơi cho thêm 3 giây để gỡ rối bằng công cụ hỗ trợ (<code>lose_booster_hint_seconds</code>). Sau đó mới hiện popup Hồi sinh (Play on).`)}</p>`+
+        params([
+          [t('Shows','Hiển thị'),t(`A red banner “Oops! No more slots available” with a 3 s stopwatch, and a pointing hand on one booster button.`,
+                                  `Băng rôn đỏ “Oops! No more slots available” kèm đồng hồ đếm ngược 3 giây, và một bàn tay chỉ vào một nút công cụ.`)],
+          [t('Which booster','Chỉ vào công cụ nào'),t(`Only unlocked boosters count. 1) If the player owns any, point at the owned one that comes first in the order <b>Magnet → Shuffle → Hand</b>. 2) If the player owns none, point at the first unlocked booster in the same order. Tapping it opens that booster’s usual get-more flow.`,
+                                  `Chỉ tính công cụ đã mở khóa. 1) Nếu người chơi đang có công cụ, chỉ vào công cụ đang có đứng đầu theo thứ tự <b>Nam châm → Xáo trộn → Bàn tay</b>. 2) Nếu không có công cụ nào, chỉ vào công cụ đã mở khóa đầu tiên theo cùng thứ tự. Chạm vào sẽ mở luồng nhận thêm công cụ như bình thường.`)],
+          [t('Player uses a booster','Người chơi dùng công cụ'),t(`The countdown stops while the booster plays. If the game can go on, the lose is cancelled and play continues. If it is still stuck, the countdown starts again from 3 s and points at the next booster by the same rules.`,
+                                  `Đồng hồ dừng khi công cụ đang chạy. Nếu chơi tiếp được, lượt thua bị hủy và người chơi chơi tiếp. Nếu vẫn kẹt, đồng hồ đếm lại từ 3 giây và chỉ vào công cụ kế tiếp theo cùng quy tắc.`)],
+          [t('Time runs out','Hết giờ'),t(`The banner closes and the Revive popup shows.`,`Băng rôn đóng lại và popup Hồi sinh hiện ra.`)],
+          [t('Skipped when','Bỏ qua khi'),t(`No booster is unlocked yet (before level 5), or during an FTUE step. The Revive popup shows at once.`,
+                                  `Chưa mở khóa công cụ nào (trước màn 5), hoặc đang trong bước FTUE. Popup Hồi sinh hiện ngay.`)]
+        ])+
+        `<figure class="ref-vid"><img src="animRef/lose_booster_hint.jpg" alt="${esc(t('Lose: Oops! No more slots available, 3 s countdown, hand points at a booster','Thua: Oops! No more slots available, đếm ngược 3 giây, bàn tay chỉ vào công cụ'))}" loading="lazy"><figcaption>${t('Reference','Tham khảo')}: <code lang="en">lose_booster_hint</code></figcaption></figure>`)+
       panel(t('Options','Lựa chọn'),
         table(t('Revive options','Lựa chọn hồi sinh'),[t('Option','Lựa chọn'),t('Cost','Giá'),t('Limit and notes','Giới hạn và ghi chú')],[
           [t('Coins','Xu'),t(`<code>revive_base_cost</code> (900), × <code>revive_cost_growth</code> per extra revive`,`<code>revive_base_cost</code> (900), × <code>revive_cost_growth</code> mỗi lần thêm`),t('Not enough coins → store, then back','Không đủ xu → cửa hàng, rồi quay lại')],
@@ -1312,6 +1328,7 @@ function view(l){
     rc(t('Sub-mechanics: revive and others','Cơ chế phụ: hồi sinh và các phần khác'),[
       ['revive_base_cost',lab('First revive cost','Giá lần hồi sinh đầu tiên',t('The cost of the first revive.','Giá của lần hồi sinh đầu tiên.')),'900',coin],
       ['revive_cost_growth',lab('Price growth per extra revive','Mức tăng giá mỗi lần hồi sinh thêm',t('The multiplier applied to the cost of each following revive.','Hệ số nhân giá áp dụng cho mỗi lần hồi sinh tiếp theo.')),'1.00×','×'],
+      ['lose_booster_hint_seconds',t('Booster hint countdown on lose, before the Revive popup.','Thời gian đếm ngược gợi ý công cụ khi thua, trước popup Hồi sinh.'),'3',t('s','giây')],
       ['revive_max_ads_per_attempt',t('Max revives by ad in one attempt','Số lần hồi sinh bằng quảng cáo tối đa trong một lượt chơi'),'1',t('count','lần')],
       [null,lab('Max revives per level','Số lần hồi sinh tối đa mỗi màn',t('How many revives are allowed in one level.','Mỗi màn được hồi sinh tối đa bao nhiêu lần.')+' '+unl),tbd,t('count','lần')]
     ])+
@@ -1511,6 +1528,7 @@ function view(l){
         t(`The red blink always runs. The bubble has its own repeat rules (30 s cooldown, at most 2 per attempt, fewer after 3 ignored attempts).`,`Nháy đỏ luôn chạy. Bong bóng có quy tắc lặp lại riêng (chờ 30 giây, tối đa 2 lần mỗi lượt, ít hơn sau 3 lượt bị bỏ qua).`),
         t(`5 new remote config keys under Reward ads placement: <code>rv_nudge_*</code>.`,`5 key cấu hình từ xa mới trong mục Vị trí quảng cáo thưởng: <code>rv_nudge_*</code>.`),
         t(`Each RV Slot now adds 5 waiting slots (was 3), so a level has at most 20 (10 + 5 + 5). Updated in 1.1, 1.3 and the demo.`,`Mỗi RV Slot nay thêm 5 ô chờ (trước là 3), nên một màn có tối đa 20 ô chờ (10 + 5 + 5). Đã sửa ở mục 1.1, 1.3 và hình động.`),
+        t(`New in Revive (1.3): before the Revive popup, a 3 s countdown points at a booster. Owned boosters first, in the order Magnet → Shuffle → Hand. New remote config key <code>lose_booster_hint_seconds</code>.`,`Mới trong Hồi sinh (1.3): trước popup Hồi sinh, đồng hồ 3 giây chỉ vào một công cụ. Ưu tiên công cụ đang có, theo thứ tự Nam châm → Xáo trộn → Bàn tay. Key cấu hình từ xa mới <code>lose_booster_hint_seconds</code>.`),
         t(`An animated sketch of the low slot warning (red blink and RV Slot bubble) in 1.3.`,`Thêm hình động minh họa cảnh báo sắp hết ô chờ (nháy đỏ và bong bóng RV Slot) ở mục 1.3.`)
       ])))+
     day(t('9 November 2026','9/11/2026'),
