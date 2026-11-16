@@ -527,8 +527,7 @@ const SECTIONS=[
   {id:'live-ops',n:'7',c:6,en:'Reward ads placement',vi:'Vị trí quảng cáo thưởng',subs:[
     {id:'limited-time-reward',n:'7.1',en:'Limited Time Reward',vi:'Quà giới hạn thời gian'},
     {id:'skip-retry',n:'7.2',en:'Skip Level & Retry with Booster',vi:'Bỏ qua màn & Chơi lại kèm công cụ'}]},
-  {id:'change-note',n:'8',c:7,en:'Change note',vi:'Ghi chú thay đổi'},
-  {id:'level-config',n:'9',c:3,en:'Level config',vi:'Cấu hình màn chơi',wip:true}
+  {id:'change-note',n:'8',c:7,en:'Change note',vi:'Ghi chú thay đổi'}
 ];
 const SEC={};
 SECTIONS.forEach(s=>{SEC[s.id]=s;(s.subs||[]).forEach(u=>{SEC[u.id]=u;});});
@@ -1525,6 +1524,10 @@ function view(l){
   /* Add one day() block per day, newest first, with one ent per area changed */
   const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
+    day(t('16 November 2026','16/11/2026'),
+      ent(t('Level config removed','Bỏ mục Cấu hình màn chơi'),ul([
+        t(`Section 9 Level config was removed. The GDD now ends at 8 Change note.`,`Đã bỏ mục 9 Cấu hình màn chơi. Tài liệu nay kết thúc ở mục 8 Ghi chú thay đổi.`)
+      ])))+
     day(t('12 November 2026','12/11/2026'),
       ent(t('Low slot warning','Cảnh báo sắp hết ô chờ'),ul([
         t(`New in the RV Slot (1.3): when 2 or fewer waiting slots are free, the free slots blink red and a bubble points at the RV Slot for 5 s.`,`Mới trong RV Slot (1.3): khi còn 2 ô chờ trống trở xuống, các ô trống nháy đỏ và một bong bóng chỉ vào RV Slot trong 5 giây.`),
@@ -1571,12 +1574,6 @@ function view(l){
         t(`Added an animated demo for each element and booster in 1.4 and 1.5.`,`Thêm minh họa chuyển động cho từng yếu tố và công cụ ở mục 1.4 và 1.5.`),
         t(`The parts added from the template are now official for Card Slots.`,`Các phần thêm từ template nay là nội dung chính thức của Card Slots.`)
       ])));
-
-  /* ===== 9. Level config ===== */
-  B['level-config']=ent(t('Planned content','Nội dung dự kiến'),ul([
-    t('JSON format','Định dạng JSON'),
-    t('Tutorial on how to use the level builder tool','Hướng dẫn cách dùng công cụ dựng màn (level builder)')
-  ]));
 
   /* ----- hero ----- */
   const legend=[
